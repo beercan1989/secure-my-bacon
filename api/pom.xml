@@ -21,12 +21,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>my-bacon-parent</artifactId>
+        <artifactId>platform</artifactId>
         <groupId>uk.co.baconi.secure</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>my-bacon-api</artifactId>
+    <artifactId>api</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencyManagement>

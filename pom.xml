@@ -18,12 +18,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.co.baconi.secure</groupId>
-    <artifactId>my-bacon-parent</artifactId>
+    <artifactId>platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>my-bacon-api</module>
+        <module>api</module>
     </modules>
 
     <name>${project.groupId}:${project.artifactId}</name>
