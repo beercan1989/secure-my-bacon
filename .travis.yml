@@ -1,0 +1,17 @@
+language: java
+
+sudo: false
+
+jdk: oraclejdk8
+
+script: mvn --batch-mode verify
+
+after_success:
+  - mvn coveralls:report
+
+#deploy:
+#  - provider: script
+#    skip_cleanup: true
+#    script: mvn --batch-mode --settings ci/settings.xml deploy
+#    on:
+#      repo: beercan1989/secure-my-bacon
