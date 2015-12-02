@@ -18,9 +18,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.co.baconi.secure</groupId>
-    <artifactId>secure-my-bacon-parent</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>my-bacon-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>my-bacon-api</module>
+    </modules>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Its like 'saving ones bacon' only its more secure.</description>
