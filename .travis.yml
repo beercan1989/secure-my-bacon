@@ -9,9 +9,15 @@ script: mvn --batch-mode verify
 after_success:
   - mvn coveralls:report
 
-#deploy:
-#  - provider: script
-#    skip_cleanup: true
-#    script: mvn --batch-mode --settings ci/settings.xml deploy
-#    on:
-#      repo: beercan1989/secure-my-bacon
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: mvn --batch-mode --settings ci/settings.xml deploy
+    on:
+      repo: beercan1989/secure-my-bacon
+      branch: master
+env:
+  global:
+    - secure: "p8zTjsBUPE4sM+r4fbmE+bf3vJ4Po7Ai2mYbM2oy0ZuQC0xkJABT4ll2unB9S1a55nfyOTB1tUAjeJcp2hlDyxHqdSUtDL/NadzMLwlnXZAdR1JG/ayYr4/X+lM55xP/TAnnlBZDGSUHEFD+oU9J1GJUsoIR/mRe40DV9j7sgffo8UU1LkE/ZjbWO8vt9cedYx2yQHwAYkBFBcJ9q2JcTy1f8/VKtTX0QC2FjhwbO5WOntaGytD6ggLYSV50IjovW3W/ms0jbIxTJT84e8pCTeUAXdke5ibfvatcAYfcFu7VdieAjWdGWlgZNUTRdOxUrikgrAZxMRUDvuWVHrz5dECkYpUc4BImc8vrals3WQelDEU3cE/KwtVdcoTbVYy3EPXYNwEgorRIH3HcJEskKph0so4P3vsGibF5PYouZsMiDSUymH5vxnxKrr6q0oKoHOO4/3Pe1Li50IT5+spFQaGKA22bseYxH+MkLRQ2E+F62dTFU2j32tdzdM/dUdbrUySjJndEgmv4wfeo5aYH/adEEcAM/+vTWnlD1djdkGxoa61oYTCWZqwMTET9DS7gqLu5ZeHQhqY3CgthGudcPoHBUe3N0Y+xShFDcLTmuKlQQ6uCI6i3p3yhEKvIXxbSZ8iUJtnBZZtIOvpK5zZaN1JUHt7iZxhSIO45eF0oob0="
+    - secure: "nGQ+fFb4xB3Vta0LleQncKJGuUasmSgShlpcclMp8TUgiRZSFscqJU9hlRY2k7qem0PsnIA4mQvZLzFGQk0KzI+8sEykhX2z4ziA1o+W9J+Yp+r27QXSJV8sV7gOhBc+hbuGqAMzJEk31ge4onfQtIDZTzauMg5P9yBU/jM4n+4G3T+/lcLuqqQH1GM+VsfdJ/cpGOmDRSUIgJ8kqeGczWI+UQdPo1/M4k7t9Qk5cYRAacBzqmhikKf+e16yfa1a3UirKVfAWhY+hSNyW6IRa4py1++MH4c2lk1Pm9a/nDKTSoB5nT3LOSYBa7Lkeh0SFPi0KOSU90fi+U8Ilrmi/JR02VyJ8yVCbKCzZaEpRxE7M9w9Gj2Jz7+4xTKpSL15reGpmgxX09+CxixyoHLVcOBRFOB1tob0J4oz5MjYmhUdCKc/LJgGznC6Ah9xDiWWWjKAcrzE1VJ6BuAssU/wx+WoISS6MMWi2fdm7G4IN1IVjOzMe58ZVpnzru/nBmhhs5duKQM/HacL93frpqZi2guzk/Qte70OK82gMXdzgQncbGw0tpZG+rRp0wya4q+Cbj045qhOS9XWn1yIb9QPpopF+4ntOjzmHG7I66MpicaN8dRxJf0yh/qTV5hvx+gkwqhO8V8YPmIe1KUENkZZcc4mo0Sp/XxKFxgdXZ0JYFE="
+    - secure: "zl8Cjlngb0l6EurU7/7zO2iraNRWhMWepeTmEWE+ItL+va7yi269snhDNO1uJzS45NEXXfutidf6Ti09InpWwee1/toKWnUSpPlPvtlXaoMNoxwENv1Of0KrXdwfyMhD0tQkodVj7lt1Kc6e3x1SwKWB+OQ5JUBKcgsKZQjEYUSb1KvrX8asuNvZzssKZcUtEAlnn5pMtJEAihmvopjtOnxoitzWI1K22mBIN1qdOx+h5odq4XZfJrXCzJxvMC6l5wtuVUR0lvqtE0pyUlHHAfQMWj8tbUBANllex23bLd3cXHha0h91ExreIGewdt9zuyPWaxOjjLtXijFIGjVxZoiP9MWXxjpIsu9dktKmsaTZrC1q9fqB+tpkA8vJxmqNzlKGUh0fFRCHUGDU6uXXYc8J3DG+I8Fu2rHJGIvPfeqUvMKoSTwMiWJbeGK+O8WTRvez2ZwIGNRXJMOkui2Yqxy3ojQ2F+BiMtLhe4tEAYbSxEWA6LqJbFkpfkQ2mYMNSGhQIri6DXZruYwvw6li/dzbEPbLt+0mK4RE1UA7yNqB0syD1mRqCc/PMJixo2PjIYlIqptV0+nSae7Z0gW0qxyTvt8Zv6Q7pbyZ1Htby83cn+lPM+g/NavM6CCtsd9qbJlVxv94SzAfnfjo8r/wYHqMWEIY7qkVMp1xgpEEx+w="
