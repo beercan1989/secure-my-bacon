@@ -2,7 +2,8 @@ Secure My Bacon
 ===============
 [![Build Status](https://travis-ci.org/beercan1989/secure-my-bacon.svg)](https://travis-ci.org/beercan1989/secure-my-bacon)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/a03b8713f2694a8f9a4af79935721760)](https://www.codacy.com/app/beercan1989/secure-my-bacon)
-[![Coverage Status](https://coveralls.io/repos/beercan1989/secure-my-bacon/badge.svg?branch=master&service=github)](https://coveralls.io/github/beercan1989/secure-my-bacon?branch=master)  
+[![Coverage Status](https://coveralls.io/repos/beercan1989/secure-my-bacon/badge.svg?branch=master&service=github)](https://coveralls.io/github/beercan1989/secure-my-bacon?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/uk.co.baconi.secure/platform.svg?label=secure-my-bacon)](https://maven-badges.herokuapp.com/maven-central/uk.co.baconi.secure/platform)  
 Its like 'saving ones bacon' only its more secure.
 
 What are you on about?
