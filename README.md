@@ -15,8 +15,8 @@ What are you going to use?
 0. Java 8
 1. Tomcat 8
 2. Spring Boot
-3. Orient DB
-4. Typesafe Config
+3. Graph Database (Neo4J / Orient DB)
+4. Nice Configuration (Spring Properties / Typesafe Config)
 5. Substeps
 
 Whats the road map like?
