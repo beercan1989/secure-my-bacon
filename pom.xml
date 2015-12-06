@@ -80,6 +80,10 @@
 
                     <configuration>
                         <repoToken>${env.COVERALLS_TOKEN}</repoToken>
+                        <jacocoReports>
+                            <jacocoReport>${project.reporting.outputDirectory}/jacoco/jacoco.xml</jacocoReport>
+                            <jacocoReport>${project.reporting.outputDirectory}/jacoco-it/jacoco.xml</jacocoReport>
+                        </jacocoReports>
                     </configuration>
                 </plugin>
 
@@ -113,15 +117,27 @@
 
                 <executions>
                     <execution>
-                        <id>prepare-jacoco-agent</id>
+                        <id>prepare-unit-test-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>report-with-jacoco</id>
+                        <id>generate-unit-test-report</id>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>prepare-integration-test-agent</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-integration-test-report</id>
+                        <goals>
+                            <goal>report-integration</goal>
                         </goals>
                     </execution>
                 </executions>
