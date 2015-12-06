@@ -24,9 +24,8 @@ Whats the road map like?
 * **0.0.1** - Travis-CI, Codacy, Coveralls, Reviewable integration
 * **0.1.0** - Basic api and encryption
 * **0.1.5** - Substeps coverage for the basic api
-* **0.2.0** - Basic fontend to consume the existing api
+* **0.2.0** - Basic frontend to consume the existing api
 * **0.2.5** - Substeps coverage for the basic frontend
-* **0.3.0** - Registation and sharing
+* **0.3.0** - Registration and sharing
 * **0.4.0** - Password recovery process via administrator accounts
 * **0.5.0** - Run standalone without Tomcat, aka desktop mode
-* **0.6.0** - Optional entired database encryption, will require an administrator to unlock the system after every startup
