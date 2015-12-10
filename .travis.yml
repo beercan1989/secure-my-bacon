@@ -7,9 +7,6 @@ sudo: false
 
 jdk: oraclejdk8
 
-env:
-  - NEO4J_VERSION="2.3.1"
-
 before_install:
   ##
   # Download, install and run Neo4j for the integration tests.
@@ -44,6 +41,8 @@ deploy:
 
 env:
   global:
+    - NEO4J_VERSION="2.3.1"
+
     ##
     # Secured global variables for OSSRH and Coveralls integration
     ##
