@@ -6,3 +6,6 @@
 target/
 **/pom.xml.releaseBackup
 **/release.properties
+
+# Vagrant
+.vagrant/
