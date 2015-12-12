@@ -16,14 +16,36 @@
 
 package uk.co.baconi.secure.api;
 
+import org.neo4j.ogm.session.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.neo4j.config.Neo4jConfiguration;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.data.neo4j.server.Neo4jServer;
+import org.springframework.data.neo4j.server.RemoteServer;
+
 
 @SpringBootApplication
-public class Application {
+@EnableNeo4jRepositories
+@ComponentScan
+public class Application extends Neo4jConfiguration {
 
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);
     }
 
+    @Autowired
+    private Neo4jProperties graphProperties;
+
+    @Override
+    public Neo4jServer neo4jServer() {
+        return new RemoteServer(graphProperties.getUrl(), graphProperties.getUsername(), graphProperties.getPassword());
+    }
+
+    @Override
+    public SessionFactory getSessionFactory() {
+        return new SessionFactory("uk.co.baconi.secure.api");
+    }
 }

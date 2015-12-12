@@ -42,6 +42,18 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.neo4j</groupId>
+                <artifactId>neo4j-ogm</artifactId>
+                <version>1.1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-neo4j</artifactId>
+                <version>4.0.0.RELEASE</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -53,11 +65,17 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
-            <version>4.0.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- Properties -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Spring Boot magic to help speed up development -->
@@ -71,6 +89,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

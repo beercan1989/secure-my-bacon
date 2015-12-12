@@ -16,21 +16,45 @@
 
 package uk.co.baconi.secure.api.user;
 
-import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
+import uk.co.baconi.secure.api.common.Entity;
 import uk.co.baconi.secure.api.lock.AsymmetricLock;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
-public class User {
-
-    @GraphId
-    private Long id;
+public class User extends Entity {
 
     @Property
     private String name;
 
     @Relationship(type = "SHARED_WITH", direction = Relationship.INCOMING)
-    private Set<AsymmetricLock> shared;
+    private Set<AsymmetricLock> shared = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(final String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<AsymmetricLock> getShared(){
+        return shared;
+    }
+
+    public boolean giveAccessTo(final AsymmetricLock lock){
+        return shared.add(lock);
+    }
+
+    public boolean removeAccessTo(final AsymmetricLock lock){
+        return shared.remove(lock);
+    }
 
 }

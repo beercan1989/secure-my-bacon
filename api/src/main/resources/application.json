@@ -1,0 +1,7 @@
+{
+  "database" : {
+    "url": "http://localhost:7474",
+    "username": "",
+    "password": ""
+  }
+}
