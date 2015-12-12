@@ -20,7 +20,6 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.unsafe.impl.batchimport.staging.DynamicProcessorAssigner;
 import uk.co.baconi.secure.api.lock.SymmetricLock;
 
 import java.util.Set;
