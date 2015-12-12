@@ -16,19 +16,14 @@
 
 package uk.co.baconi.secure.api.password;
 
-import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import uk.co.baconi.secure.api.common.Entity;
 import uk.co.baconi.secure.api.lock.SymmetricLock;
 
-import java.util.Set;
-
 @NodeEntity
-public class Password {
-
-    @GraphId
-    private Long id;
+public class Password extends Entity {
 
     @Property
     private String whereFor;
@@ -42,4 +37,29 @@ public class Password {
     @Relationship(type = "SECURED_BY")
     private SymmetricLock securedBy;
 
+    public Password() {
+    }
+
+    public Password(final String username, final String password, final String whereFor, final SymmetricLock securedBy) {
+        this.username = username;
+        this.password = password;
+        this.whereFor = whereFor;
+        this.securedBy = securedBy;
+    }
+
+    public String getWhereFor() {
+        return whereFor;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public SymmetricLock getSecuredBy() {
+        return securedBy;
+    }
 }
