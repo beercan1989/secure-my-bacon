@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.password;
+package uk.co.baconi.secure.password;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.unsafe.impl.batchimport.staging.DynamicProcessorAssigner;
-import uk.co.baconi.secure.api.lock.SymmetricLock;
-
-import java.util.Set;
+import uk.co.baconi.secure.lock.SymmetricLock;
 
 @NodeEntity
 public class Password {
