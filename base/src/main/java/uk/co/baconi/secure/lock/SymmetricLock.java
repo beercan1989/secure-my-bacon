@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.lock;
+package uk.co.baconi.secure.lock;
 
 import org.neo4j.ogm.annotation.*;
-import uk.co.baconi.secure.api.bag.Bag;
-import uk.co.baconi.secure.api.password.Password;
-import uk.co.baconi.secure.api.user.User;
+import uk.co.baconi.secure.bag.Bag;
+import uk.co.baconi.secure.password.Password;
 
 @RelationshipEntity(type = "SECURED_BY")
 public class SymmetricLock {

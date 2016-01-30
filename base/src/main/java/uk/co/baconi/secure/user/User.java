@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.bag;
+package uk.co.baconi.secure.user;
 
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.Relationship;
-import uk.co.baconi.secure.api.lock.AsymmetricLock;
-import uk.co.baconi.secure.api.lock.SymmetricLock;
+import org.neo4j.ogm.annotation.*;
+import uk.co.baconi.secure.lock.AsymmetricLock;
 
 import java.util.Set;
 
-public class Bag {
+@NodeEntity
+public class User {
 
     @GraphId
     private Long id;
@@ -32,12 +30,7 @@ public class Bag {
     @Property
     private String name;
 
-    @Property
-    private byte[] publicKey;
-
-    @Relationship(type = "SHARED_WITH")
+    @Relationship(type = "SHARED_WITH", direction = Relationship.INCOMING)
     private Set<AsymmetricLock> shared;
 
-    @Relationship(type = "SECURED_BY", direction = Relationship.INCOMING)
-    private Set<SymmetricLock> secured;
 }

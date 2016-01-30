@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2015 James Bacon
+  ~ Copyright 2016 James Bacon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,13 +20,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>platform</artifactId>
         <groupId>uk.co.baconi.secure</groupId>
+        <artifactId>platform</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api</artifactId>
+    <artifactId>base</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+
+    <properties>
+        <spring.data.neo4j.version>4.0.0.RELEASE</spring.data.neo4j.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -42,17 +46,19 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>uk.co.baconi.secure</groupId>
-            <artifactId>base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- Spring Boot magic to help speed up development -->
+        <!-- Spring Data magic for Neo4J -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-neo4j</artifactId>
+            <version>${spring.data.neo4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -72,20 +78,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-
-                <executions>
-                    <execution>
-                        <id>make-artifact-${project.packaging}-executable</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
