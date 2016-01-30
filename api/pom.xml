@@ -48,6 +48,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- More Spring Boot magic-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- Spring Boot magic to help speed up development -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -59,6 +65,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
