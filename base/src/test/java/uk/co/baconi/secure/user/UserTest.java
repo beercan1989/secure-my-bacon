@@ -101,4 +101,15 @@ public class UserTest {
         assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
     }
 
+    @Test
+    public void shouldHaveNiceToStringRepresentation() {
+
+        final User user = new User("beercan1989");
+
+        final String userAsString = user.toString();
+
+        assertThat(userAsString, containsString("id=null,"));
+        assertThat(userAsString, containsString("name='beercan1989',"));
+        assertThat(userAsString, containsString("shared=[]"));
+    }
 }

@@ -148,4 +148,20 @@ public class PasswordTest {
         assertThat(password3.hashCode(), is(not(equalTo(password5.hashCode()))));
     }
 
+    @Test
+    public void shouldHaveNiceToStringRepresentation() {
+        final String whereFor = "https://github.com/login";
+        final String username = "beercan1989";
+        final String passw0rd = "p@55w0rd!";
+
+        final Password password = new Password(whereFor, username, passw0rd);
+
+        final String passwordAsString = password.toString();
+
+        assertThat(passwordAsString, containsString("id=null,"));
+        assertThat(passwordAsString, containsString("whereFor='https://github.com/login',"));
+        assertThat(passwordAsString, containsString("username='beercan1989',"));
+        assertThat(passwordAsString, containsString("password='p@55w0rd!',"));
+        assertThat(passwordAsString, containsString("securedBy=null"));
+    }
 }
