@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -35,6 +36,7 @@ public class User {
     @Property
     private String name;
 
+    @JsonIgnore
     @Relationship(type = AsymmetricLock.SHARED_WITH, direction = Relationship.INCOMING)
     private Set<AsymmetricLock> shared = new HashSet<>();
 

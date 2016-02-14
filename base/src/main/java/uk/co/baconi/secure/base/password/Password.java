@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base.password;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -39,6 +40,7 @@ public class Password {
     @Property
     private String password;
 
+    @JsonIgnore
     @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
