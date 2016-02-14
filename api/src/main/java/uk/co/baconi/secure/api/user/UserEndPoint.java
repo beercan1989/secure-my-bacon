@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-public class UserEndpoint {
+public class UserEndPoint {
 
     // TODO - Fill in
     @RequestMapping(method = RequestMethod.GET)
