@@ -121,57 +121,15 @@ public class BagTest {
 
         bag1.securedWith(symmetricLock);
 
-        assertThat(bag1, is(not(equalTo(bag2))));
-        assertThat(bag1.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
-        bag2.securedWith(symmetricLock);
-
         assertThat(bag1, is(equalTo(bag2)));
         assertThat(bag1.hashCode(), is(equalTo(bag2.hashCode())));
 
-        assertThat(bag3, is(not(equalTo(bag1))));
-        assertThat(bag3, is(not(equalTo(bag2))));
-        assertThat(bag3.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag3.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
-        assertThat(bag4, is(not(equalTo(bag1))));
-        assertThat(bag4, is(not(equalTo(bag2))));
-        assertThat(bag4.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag4.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
-        final Bag bag5 = new Bag(name, publicKey);
-
-        assertThat(bag5, is(not(equalTo(bag1))));
-        assertThat(bag5, is(not(equalTo(bag2))));
-        assertThat(bag5.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag5.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
         final AsymmetricLock asymmetricLock = mock(AsymmetricLock.class);
-
-        bag1.sharedWith(asymmetricLock);
-
-        assertThat(bag1, is(not(equalTo(bag2))));
-        assertThat(bag1.hashCode(), is(not(equalTo(bag2.hashCode()))));
 
         bag2.sharedWith(asymmetricLock);
 
         assertThat(bag1, is(equalTo(bag2)));
         assertThat(bag1.hashCode(), is(equalTo(bag2.hashCode())));
-
-        assertThat(bag3, is(not(equalTo(bag1))));
-        assertThat(bag3, is(not(equalTo(bag2))));
-        assertThat(bag3.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag3.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
-        assertThat(bag4, is(not(equalTo(bag1))));
-        assertThat(bag4, is(not(equalTo(bag2))));
-        assertThat(bag4.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag4.hashCode(), is(not(equalTo(bag2.hashCode()))));
-
-        assertThat(bag5, is(not(equalTo(bag1))));
-        assertThat(bag5, is(not(equalTo(bag2))));
-        assertThat(bag5.hashCode(), is(not(equalTo(bag1.hashCode()))));
-        assertThat(bag5.hashCode(), is(not(equalTo(bag2.hashCode()))));
     }
 
     @Test
@@ -183,8 +141,6 @@ public class BagTest {
 
         assertThat(bagAsString, containsString("id=null,"));
         assertThat(bagAsString, containsString("name='Substeps',"));
-        assertThat(bagAsString, containsString("publicKey=" + Arrays.toString("public key".getBytes()) + ','));
-        assertThat(bagAsString, containsString("shared=[],"));
-        assertThat(bagAsString, containsString("secured=[]"));
+        assertThat(bagAsString, containsString("publicKey=" + Arrays.toString("public key".getBytes())));
     }
 }

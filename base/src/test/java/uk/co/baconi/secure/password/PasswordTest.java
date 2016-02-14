@@ -109,43 +109,8 @@ public class PasswordTest {
 
         password1.securedBy(asymmetricLock);
 
-        assertThat(password1, is(not(equalTo(password2))));
-        assertThat(password3, is(not(equalTo(password1))));
-        assertThat(password3, is(not(equalTo(password2))));
-        assertThat(password4, is(not(equalTo(password1))));
-        assertThat(password4, is(not(equalTo(password2))));
-        assertThat(password5, is(not(equalTo(password1))));
-        assertThat(password5, is(not(equalTo(password2))));
-        assertThat(password1.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password1.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password4.hashCode(), is(not(equalTo(password1.hashCode()))));
-        assertThat(password4.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password5.hashCode(), is(not(equalTo(password1.hashCode()))));
-        assertThat(password5.hashCode(), is(not(equalTo(password2.hashCode()))));
-
-        password2.securedBy(asymmetricLock);
-
         assertThat(password1, is(equalTo(password2)));
         assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
-
-        assertThat(password3, is(not(equalTo(password2))));
-        assertThat(password5, is(not(equalTo(password2))));
-        assertThat(password4, is(not(equalTo(password2))));
-        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password4.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password5.hashCode(), is(not(equalTo(password2.hashCode()))));
-
-        password3.securedBy(asymmetricLock);
-
-        assertThat(password3, is(not(equalTo(password1))));
-        assertThat(password3, is(not(equalTo(password2))));
-        assertThat(password3, is(not(equalTo(password4))));
-        assertThat(password3, is(not(equalTo(password5))));
-        assertThat(password3.hashCode(), is(not(equalTo(password1.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password4.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password5.hashCode()))));
     }
 
     @Test
@@ -161,7 +126,6 @@ public class PasswordTest {
         assertThat(passwordAsString, containsString("id=null,"));
         assertThat(passwordAsString, containsString("whereFor='https://github.com/login',"));
         assertThat(passwordAsString, containsString("username='beercan1989',"));
-        assertThat(passwordAsString, containsString("password='p@55w0rd!',"));
-        assertThat(passwordAsString, containsString("securedBy=null"));
+        assertThat(passwordAsString, containsString("password='p@55w0rd!'"));
     }
 }

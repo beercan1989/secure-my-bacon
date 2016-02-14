@@ -75,30 +75,8 @@ public class UserTest {
 
         user1.sharedWith(asymmetricLock);
 
-        assertThat(user1, is(not(equalTo(user2))));
-        assertThat(user1.hashCode(), is(not(equalTo(user2.hashCode()))));
-
-        assertThat(user3, is(not(equalTo(user1))));
-        assertThat(user3, is(not(equalTo(user2))));
-        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
-        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
-
-        user2.sharedWith(asymmetricLock);
-
         assertThat(user1, is(equalTo(user2)));
         assertThat(user1.hashCode(), is(equalTo(user2.hashCode())));
-
-        assertThat(user3, is(not(equalTo(user1))));
-        assertThat(user3, is(not(equalTo(user2))));
-        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
-        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
-
-        user3.sharedWith(asymmetricLock);
-
-        assertThat(user3, is(not(equalTo(user1))));
-        assertThat(user3, is(not(equalTo(user2))));
-        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
-        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
     }
 
     @Test
@@ -109,7 +87,6 @@ public class UserTest {
         final String userAsString = user.toString();
 
         assertThat(userAsString, containsString("id=null,"));
-        assertThat(userAsString, containsString("name='beercan1989',"));
-        assertThat(userAsString, containsString("shared=[]"));
+        assertThat(userAsString, containsString("name='beercan1989'"));
     }
 }
