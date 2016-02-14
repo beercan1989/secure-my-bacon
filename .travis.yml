@@ -11,7 +11,7 @@ before_install:
   ##
   # Download, install and run Neo4j for the integration tests.
   ##
-  - ci/setup-neo4j.bash
+  - bash ci/setup-neo4j.bash
 
 ##
 # Enable integration tests during the testing phase
