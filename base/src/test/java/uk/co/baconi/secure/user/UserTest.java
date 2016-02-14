@@ -17,17 +17,88 @@
 package uk.co.baconi.secure.user;
 
 import org.junit.Test;
-import uk.co.baconi.secure.bag.Bag;
+import uk.co.baconi.secure.lock.AsymmetricLock;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
 
 public class UserTest {
 
     @Test
-    public void replaceMe() throws Exception {
+    public void shouldBeAbleToReadProperties() {
 
-        final User bag = new User();
+        final String name = "beercan1989";
+        final User user = new User(name);
 
-        assert true;
+        assertThat(user.getId(), is(nullValue()));
+        assertThat(user.getName(), is(equalTo(name)));
+        assertThat(user.getShared(), is(emptyIterableOf(AsymmetricLock.class)));
+    }
 
+    @Test
+    public void shouldBeAbleToGetSharedWithLinks() {
+
+        final String name = "beercan1989";
+        final AsymmetricLock asymmetricLock = mock(AsymmetricLock.class);
+        final AsymmetricLock asymmetricLock2 = mock(AsymmetricLock.class);
+
+        final User user = new User(name).sharedWith(asymmetricLock);
+
+        assertThat(user.getShared(), contains(asymmetricLock));
+
+        user.sharedWith(asymmetricLock2);
+
+        assertThat(user.getShared(), containsInAnyOrder(asymmetricLock, asymmetricLock2));
+    }
+
+    @Test
+    public void shouldImplementEqualsCorrectly() {
+
+        final String name = "beercan1989";
+
+        final User user1 = new User(name);
+        final User user2 = new User(name);
+
+        assertThat(user1, is(equalTo(user2)));
+        assertThat(user1.hashCode(), is(equalTo(user2.hashCode())));
+
+        final User user3 = new User("beercan");
+
+        assertThat(user1, is(not(equalTo(user3))));
+        assertThat(user2, is(not(equalTo(user3))));
+
+        assertThat(user1.hashCode(), is(not(equalTo(user3.hashCode()))));
+        assertThat(user2.hashCode(), is(not(equalTo(user3.hashCode()))));
+
+        final AsymmetricLock asymmetricLock = mock(AsymmetricLock.class);
+
+        user1.sharedWith(asymmetricLock);
+
+        assertThat(user1, is(not(equalTo(user2))));
+        assertThat(user1.hashCode(), is(not(equalTo(user2.hashCode()))));
+
+        assertThat(user3, is(not(equalTo(user1))));
+        assertThat(user3, is(not(equalTo(user2))));
+        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
+        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
+
+        user2.sharedWith(asymmetricLock);
+
+        assertThat(user1, is(equalTo(user2)));
+        assertThat(user1.hashCode(), is(equalTo(user2.hashCode())));
+
+        assertThat(user3, is(not(equalTo(user1))));
+        assertThat(user3, is(not(equalTo(user2))));
+        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
+        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
+
+        user3.sharedWith(asymmetricLock);
+
+        assertThat(user3, is(not(equalTo(user1))));
+        assertThat(user3, is(not(equalTo(user2))));
+        assertThat(user3.hashCode(), is(not(equalTo(user1.hashCode()))));
+        assertThat(user3.hashCode(), is(not(equalTo(user2.hashCode()))));
     }
 
 }

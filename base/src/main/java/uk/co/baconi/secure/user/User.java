@@ -16,9 +16,14 @@
 
 package uk.co.baconi.secure.user;
 
-import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.lock.AsymmetricLock;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @NodeEntity
@@ -30,7 +35,56 @@ public class User {
     @Property
     private String name;
 
-    @Relationship(type = "SHARED_WITH", direction = Relationship.INCOMING)
-    private Set<AsymmetricLock> shared;
+    @Relationship(type = AsymmetricLock.SHARED_WITH, direction = Relationship.INCOMING)
+    private Set<AsymmetricLock> shared = new HashSet<>();
 
+    // Here for Neo4J annotations
+    public User() {
+    }
+
+    public User(final String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User sharedWith(final AsymmetricLock lock){
+
+        shared.add(lock);
+
+        return this;
+    }
+
+    public Set<AsymmetricLock> getShared() {
+        return shared;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) &&
+                Objects.equals(shared, user.shared);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, shared);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", shared=" + shared +
+                '}';
+    }
 }

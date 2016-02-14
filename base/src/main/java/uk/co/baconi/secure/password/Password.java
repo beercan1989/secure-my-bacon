@@ -22,6 +22,8 @@ import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.lock.SymmetricLock;
 
+import java.util.Objects;
+
 @NodeEntity
 public class Password {
 
@@ -37,7 +39,82 @@ public class Password {
     @Property
     private String password;
 
-    @Relationship(type = "SECURED_BY")
+    @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
+    // Here for Neo4J annotations
+    public Password() {
+    }
+
+    public Password(final String whereFor, final String username, final String password) {
+        this.whereFor = whereFor;
+        this.username = username;
+        this.password = password;  // TODO - Encryption with the target's public key
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getWhereFor() {
+        return whereFor;
+    }
+
+    public void setWhereFor(final String whereFor) {
+        this.whereFor = whereFor;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public SymmetricLock getSecuredBy() {
+        return securedBy;
+    }
+
+    public Password securedBy(final SymmetricLock securedBy) {
+
+        this.securedBy = securedBy;
+
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Password password1 = (Password) o;
+        return Objects.equals(whereFor, password1.whereFor) &&
+                Objects.equals(username, password1.username) &&
+                Objects.equals(password, password1.password) &&
+                Objects.equals(securedBy, password1.securedBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(whereFor, username, password, securedBy);
+    }
+
+    @Override
+    public String toString() {
+        return "Password{" +
+                "id=" + id +
+                ", whereFor='" + whereFor + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", securedBy=" + securedBy +
+                '}';
+    }
 }
