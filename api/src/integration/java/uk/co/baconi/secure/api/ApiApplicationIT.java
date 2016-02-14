@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure;
+package uk.co.baconi.secure.api;
 
 import org.junit.Test;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.user;
+package uk.co.baconi.secure.api.password;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
-public class UserEndPoint {
+@RequestMapping("/passwords")
+public class PasswordEndpoint {
 
     // TODO - Fill in
     @RequestMapping(method = RequestMethod.GET)

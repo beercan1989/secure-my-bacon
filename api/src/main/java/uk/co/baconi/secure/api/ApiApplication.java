@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure;
+package uk.co.baconi.secure.api;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class ApiApplication {
+import uk.co.baconi.secure.base.BaseConfiguration;
+
+public class ApiApplication extends BaseConfiguration {
 
     public static void main(final String... args) {
         SpringApplication.run(ApiApplication.class, args);
