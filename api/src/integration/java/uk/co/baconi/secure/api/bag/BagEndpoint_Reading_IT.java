@@ -34,7 +34,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body(isEmptyOrNullString());
+                body("[0].name", is(equalTo("Substeps")));
     }
 
 }
