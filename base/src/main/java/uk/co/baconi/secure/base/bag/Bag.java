@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base.bag;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -38,9 +39,11 @@ public class Bag {
     @Property
     private byte[] publicKey;
 
+    @JsonIgnore
     @Relationship(type = AsymmetricLock.SHARED_WITH)
     private Set<AsymmetricLock> shared = new HashSet<>();
 
+    @JsonIgnore
     @Relationship(type = SymmetricLock.SECURED_BY, direction = Relationship.INCOMING)
     private Set<SymmetricLock> secured = new HashSet<>();
 
