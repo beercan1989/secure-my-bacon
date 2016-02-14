@@ -25,6 +25,8 @@ import uk.co.baconi.secure.bag.Bag;
 import uk.co.baconi.secure.password.Password;
 import uk.co.baconi.secure.user.User;
 
+import java.util.Arrays;
+
 public class SymmetricLockTest {
 
     @Test
@@ -104,4 +106,20 @@ public class SymmetricLockTest {
         assertThat(lock4.hashCode(), is(not(equalTo(lock5.hashCode()))));
     }
 
+    @Test
+    public void shouldHaveNiceToStringRepresentation() {
+
+        final Password password = mock(Password.class);
+        final Bag bag = mock(Bag.class);
+        final byte[] key = "symmetric key".getBytes();
+
+        final SymmetricLock lock = new SymmetricLock(password, bag, key);
+
+        final String lockAsString = lock.toString();
+
+        assertThat(lockAsString, containsString("id=null,"));
+        assertThat(lockAsString, containsString("key=" + Arrays.toString(key) + ','));
+        assertThat(lockAsString, containsString("password=" + password + ','));
+        assertThat(lockAsString, containsString("bag=" + bag));
+    }
 }

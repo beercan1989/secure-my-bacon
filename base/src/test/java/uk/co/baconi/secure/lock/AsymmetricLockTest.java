@@ -16,13 +16,15 @@
 
 package uk.co.baconi.secure.lock;
 
-import static org.mockito.Mockito.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
 import org.junit.Test;
 import uk.co.baconi.secure.bag.Bag;
 import uk.co.baconi.secure.user.User;
+
+import java.util.Arrays;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 public class AsymmetricLockTest {
 
@@ -102,5 +104,22 @@ public class AsymmetricLockTest {
         assertThat(lock2.hashCode(), is(not(equalTo(lock5.hashCode()))));
         assertThat(lock3.hashCode(), is(not(equalTo(lock5.hashCode()))));
         assertThat(lock4.hashCode(), is(not(equalTo(lock5.hashCode()))));
+    }
+
+    @Test
+    public void shouldHaveNiceToStringRepresentation() {
+
+        final User user = mock(User.class);
+        final Bag bag = mock(Bag.class);
+        final byte[] privateKey = "private key".getBytes();
+
+        final AsymmetricLock lock = new AsymmetricLock(bag, user, privateKey);
+
+        final String lockAsString = lock.toString();
+
+        assertThat(lockAsString, containsString("id=null,"));
+        assertThat(lockAsString, containsString("privateKey=" + Arrays.toString(privateKey) + ','));
+        assertThat(lockAsString, containsString("bag=" + bag + ','));
+        assertThat(lockAsString, containsString("user=" + user));
     }
 }

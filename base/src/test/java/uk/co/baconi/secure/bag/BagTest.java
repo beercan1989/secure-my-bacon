@@ -20,6 +20,8 @@ import org.junit.Test;
 import uk.co.baconi.secure.lock.AsymmetricLock;
 import uk.co.baconi.secure.lock.SymmetricLock;
 
+import java.util.Arrays;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
@@ -170,5 +172,19 @@ public class BagTest {
         assertThat(bag5, is(not(equalTo(bag2))));
         assertThat(bag5.hashCode(), is(not(equalTo(bag1.hashCode()))));
         assertThat(bag5.hashCode(), is(not(equalTo(bag2.hashCode()))));
+    }
+
+    @Test
+    public void shouldHaveNiceToStringRepresentation() {
+
+        final Bag bag = new Bag("Substeps", "public key".getBytes());
+
+        final String bagAsString = bag.toString();
+
+        assertThat(bagAsString, containsString("id=null,"));
+        assertThat(bagAsString, containsString("name='Substeps',"));
+        assertThat(bagAsString, containsString("publicKey=" + Arrays.toString("public key".getBytes()) + ','));
+        assertThat(bagAsString, containsString("shared=[],"));
+        assertThat(bagAsString, containsString("secured=[]"));
     }
 }
