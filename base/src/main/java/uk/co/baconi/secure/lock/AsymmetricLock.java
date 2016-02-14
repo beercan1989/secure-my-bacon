@@ -20,11 +20,16 @@ import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.bag.Bag;
 import uk.co.baconi.secure.user.User;
 
-@RelationshipEntity(type = "SHARED_WITH")
+import java.util.Arrays;
+import java.util.Objects;
+
+@RelationshipEntity(type = AsymmetricLock.SHARED_WITH)
 public class AsymmetricLock {
 
+    public static final String SHARED_WITH = "SHARED_WITH";
+
     @GraphId
-    private Long relationshipId;
+    private Long id;
 
     @Property
     private byte[] privateKey;
@@ -35,4 +40,62 @@ public class AsymmetricLock {
     @EndNode
     private User user;
 
+    // Here for Neo4J annotations
+    public AsymmetricLock() {
+    }
+
+    public AsymmetricLock(final Bag bag, final User user, final byte[] privateKey) {
+        this.bag = bag;
+        this.user = user;
+
+        this.privateKey = privateKey; // TODO - Encryption with the target's public key
+
+        this.bag.sharedWith(this);
+        this.user.sharedWith(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public byte[] getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(byte[] privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public Bag getBag() {
+        return bag;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AsymmetricLock that = (AsymmetricLock) o;
+        return Objects.equals(privateKey, that.privateKey) &&
+                Objects.equals(bag, that.bag) &&
+                Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(privateKey, bag, user);
+    }
+
+    @Override
+    public String toString() {
+        return "AsymmetricLock{" +
+                "id=" + id +
+                ", privateKey=" + Arrays.toString(privateKey) +
+                ", bag=" + bag +
+                ", user=" + user +
+                '}';
+    }
 }

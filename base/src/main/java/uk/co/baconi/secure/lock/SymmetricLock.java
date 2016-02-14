@@ -20,11 +20,16 @@ import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.bag.Bag;
 import uk.co.baconi.secure.password.Password;
 
-@RelationshipEntity(type = "SECURED_BY")
+import java.util.Arrays;
+import java.util.Objects;
+
+@RelationshipEntity(type = SymmetricLock.SECURED_BY)
 public class SymmetricLock {
 
+    public static final String SECURED_BY = "SECURED_BY";
+
     @GraphId
-    private Long relationshipId;
+    private Long id;
 
     @Property
     private byte[] key;
@@ -35,4 +40,63 @@ public class SymmetricLock {
     @EndNode
     private Bag bag;
 
+    // Here for Neo4J annotations
+    public SymmetricLock() {
+    }
+
+    public SymmetricLock(final Password password, final Bag bag, final byte[] key) {
+        this.password = password;
+        this.bag = bag;
+
+        this.key = key;  // TODO - Encryption with the source's public key
+
+        //this.password;
+        this.bag.securedWith(this);
+        this.password.securedBy(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public byte[] getKey() {
+        return key;
+    }
+
+    public void setKey(byte[] key) {
+        this.key = key;
+    }
+
+    public Password getPassword() {
+        return password;
+    }
+
+    public Bag getBag() {
+        return bag;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SymmetricLock that = (SymmetricLock) o;
+        return Objects.equals(key, that.key) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(bag, that.bag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, password, bag);
+    }
+
+    @Override
+    public String toString() {
+        return "SymmetricLock{" +
+                "id=" + id +
+                ", key=" + Arrays.toString(key) +
+                ", password=" + password +
+                ", bag=" + bag +
+                '}';
+    }
 }

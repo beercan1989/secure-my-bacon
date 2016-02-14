@@ -17,17 +17,135 @@
 package uk.co.baconi.secure.password;
 
 import org.junit.Test;
-import uk.co.baconi.secure.user.User;
+import uk.co.baconi.secure.lock.SymmetricLock;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
 
 public class PasswordTest {
 
     @Test
-    public void replaceMe() throws Exception {
+    public void shouldBeAbleToReadProperties() {
 
-        final Password bag = new Password();
+        final String whereFor = "https://github.com/login";
+        final String username = "beercan1989";
+        final String passw0rd = "password";
 
-        assert true;
+        final Password password = new Password(whereFor, username, passw0rd);
 
+        assertThat(password.getId(), is(nullValue()));
+        assertThat(password.getWhereFor(), is(equalTo(whereFor)));
+        assertThat(password.getUsername(), is(equalTo(username)));
+        assertThat(password.getPassword(), is(equalTo(passw0rd)));
+        assertThat(password.getSecuredBy(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldBeAbleToChangeProperties() {
+
+        final SymmetricLock symmetricLock = mock(SymmetricLock.class);
+        final Password password = new Password("", "", "").securedBy(symmetricLock);
+        assertThat(password.getSecuredBy(), is(equalTo(symmetricLock)));
+
+        final String newWhereFor = "https://bitbucket.org/account/signin/?next=/";
+        password.setWhereFor(newWhereFor);
+        assertThat(password.getWhereFor(), is(equalTo(newWhereFor)));
+
+        final String newUsername = "substepsTeam";
+        password.setUsername(newUsername);
+        assertThat(password.getUsername(), is(equalTo(newUsername)));
+
+        final String newPassw0rd = "P@55w0rd!";
+        password.setPassword(newPassw0rd);
+        assertThat(password.getPassword(), is(equalTo(newPassw0rd)));
+
+        final SymmetricLock newSymmetricLock = mock(SymmetricLock.class);
+        password.securedBy(newSymmetricLock);
+        assertThat(password.getSecuredBy(), is(equalTo(newSymmetricLock)));
+    }
+
+    @Test
+    public void shouldImplementEqualsCorrectly() {
+
+        final String whereFor = "https://github.com/login";
+        final String username = "beercan1989";
+        final String passw0rd = "password";
+
+        final Password password1 = new Password(whereFor, username, passw0rd);
+        final Password password2 = new Password(whereFor, username, passw0rd);
+
+        assertThat(password1, is(equalTo(password2)));
+        assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
+
+        final Password password3 = new Password(whereFor, "beercan", passw0rd);
+
+        assertThat(password1, is(not(equalTo(password3))));
+        assertThat(password2, is(not(equalTo(password3))));
+        assertThat(password1.hashCode(), is(not(equalTo(password3.hashCode()))));
+        assertThat(password2.hashCode(), is(not(equalTo(password3.hashCode()))));
+
+        final Password password4 = new Password(whereFor, username, "P@55w0rd!");
+
+        assertThat(password1, is(not(equalTo(password4))));
+        assertThat(password2, is(not(equalTo(password4))));
+        assertThat(password3, is(not(equalTo(password4))));
+        assertThat(password1.hashCode(), is(not(equalTo(password4.hashCode()))));
+        assertThat(password2.hashCode(), is(not(equalTo(password4.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password4.hashCode()))));
+
+        final Password password5 = new Password("https://bitbucket.org/account/signin/?next=/", username, passw0rd);
+
+        assertThat(password1, is(not(equalTo(password5))));
+        assertThat(password2, is(not(equalTo(password5))));
+        assertThat(password3, is(not(equalTo(password5))));
+        assertThat(password4, is(not(equalTo(password5))));
+        assertThat(password1.hashCode(), is(not(equalTo(password5.hashCode()))));
+        assertThat(password2.hashCode(), is(not(equalTo(password5.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password5.hashCode()))));
+        assertThat(password4.hashCode(), is(not(equalTo(password5.hashCode()))));
+
+        final SymmetricLock asymmetricLock = mock(SymmetricLock.class);
+
+        password1.securedBy(asymmetricLock);
+
+        assertThat(password1, is(not(equalTo(password2))));
+        assertThat(password3, is(not(equalTo(password1))));
+        assertThat(password3, is(not(equalTo(password2))));
+        assertThat(password4, is(not(equalTo(password1))));
+        assertThat(password4, is(not(equalTo(password2))));
+        assertThat(password5, is(not(equalTo(password1))));
+        assertThat(password5, is(not(equalTo(password2))));
+        assertThat(password1.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password1.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password4.hashCode(), is(not(equalTo(password1.hashCode()))));
+        assertThat(password4.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password5.hashCode(), is(not(equalTo(password1.hashCode()))));
+        assertThat(password5.hashCode(), is(not(equalTo(password2.hashCode()))));
+
+        password2.securedBy(asymmetricLock);
+
+        assertThat(password1, is(equalTo(password2)));
+        assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
+
+        assertThat(password3, is(not(equalTo(password2))));
+        assertThat(password5, is(not(equalTo(password2))));
+        assertThat(password4, is(not(equalTo(password2))));
+        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password4.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password5.hashCode(), is(not(equalTo(password2.hashCode()))));
+
+        password3.securedBy(asymmetricLock);
+
+        assertThat(password3, is(not(equalTo(password1))));
+        assertThat(password3, is(not(equalTo(password2))));
+        assertThat(password3, is(not(equalTo(password4))));
+        assertThat(password3, is(not(equalTo(password5))));
+        assertThat(password3.hashCode(), is(not(equalTo(password1.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password2.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password4.hashCode()))));
+        assertThat(password3.hashCode(), is(not(equalTo(password5.hashCode()))));
     }
 
 }

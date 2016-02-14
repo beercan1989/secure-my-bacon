@@ -20,6 +20,9 @@ import org.junit.Test;
 
 public class BagIT {
 
+    // TODO - Review embbedded server once Spring Data Neo4j 4.1 released
+    // http://docs.spring.io/spring-data/data-neo4j/docs/4.1.0.M1/reference/html/#_drivers
+
     @Test
     public void replaceMe() throws Exception {
 
