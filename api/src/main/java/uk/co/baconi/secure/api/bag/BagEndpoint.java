@@ -16,19 +16,35 @@
 
 package uk.co.baconi.secure.api.bag;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.bag.BagGraphRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/bags")
 public class BagEndpoint {
 
-    // TODO - Fill in
+    @Autowired
+    private BagGraphRepository bagGraphRepository;
+
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Void> get(){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<Bag>> get(){
+
+        final List<Bag> bags = StreamSupport.
+                stream(bagGraphRepository.findAll().spliterator(), false).
+                collect(Collectors.toList());
+
+        return ResponseEntity.
+                ok().
+                body(bags);
     }
 
 }
