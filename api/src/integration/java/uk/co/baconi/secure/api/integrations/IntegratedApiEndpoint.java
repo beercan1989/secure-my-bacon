@@ -48,11 +48,11 @@ public class IntegratedApiEndpoint {
     //
     // Api Key Values
     //
-    @Value("${smb.test.data.api.headerName}")
+    @Value("${integration.test.data.api.headerName}")
     protected String apiKeyHeader;
-    @Value("${smb.test.data.api.validKey}")
+    @Value("${integration.test.data.api.validKey}")
     protected String apiKeyValidValue;
-    @Value("${smb.test.data.api.invalidKey}")
+    @Value("${integration.test.data.api.invalidKey}")
     protected String apiKeyInvalidValue;
 
 
