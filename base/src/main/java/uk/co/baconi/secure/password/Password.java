@@ -98,13 +98,12 @@ public class Password {
         Password password1 = (Password) o;
         return Objects.equals(whereFor, password1.whereFor) &&
                 Objects.equals(username, password1.username) &&
-                Objects.equals(password, password1.password) &&
-                Objects.equals(securedBy, password1.securedBy);
+                Objects.equals(password, password1.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(whereFor, username, password, securedBy);
+        return Objects.hash(whereFor, username, password);
     }
 
     @Override
@@ -114,7 +113,6 @@ public class Password {
                 ", whereFor='" + whereFor + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", securedBy=" + securedBy +
                 '}';
     }
 }
