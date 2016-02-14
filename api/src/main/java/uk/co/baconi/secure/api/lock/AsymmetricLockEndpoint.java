@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.password;
+package uk.co.baconi.secure.api.lock;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/passwords")
-public class PasswordEndpoint {
+@RequestMapping("/asymmetric-locks")
+public class AsymmetricLockEndpoint {
 
     // TODO - Fill in
     @RequestMapping(method = RequestMethod.GET)

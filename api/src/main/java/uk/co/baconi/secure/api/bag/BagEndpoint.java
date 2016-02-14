@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 James Bacon
+ * Copyright 2016 James Bacon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure;
+package uk.co.baconi.secure.api.bag;
 
-import org.junit.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-public class ApiApplicationTest {
+@RestController
+@RequestMapping("/bags")
+public class BagEndpoint {
 
-    @Test
-    public void startApplication() throws Exception {
-        ApiApplication.main();
+    // TODO - Fill in
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Void> get(){
+        return ResponseEntity.ok().build();
     }
 
 }
