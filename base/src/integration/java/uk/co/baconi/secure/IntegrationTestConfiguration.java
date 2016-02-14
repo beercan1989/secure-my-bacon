@@ -39,7 +39,7 @@ public class IntegrationTestConfiguration extends Neo4jConfiguration {
 
     @Override
     public Neo4jServer neo4jServer() {
-        return new RemoteServer("http://localhost:7474");
+        return new RemoteServer("http://localhost:7474", "neo4j", "password");
     }
 
     @Bean

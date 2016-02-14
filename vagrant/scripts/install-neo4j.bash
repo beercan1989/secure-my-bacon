@@ -17,12 +17,18 @@ sudo apt-get update
 
 sudo apt-get --assume-yes install neo4j
 
-# Enable external connections
+## Enable external connections
 sed -i 's/#org.neo4j.server.webserver.address=0.0.0.0/org.neo4j.server.webserver.address=0.0.0.0/' /var/lib/neo4j/conf/neo4j-server.properties
 
-# TODO: Setup users that can access Neo4J via port 7474
+## Change default user:password from [neo4j/neo4j] http://neo4j.com/docs/stable/rest-api-security.html
+curl -X POST \
+  -d '{ "password" : "password" }' \
+  -H "Authorization: Basic $(echo -n neo4j:neo4j | base64)" \
+  -H 'Accept: application/json; charset=UTF-8' \
+  -H 'Content-Type: application/json'
+  'http://localhost:7474/user/neo4j/password'
 
-# Restart Neo4J to pick up configuration changes.
+## Restart Neo4J to pick up configuration changes.
 sudo /etc/init.d/neo4j-service restart
 
 touch /home/vagrant/.install-neo4j-has-run
