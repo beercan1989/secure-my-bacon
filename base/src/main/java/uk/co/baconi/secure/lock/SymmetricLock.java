@@ -50,7 +50,6 @@ public class SymmetricLock {
 
         this.key = key;  // TODO - Encryption with the source's public key
 
-        //this.password;
         this.bag.securedWith(this);
         this.password.securedBy(this);
     }

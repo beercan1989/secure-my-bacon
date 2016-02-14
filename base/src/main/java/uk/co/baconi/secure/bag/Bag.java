@@ -101,14 +101,12 @@ public class Bag {
         if (o == null || getClass() != o.getClass()) return false;
         Bag bag = (Bag) o;
         return Objects.equals(name, bag.name) &&
-                Objects.equals(publicKey, bag.publicKey) &&
-                Objects.equals(shared, bag.shared) &&
-                Objects.equals(secured, bag.secured);
+                Objects.equals(publicKey, bag.publicKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, publicKey, shared, secured);
+        return Objects.hash(name, publicKey);
     }
 
     @Override
@@ -117,8 +115,6 @@ public class Bag {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", publicKey=" + Arrays.toString(publicKey) +
-                ", shared=" + shared +
-                ", secured=" + secured +
                 '}';
     }
 }
