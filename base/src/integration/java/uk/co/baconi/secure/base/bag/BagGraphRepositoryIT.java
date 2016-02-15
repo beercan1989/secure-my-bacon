@@ -46,7 +46,7 @@ public class BagGraphRepositoryIT {
 
         final Bag saved = bagGraphRepository.save(bag);
 
-        assertThat(saved, Matchers.is(equalTo(bag)));
+        assertThat(saved, is(equalTo(bag)));
         assertThat(saved.getId(), is(not(nullValue())));
         assertThat(saved.getName(), is(equalTo(name)));
         assertThat(saved.getPublicKey(), is(equalTo(publicKey)));
@@ -55,7 +55,7 @@ public class BagGraphRepositoryIT {
 
         final Bag one = bagGraphRepository.findOne(bag.getId());
 
-        assertThat(one, Matchers.is(equalTo(saved)));
+        assertThat(one, is(equalTo(saved)));
         assertThat(one.getId(), is(not(nullValue())));
         assertThat(one.getName(), is(equalTo(name)));
         assertThat(one.getPublicKey(), is(equalTo(publicKey)));
