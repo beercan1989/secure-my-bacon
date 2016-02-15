@@ -16,7 +16,6 @@
 
 package uk.co.baconi.secure.base.user;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 
