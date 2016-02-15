@@ -25,7 +25,7 @@ curl -X POST \
   -d '{ "password" : "password" }' \
   -H "Authorization: Basic $(echo -n neo4j:neo4j | base64)" \
   -H 'Accept: application/json; charset=UTF-8' \
-  -H 'Content-Type: application/json'
+  -H 'Content-Type: application/json' \
   'http://localhost:7474/user/neo4j/password'
 
 ## Restart Neo4J to pick up configuration changes.
