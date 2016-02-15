@@ -33,7 +33,7 @@ import java.io.IOException;
 import static com.jayway.restassured.RestAssured.with;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(ApiApplication.class)
+@SpringApplicationConfiguration(IntegrationApiApplication.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("integration")
 public class IntegratedApiEndpoint {
