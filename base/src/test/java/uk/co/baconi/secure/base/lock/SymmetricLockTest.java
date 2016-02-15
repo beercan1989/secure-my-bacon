@@ -75,31 +75,31 @@ public class SymmetricLockTest {
         final SymmetricLock lock1 = new SymmetricLock(password, bag, key);
         final SymmetricLock lock2 = new SymmetricLock(password, bag, key);
 
-        assertThat(lock1, Matchers.is(equalTo(lock2)));
+        assertThat(lock1, is(equalTo(lock2)));
         assertThat(lock1.hashCode(), is(equalTo(lock2.hashCode())));
 
         final SymmetricLock lock3 = new SymmetricLock(mock(Password.class), bag, key);
 
-        assertThat(lock1, is(Matchers.not(equalTo(lock3))));
-        assertThat(lock2, is(Matchers.not(equalTo(lock3))));
+        assertThat(lock1, is(not(equalTo(lock3))));
+        assertThat(lock2, is(not(equalTo(lock3))));
         assertThat(lock1.hashCode(), is(not(equalTo(lock3.hashCode()))));
         assertThat(lock2.hashCode(), is(not(equalTo(lock3.hashCode()))));
 
         final SymmetricLock lock4 = new SymmetricLock(password, mock(Bag.class), key);
 
-        assertThat(lock1, is(Matchers.not(equalTo(lock4))));
-        assertThat(lock2, is(Matchers.not(equalTo(lock4))));
-        assertThat(lock3, is(Matchers.not(equalTo(lock4))));
+        assertThat(lock1, is(not(equalTo(lock4))));
+        assertThat(lock2, is(not(equalTo(lock4))));
+        assertThat(lock3, is(not(equalTo(lock4))));
         assertThat(lock1.hashCode(), is(not(equalTo(lock4.hashCode()))));
         assertThat(lock2.hashCode(), is(not(equalTo(lock4.hashCode()))));
         assertThat(lock3.hashCode(), is(not(equalTo(lock4.hashCode()))));
 
         final SymmetricLock lock5 = new SymmetricLock(password, bag, "diffent symmetric key".getBytes());
 
-        assertThat(lock1, is(Matchers.not(equalTo(lock5))));
-        assertThat(lock2, is(Matchers.not(equalTo(lock5))));
-        assertThat(lock3, is(Matchers.not(equalTo(lock5))));
-        assertThat(lock4, is(Matchers.not(equalTo(lock5))));
+        assertThat(lock1, is(not(equalTo(lock5))));
+        assertThat(lock2, is(not(equalTo(lock5))));
+        assertThat(lock3, is(not(equalTo(lock5))));
+        assertThat(lock4, is(not(equalTo(lock5))));
         assertThat(lock1.hashCode(), is(not(equalTo(lock5.hashCode()))));
         assertThat(lock2.hashCode(), is(not(equalTo(lock5.hashCode()))));
         assertThat(lock3.hashCode(), is(not(equalTo(lock5.hashCode()))));

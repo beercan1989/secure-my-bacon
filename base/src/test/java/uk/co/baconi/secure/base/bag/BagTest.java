@@ -97,22 +97,22 @@ public class BagTest {
         final Bag bag1 = new Bag(name, publicKey);
         final Bag bag2 = new Bag(name, publicKey);
 
-        assertThat(bag1, Matchers.is(equalTo(bag2)));
+        assertThat(bag1, is(equalTo(bag2)));
         assertThat(bag1.hashCode(), is(equalTo(bag2.hashCode())));
 
         final Bag bag3 = new Bag("Cucumber", publicKey);
 
-        assertThat(bag1, is(Matchers.not(equalTo(bag3))));
-        assertThat(bag2, is(Matchers.not(equalTo(bag3))));
+        assertThat(bag1, is(not(equalTo(bag3))));
+        assertThat(bag2, is(not(equalTo(bag3))));
 
         assertThat(bag1.hashCode(), is(not(equalTo(bag3.hashCode()))));
         assertThat(bag2.hashCode(), is(not(equalTo(bag3.hashCode()))));
 
         final Bag bag4 = new Bag(name, "another public key".getBytes());
 
-        assertThat(bag1, is(Matchers.not(equalTo(bag4))));
-        assertThat(bag2, is(Matchers.not(equalTo(bag4))));
-        assertThat(bag3, is(Matchers.not(equalTo(bag4))));
+        assertThat(bag1, is(not(equalTo(bag4))));
+        assertThat(bag2, is(not(equalTo(bag4))));
+        assertThat(bag3, is(not(equalTo(bag4))));
 
         assertThat(bag1.hashCode(), is(not(equalTo(bag4.hashCode()))));
         assertThat(bag2.hashCode(), is(not(equalTo(bag4.hashCode()))));
@@ -122,14 +122,14 @@ public class BagTest {
 
         bag1.securedWith(symmetricLock);
 
-        assertThat(bag1, Matchers.is(equalTo(bag2)));
+        assertThat(bag1, is(equalTo(bag2)));
         assertThat(bag1.hashCode(), is(equalTo(bag2.hashCode())));
 
         final AsymmetricLock asymmetricLock = mock(AsymmetricLock.class);
 
         bag2.sharedWith(asymmetricLock);
 
-        assertThat(bag1, Matchers.is(equalTo(bag2)));
+        assertThat(bag1, is(equalTo(bag2)));
         assertThat(bag1.hashCode(), is(equalTo(bag2.hashCode())));
     }
 
