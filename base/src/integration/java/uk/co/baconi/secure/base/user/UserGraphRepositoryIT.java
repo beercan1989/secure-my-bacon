@@ -48,14 +48,14 @@ public class UserGraphRepositoryIT {
         assertThat(saved, is(equalTo(user)));
         assertThat(saved.getId(), is(not(nullValue())));
         assertThat(saved.getName(), is(equalTo(name)));
-        MatcherAssert.assertThat(saved.getShared(), is(empty()));
+        assertThat(saved.getShared(), is(empty()));
 
         final User one = userGraphRepository.findOne(user.getId());
 
         assertThat(one, is(equalTo(saved)));
         assertThat(one.getId(), is(equalTo(user.getId())));
         assertThat(one.getName(), is(equalTo(name)));
-        MatcherAssert.assertThat(one.getShared(), is(empty()));
+        assertThat(one.getShared(), is(empty()));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class UserGraphRepositoryIT {
 
         final AsymmetricLock sharedWith = new AsymmetricLock(gitHubBag, user, "privateKey".getBytes());
 
-        MatcherAssert.assertThat(user.getShared(), contains(sharedWith));
+        assertThat(user.getShared(), contains(sharedWith));
 
         assertThat(gitHubBag.getId(), is(nullValue()));
         assertThat(sharedWith.getId(), is(nullValue()));
