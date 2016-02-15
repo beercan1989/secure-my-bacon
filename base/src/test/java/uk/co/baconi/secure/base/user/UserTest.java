@@ -46,11 +46,11 @@ public class UserTest {
 
         final User user = new User(name).sharedWith(asymmetricLock);
 
-        MatcherAssert.assertThat(user.getShared(), contains(asymmetricLock));
+        assertThat(user.getShared(), contains(asymmetricLock));
 
         user.sharedWith(asymmetricLock2);
 
-        MatcherAssert.assertThat(user.getShared(), containsInAnyOrder(asymmetricLock, asymmetricLock2));
+        assertThat(user.getShared(), containsInAnyOrder(asymmetricLock, asymmetricLock2));
     }
 
     @Test

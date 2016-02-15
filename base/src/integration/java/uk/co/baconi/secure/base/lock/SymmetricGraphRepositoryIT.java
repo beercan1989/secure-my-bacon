@@ -50,7 +50,7 @@ public class SymmetricGraphRepositoryIT {
         assertThat(saved, is(equalTo(lock)));
         assertThat(saved.getId(), is(not(nullValue())));
         assertThat(saved.getKey(), is(equalTo(key)));
-        MatcherAssert.assertThat(saved.getPassword(), is(equalTo(password)));
+        assertThat(saved.getPassword(), is(equalTo(password)));
         assertThat(saved.getBag(), is(equalTo(bag)));
 
         final SymmetricLock one = symmetricLockGraphRepository.findOne(lock.getId());
@@ -58,7 +58,7 @@ public class SymmetricGraphRepositoryIT {
         assertThat(one, is(equalTo(lock)));
         assertThat(one.getId(), is(equalTo(lock.getId())));
         assertThat(one.getKey(), is(equalTo(key)));
-        MatcherAssert.assertThat(one.getPassword(), is(equalTo(password)));
+        assertThat(one.getPassword(), is(equalTo(password)));
         assertThat(one.getBag(), is(equalTo(bag)));
     }
 
