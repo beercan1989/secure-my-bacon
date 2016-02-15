@@ -16,7 +16,6 @@
 
 package uk.co.baconi.secure.base.lock;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.password.Password;
