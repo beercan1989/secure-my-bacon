@@ -22,8 +22,8 @@ import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.isA;
 
 public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
@@ -37,10 +37,17 @@ public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("[0].password.whereFor", is(equalTo("https://github.com/login"))).
-                body("[0].password.username", is(equalTo("beercan1989"))).
-                body("[0].password.password", is(equalTo("password"))).
-                body("[0].bag.name", is(equalTo("GitHub")));
+                body("[0].password.whereFor", is(not(nullValue()))).
+                body("[0].password.whereFor", isA(String.class)).
+
+                body("[0].password.username", is(not(nullValue()))).
+                body("[0].password.username", isA(String.class)).
+
+                body("[0].password.password", is(not(nullValue()))).
+                body("[0].password.password", isA(String.class)).
+
+                body("[0].bag.name", is(not(nullValue()))).
+                body("[0].bag.name", isA(String.class));
     }
 
 }

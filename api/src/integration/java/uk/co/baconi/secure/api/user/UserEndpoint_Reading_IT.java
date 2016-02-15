@@ -20,8 +20,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
@@ -35,7 +34,8 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("[0].name", is(equalTo("beercan1989")));
+                body("[0].name", is(not(nullValue()))).
+                body("[0].name", isA(String.class));
     }
 
 }
