@@ -16,19 +16,38 @@
 
 package uk.co.baconi.secure.api.lock;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
+import uk.co.baconi.secure.base.lock.SymmetricLock;
+import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/symmetric-locks")
+@RequestMapping(value = "/symmetric-locks", produces = "application/json; charset=UTF-8")
 public class SymmetricLockEndpoint {
 
-    // TODO - Fill in
+    @Autowired
+    private SymmetricLockGraphRepository symmetricLockGraphRepository;
+
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Void> get(){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<SymmetricLock>> get(){
+
+        final List<SymmetricLock> allSymmetricLocks = StreamSupport.
+                stream(symmetricLockGraphRepository.findAll().spliterator(), false).
+                collect(Collectors.toList());
+
+        return ResponseEntity.
+                ok().
+                body(allSymmetricLocks);
     }
+
 
 }
