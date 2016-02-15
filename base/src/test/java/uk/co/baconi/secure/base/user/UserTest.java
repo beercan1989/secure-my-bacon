@@ -19,7 +19,9 @@ package uk.co.baconi.secure.base.user;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -35,7 +37,7 @@ public class UserTest {
 
         assertThat(user.getId(), is(nullValue()));
         assertThat(user.getName(), is(equalTo(name)));
-        assertThat(user.getShared(), Matchers.is(emptyIterableOf(AsymmetricLock.class)));
+        assertThat(user.getShared(), is(emptyCollectionOf(AsymmetricLock.class)));
     }
 
     @Test
@@ -90,5 +92,15 @@ public class UserTest {
 
         assertThat(userAsString, containsString("id=null,"));
         assertThat(userAsString, containsString("name='beercan1989'"));
+    }
+
+    @Test
+    public void shouldBeAbleToCreateBlankUser() {
+
+        final User user = new User();
+
+        assertThat(user.getId(), is(nullValue(Long.class)));
+        assertThat(user.getName(), is(nullValue(String.class)));
+        assertThat(user.getShared(), is(emptyCollectionOf(AsymmetricLock.class)));
     }
 }

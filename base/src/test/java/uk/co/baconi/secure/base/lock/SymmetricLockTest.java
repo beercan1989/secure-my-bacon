@@ -122,4 +122,15 @@ public class SymmetricLockTest {
         assertThat(lockAsString, containsString("password=" + password + ','));
         assertThat(lockAsString, containsString("bag=" + bag));
     }
+
+    @Test
+    public void shouldBeAbleToCreateBlankSymmetricLock() {
+
+        final SymmetricLock lock = new SymmetricLock();
+
+        assertThat(lock.getId(), is(nullValue(Long.class)));
+        assertThat(lock.getBag(), is(nullValue(Bag.class)));
+        assertThat(lock.getPassword(), is(nullValue(Password.class)));
+        assertThat(lock.getKey(), is(nullValue(byte[].class)));
+    }
 }

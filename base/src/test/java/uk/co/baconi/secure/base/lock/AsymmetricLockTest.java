@@ -122,4 +122,15 @@ public class AsymmetricLockTest {
         assertThat(lockAsString, containsString("bag=" + bag + ','));
         assertThat(lockAsString, containsString("user=" + user));
     }
+
+    @Test
+    public void shouldBeAbleToCreateBlankAsymmetricLock() {
+
+        final AsymmetricLock lock = new AsymmetricLock();
+
+        assertThat(lock.getId(), is(nullValue(Long.class)));
+        assertThat(lock.getBag(), is(nullValue(Bag.class)));
+        assertThat(lock.getUser(), is(nullValue(User.class)));
+        assertThat(lock.getPrivateKey(), is(nullValue(byte[].class)));
+    }
 }

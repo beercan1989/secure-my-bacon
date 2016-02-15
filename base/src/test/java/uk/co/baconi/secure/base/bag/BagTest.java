@@ -39,8 +39,8 @@ public class BagTest {
         assertThat(bag.getId(), is(nullValue()));
         assertThat(bag.getName(), is(equalTo(name)));
         assertThat(bag.getPublicKey(), is(equalTo(publicKey)));
-        assertThat(bag.getSecured(), Matchers.is(emptyIterableOf(SymmetricLock.class)));
-        assertThat(bag.getShared(), Matchers.is(emptyIterableOf(AsymmetricLock.class)));
+        assertThat(bag.getSecured(), is(emptyCollectionOf(SymmetricLock.class)));
+        assertThat(bag.getShared(), is(emptyCollectionOf(AsymmetricLock.class)));
     }
 
     @Test
@@ -143,5 +143,17 @@ public class BagTest {
         assertThat(bagAsString, containsString("id=null,"));
         assertThat(bagAsString, containsString("name='Substeps',"));
         assertThat(bagAsString, containsString("publicKey=" + Arrays.toString("public key".getBytes())));
+    }
+
+    @Test
+    public void shouldBeAbleToCreateBlankBag() {
+
+        final Bag bag = new Bag();
+
+        assertThat(bag.getId(), is(nullValue(Long.class)));
+        assertThat(bag.getName(), is(nullValue(String.class)));
+        assertThat(bag.getPublicKey(), is(nullValue(byte[].class)));
+        assertThat(bag.getSecured(), is(emptyCollectionOf(SymmetricLock.class)));
+        assertThat(bag.getShared(), is(emptyCollectionOf(AsymmetricLock.class)));
     }
 }

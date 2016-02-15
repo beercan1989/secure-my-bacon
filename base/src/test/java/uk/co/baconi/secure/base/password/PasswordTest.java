@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.base.password;
 
 import org.junit.Test;
+import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -127,5 +128,17 @@ public class PasswordTest {
         assertThat(passwordAsString, containsString("whereFor='https://github.com/login',"));
         assertThat(passwordAsString, containsString("username='beercan1989',"));
         assertThat(passwordAsString, containsString("password='p@55w0rd!'"));
+    }
+
+    @Test
+    public void shouldBeAbleToCreateBlankPassword() {
+
+        final Password password = new Password();
+
+        assertThat(password.getId(), is(nullValue(Long.class)));
+        assertThat(password.getWhereFor(), is(nullValue(String.class)));
+        assertThat(password.getUsername(), is(nullValue(String.class)));
+        assertThat(password.getPassword(), is(nullValue(String.class)));
+        assertThat(password.getSecuredBy(), is(nullValue(SymmetricLock.class)));
     }
 }
