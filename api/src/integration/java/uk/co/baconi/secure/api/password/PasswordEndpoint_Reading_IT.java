@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.isA;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
@@ -35,9 +35,14 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("[0].whereFor", is(equalTo("https://github.com/login"))).
-                body("[0].username", is(equalTo("beercan1989"))).
-                body("[0].password", is(equalTo("password")));
+                body("[0].whereFor", is(not(nullValue()))).
+                body("[0].whereFor", isA(String.class)).
+
+                body("[0].username", is(not(nullValue()))).
+                body("[0].username", isA(String.class)).
+
+                body("[0].password", is(not(nullValue()))).
+                body("[0].password", isA(String.class));
     }
 
 }

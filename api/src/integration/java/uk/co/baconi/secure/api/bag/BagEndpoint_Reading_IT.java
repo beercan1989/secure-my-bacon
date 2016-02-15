@@ -19,6 +19,7 @@ package uk.co.baconi.secure.api.bag;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.base.bag.Bag;
 
 import static org.hamcrest.Matchers.*;
 
@@ -34,7 +35,8 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("[0].name", is(equalTo("Substeps")));
+                body("[0].name", is(not(nullValue()))).
+                body("[0].name", isA(String.class));
     }
 
 }

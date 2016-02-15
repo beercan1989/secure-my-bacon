@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.isA;
 
 public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
@@ -35,8 +35,11 @@ public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("[0].user.name", is(equalTo("username"))).
-                body("[0].bag.name", is(equalTo("bag")));
+                body("[0].user.name", is(not(nullValue()))).
+                body("[0].user.name", isA(String.class)).
+
+                body("[0].bag.name", is(not(nullValue()))).
+                body("[0].bag.name", isA(String.class));
     }
 
 }
