@@ -21,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.baconi.secure.base.lock.AsymmetricLock;
-import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
 

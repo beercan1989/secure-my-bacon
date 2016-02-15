@@ -17,11 +17,8 @@
 package uk.co.baconi.secure.base.user;
 
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
-import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
-import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

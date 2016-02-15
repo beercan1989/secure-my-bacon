@@ -21,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.isA;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
