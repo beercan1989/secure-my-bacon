@@ -16,19 +16,37 @@
 
 package uk.co.baconi.secure.api.password;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.PasswordGraphRepository;
+import uk.co.baconi.secure.base.user.User;
+import uk.co.baconi.secure.base.user.UserGraphRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/passwords")
+@RequestMapping(value = "/passwords", produces = "application/json; charset=UTF-8")
 public class PasswordEndpoint {
 
-    // TODO - Fill in
+    @Autowired
+    private PasswordGraphRepository passwordGraphRepository;
+
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Void> get(){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<Password>> get(){
+
+        final List<Password> allPasswords = StreamSupport.
+                stream(passwordGraphRepository.findAll().spliterator(), false).
+                collect(Collectors.toList());
+
+        return ResponseEntity.
+                ok().
+                body(allPasswords);
     }
 
 }

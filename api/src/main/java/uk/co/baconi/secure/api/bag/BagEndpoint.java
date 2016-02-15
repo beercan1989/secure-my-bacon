@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/bags")
+@RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
 public class BagEndpoint {
 
     @Autowired
@@ -38,13 +38,13 @@ public class BagEndpoint {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Bag>> get(){
 
-        final List<Bag> bags = StreamSupport.
+        final List<Bag> allBags = StreamSupport.
                 stream(bagGraphRepository.findAll().spliterator(), false).
                 collect(Collectors.toList());
 
         return ResponseEntity.
                 ok().
-                body(bags);
+                body(allBags);
     }
 
 }

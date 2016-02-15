@@ -16,19 +16,36 @@
 
 package uk.co.baconi.secure.api.lock;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/asymmetric-locks")
+@RequestMapping(value = "/asymmetric-locks", produces = "application/json; charset=UTF-8")
 public class AsymmetricLockEndpoint {
 
-    // TODO - Fill in
+    @Autowired
+    private AsymmetricLockGraphRepository asymmetricLockGraphRepository;
+
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Void> get(){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AsymmetricLock>> get(){
+
+        final List<AsymmetricLock> allAsymmetricLocks = StreamSupport.
+                stream(asymmetricLockGraphRepository.findAll().spliterator(), false).
+                collect(Collectors.toList());
+
+        return ResponseEntity.
+                ok().
+                body(allAsymmetricLocks);
     }
 
 }
