@@ -19,7 +19,6 @@ package uk.co.baconi.secure.api.bag;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.base.bag.Bag;
 
 import static org.hamcrest.Matchers.*;
 

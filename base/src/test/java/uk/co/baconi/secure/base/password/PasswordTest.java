@@ -17,7 +17,6 @@
 package uk.co.baconi.secure.base.password;
 
 import org.junit.Test;
-import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;

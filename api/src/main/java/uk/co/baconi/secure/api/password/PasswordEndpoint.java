@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
-import uk.co.baconi.secure.base.user.User;
-import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

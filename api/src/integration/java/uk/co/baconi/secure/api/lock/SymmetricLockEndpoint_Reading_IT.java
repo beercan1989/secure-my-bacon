@@ -20,10 +20,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import java.util.Arrays;
-
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.isA;
 
 public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
