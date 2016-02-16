@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 ## Download Neo4J
 wget http://dist.neo4j.org/neo4j-community-${NEO4J_VERSION}-unix.tar.gz
 
@@ -8,6 +10,9 @@ tar -xzf neo4j-community-${NEO4J_VERSION}-unix.tar.gz
 
 ## Start Neo4J
 neo4j-community-${NEO4J_VERSION}/bin/neo4j start
+
+## Give it an extra second or two
+sleep 2s
 
 ## Reset Neo4J Password
 curl -X POST \
