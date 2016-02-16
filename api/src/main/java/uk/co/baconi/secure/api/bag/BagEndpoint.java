@@ -16,6 +16,8 @@
 
 package uk.co.baconi.secure.api.bag;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,8 @@ import java.util.stream.StreamSupport;
 @RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
 public class BagEndpoint {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BagEndpoint.class);
+
     @Autowired
     private BagGraphRepository bagGraphRepository;
 
@@ -53,7 +57,11 @@ public class BagEndpoint {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
 
+        LOG.debug("paged: {}", paged);
+
         final PaginatedResult<Bag> paginatedResult = new PaginatedResult<>(paged);
+
+        LOG.debug("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.
                 ok().
