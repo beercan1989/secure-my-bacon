@@ -36,6 +36,7 @@ public class Bag {
     @Property
     private String name;
 
+    @JsonIgnore
     @Property
     private byte[] publicKey;
 
