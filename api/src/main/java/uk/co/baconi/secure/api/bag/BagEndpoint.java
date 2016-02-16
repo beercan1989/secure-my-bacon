@@ -17,11 +17,14 @@
 package uk.co.baconi.secure.api.bag;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -40,7 +43,7 @@ public class BagEndpoint {
     private BagGraphRepository bagGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Bag>> get(
+    public ResponseEntity<PaginatedResult<Bag>> get(
             @Min(value = 1, message = "Page '${validatedValue}' must be greater than or equal to {value}.")
             @RequestParam(required = false, defaultValue = "1") final Integer page,
 
@@ -48,13 +51,13 @@ public class BagEndpoint {
             @Max(value = 20, message = "PerPage '${validatedValue}' must be less than or equal to {value}.")
             @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
 
-        final List<Bag> allBags = StreamSupport.
-                stream(bagGraphRepository.findAll().spliterator(), false).
-                collect(Collectors.toList());
+        final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
+
+        final PaginatedResult<Bag> paginatedResult = new PaginatedResult<>(paged);
 
         return ResponseEntity.
                 ok().
-                body(allBags);
+                body(paginatedResult);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
