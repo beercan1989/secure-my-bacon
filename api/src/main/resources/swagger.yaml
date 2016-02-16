@@ -15,7 +15,7 @@ paths:
         200:
           description: List of all bags in the system
           schema:
-            $ref: '#/definitions/PaginatedBagsResult'
+            $ref: '#/definitions/PaginatedBagResult'
           examples:
             application/json:
               data:
@@ -44,7 +44,7 @@ paths:
         200:
           description: List of all users in the system
           schema:
-            $ref: '#/definitions/PaginatedUsersResult'
+            $ref: '#/definitions/PaginatedUserResult'
 
   /passwords:
     get:
@@ -56,11 +56,11 @@ paths:
         200:
           description: List of all passwords in the system
           schema:
-            $ref: '#/definitions/PaginatedPasswordsResult'
+            $ref: '#/definitions/PaginatedPasswordResult'
 
 definitions:
 
-  PaginatedBagsResult:
+  PaginatedBagResult:
     description: Paginated result set of bags
     type: object
     properties:
@@ -83,7 +83,7 @@ definitions:
         description: the display name of the bag
         type: string
   
-  PaginatedUsersResult:
+  PaginatedUserResult:
     description: Paginated result set of users
     type: object
     properties:
@@ -106,7 +106,7 @@ definitions:
         description: the login identifier for the user
         type: string
   
-  PaginatedPasswordsResult:
+  PaginatedPasswordResult:
     description: Paginated result set of passwords
     type: object
     properties:
