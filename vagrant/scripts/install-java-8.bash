@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-set -ev
+set -e
 
-if [ -s "/home/vagrant/.install-java-8-has-run" ]; then
-  echo
+if [ -e "/home/vagrant/.install-java-8-has-run" ]; then
   echo Provision step has already been run.
-  echo
   exit 0
 fi
 

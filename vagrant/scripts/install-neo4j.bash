@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-set -ev
+set -e
 
-if [ -s "/home/vagrant/.install-neo4j-has-run" ]; then
-  echo
+if [ -e "/home/vagrant/.install-neo4j-has-run" ]; then
   echo Provision step has already been run.
-  echo
   exit 0
 fi
 
