@@ -20,6 +20,8 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static org.hamcrest.Matchers.*;
 
 public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -28,14 +30,18 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
     public void onFindingAllBags() {
 
         withNoAuthentication().
-                get(getBaseUrl() + "/bags").
+                baseUri(getBaseUrl()).
+                get("/bags").
 
                 then().assertThat().
 
-                statusCode(is(equalTo(HttpStatus.OK.value()))).
+                body(isJson(withJsonPath("[0].name"))).
 
-                body("[0].name", is(not(nullValue()))).
-                body("[0].name", isA(String.class));
+                body("[0].name", isA(String.class)).
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
+    //queryParam("page", 1).
+    //queryParam("perPage", 5).
 }
