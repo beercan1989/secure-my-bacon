@@ -18,16 +18,20 @@ package uk.co.baconi.secure.api.bag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Validated
 @RestController
 @RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
 public class BagEndpoint {
@@ -36,7 +40,13 @@ public class BagEndpoint {
     private BagGraphRepository bagGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Bag>> get(){
+    public ResponseEntity<List<Bag>> get(
+            @Min(value = 1, message = "Page '${validatedValue}' must be greater than or equal to {value}.")
+            @RequestParam(required = false, defaultValue = "1") final Integer page,
+
+            @Min(value = 1, message = "PerPage '${validatedValue}' must be greater than or equal to {value}.")
+            @Max(value = 20, message = "PerPage '${validatedValue}' must be less than or equal to {value}.")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
 
         final List<Bag> allBags = StreamSupport.
                 stream(bagGraphRepository.findAll().spliterator(), false).
@@ -47,4 +57,17 @@ public class BagEndpoint {
                 body(allBags);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List<String>> handleResourceNotFoundException(final ConstraintViolationException exception) {
+
+        final List<String> violations = exception.
+                getConstraintViolations().
+                stream().
+                map(ConstraintViolation::getMessage).
+                collect(Collectors.toList());
+
+        return ResponseEntity.
+                badRequest().
+                body(violations);
+    }
 }
