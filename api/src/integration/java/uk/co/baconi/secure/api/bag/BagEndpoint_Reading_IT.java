@@ -20,8 +20,7 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
 import static org.hamcrest.Matchers.*;
 
 public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -35,9 +34,23 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
-                body(isJson(withJsonPath("[0].name"))).
+                body(isJson(withJsonPath("data[0].id"))).
+                body(isJson(withJsonPath("data[0].name"))).
+                body(isJson(withoutJsonPath("data[0].publicKey"))).
 
-                body("[0].name", isA(String.class)).
+                body(isJson(withJsonPath("paging.page"))).
+                body(isJson(withJsonPath("paging.perPage"))).
+                body(isJson(withJsonPath("paging.totalCount"))).
+
+                body("data[0].id", isA(Integer.class)).
+                body("data[0].name", isA(String.class)).
+
+                body("paging.page", isA(Integer.class)).
+                body("paging.perPage", isA(Integer.class)).
+                body("paging.totalCount", isA(Integer.class)).
+
+                body("paging.page", is(equalTo(1))).
+                body("paging.perPage", is(equalTo(5))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
