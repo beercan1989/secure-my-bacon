@@ -11,9 +11,7 @@ before_install:
   ##
   # Download, install and run Neo4j for the integration tests.
   ##
-  - wget http://dist.neo4j.org/neo4j-community-${NEO4J_VERSION}-unix.tar.gz
-  - tar -xzf neo4j-community-${NEO4J_VERSION}-unix.tar.gz
-  - neo4j-community-${NEO4J_VERSION}/bin/neo4j start
+  - bash ci/setup-neo4j.bash
 
 ##
 # Enable integration tests during the testing phase
@@ -41,7 +39,7 @@ deploy:
 
 env:
   global:
-    - NEO4J_VERSION="2.3.1"
+    - NEO4J_VERSION="2.3.2"
 
     ##
     # Secured global variables for OSSRH and Coveralls integration

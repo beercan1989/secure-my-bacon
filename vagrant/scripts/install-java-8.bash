@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-set -ev
+set -e
+
+if [ -e "/home/vagrant/.install-java-8-has-run" ]; then
+  echo Provision step has already been run.
+  exit 0
+fi
 
 export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
@@ -11,3 +16,5 @@ sudo apt-get update
 
 sudo /usr/bin/debconf-set-selections <<< "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true"
 sudo apt-get --assume-yes install oracle-java8-installer oracle-java8-set-default oracle-java8-unlimited-jce-policy
+
+touch /home/vagrant/.install-java-8-has-run

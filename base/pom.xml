@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2015 James Bacon
+  ~ Copyright 2016 James Bacon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,20 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>platform</artifactId>
         <groupId>uk.co.baconi.secure</groupId>
+        <artifactId>platform</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api</artifactId>
+    <artifactId>base</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <packaging>war</packaging>
 
     <dependencyManagement>
         <dependencies>
@@ -43,21 +40,19 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>uk.co.baconi.secure</groupId>
-            <artifactId>base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- Spring Data magic for Neo4J -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
             <version>${spring.data.neo4j.version}</version>
         </dependency>
-
-        <!-- More Spring Boot magic-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,24 +71,6 @@
             <artifactId>spring-boot-starter-integration</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>${json-path.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path-assert</artifactId>
-            <version>${json-path.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.restassured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>2.8.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -107,32 +84,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
             </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-
-                <executions>
-                    <execution>
-                        <id>make-artifact-${project.packaging}-executable</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 </project>

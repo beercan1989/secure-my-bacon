@@ -1,0 +1,180 @@
+swagger: '2.0'
+
+info:
+  version: "0.0.1"
+  title: Secure My Bacon
+
+paths:
+  /bags:
+    get:
+      description: Get all bags
+      parameters:
+        - $ref: '#/parameters/Page'
+        - $ref: '#/parameters/PerPage'
+      responses:
+        200:
+          description: List of all bags in the system
+          schema:
+            $ref: '#/definitions/PaginatedBagResult'
+          examples:
+            application/json:
+              data:
+                - id: 0
+                  name: 'bag 1'
+                - id: 1
+                  name: 'bag 2'
+                - id: 2
+                  name: 'bag 3'
+                - id: 3
+                  name: 'bag 4'
+                - id: 4
+                  name: 'bag 5'
+              paging:
+                page: 1
+                perPage: 5
+                totalCount: 200
+
+  /users:
+    get:
+      description: Get all users
+      parameters:
+        - $ref: '#/parameters/Page'
+        - $ref: '#/parameters/PerPage'
+      responses:
+        200:
+          description: List of all users in the system
+          schema:
+            $ref: '#/definitions/PaginatedUserResult'
+
+  /passwords:
+    get:
+      description: Get all passwords
+      parameters:
+        - $ref: '#/parameters/Page'
+        - $ref: '#/parameters/PerPage'
+      responses:
+        200:
+          description: List of all passwords in the system
+          schema:
+            $ref: '#/definitions/PaginatedPasswordResult'
+
+definitions:
+
+  PaginatedBagResult:
+    description: Paginated result set of bags
+    type: object
+    properties:
+      data:
+        title: Bags
+        description: List of bags, limited by pagination
+        type: array
+        items:
+          $ref: '#/definitions/Bag'
+      paging:
+        $ref: '#/definitions/Pagination'
+
+  Bag:
+    type: object
+    description: Bag providing links to Passwords
+    properties:
+      id: 
+        $ref: '#/definitions/DatabaseID'
+      name:
+        description: the display name of the bag
+        type: string
+  
+  PaginatedUserResult:
+    description: Paginated result set of users
+    type: object
+    properties:
+      data:
+        title: Users
+        description: List of users, limited by pagination
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      paging:
+        $ref: '#/definitions/Pagination'
+  
+  User:
+    type: object
+    description: Represents a User of the system
+    properties:
+      id:
+        $ref: '#/definitions/DatabaseID'
+      name:
+        description: the login identifier for the user
+        type: string
+  
+  PaginatedPasswordResult:
+    description: Paginated result set of passwords
+    type: object
+    properties:
+      data:
+        title: Users
+        description: List of passwords, limited by pagination
+        type: array
+        items:
+          $ref: '#/definitions/Password'
+      paging:
+        $ref: '#/definitions/Pagination'
+  
+  Password:
+    type: object
+    description: Holds the encrypted data, along with where it is for and which account
+    properties:
+      id: 
+        $ref: '#/definitions/DatabaseID'
+      whereFor:
+        description: information describing where the password is for
+        type: string
+      username:
+        description: usually the username to be used when logging in
+        type: string
+      password:
+        description: the data that is stored in an encrypted state
+        type: string
+        
+  DatabaseID:
+    title: Neo4J ID
+    description: the database id
+    type: integer
+    format: int32
+  
+  Pagination:
+    type: object
+    description: Pagination details
+    properties:
+      page:
+        description: the offset for pagination
+        type: integer
+        format: int32
+      perPage:
+        description: the number of results per page
+        type: integer
+        format: int32
+      totalCount:
+        description: the total number of possible results
+        type: integer
+        format: int64
+
+parameters:
+
+  Page:
+    name: page
+    in: query
+    required: false
+    type: integer
+    format: int32
+    default: 1
+    minimum: 1
+  
+  PerPage:
+    name: perPage
+    in: query
+    required: false
+    type: integer
+    format: int32
+    default: 5
+    minimum: 1
+    maximum: 20

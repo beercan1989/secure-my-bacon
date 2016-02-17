@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.lock;
+package uk.co.baconi.secure.api;
 
-import org.neo4j.ogm.annotation.*;
-import uk.co.baconi.secure.api.bag.Bag;
-import uk.co.baconi.secure.api.user.User;
+import org.junit.Test;
 
-@RelationshipEntity(type = "SHARED_WITH")
-public class AsymmetricLock {
+public class ApiApplicationTest {
 
-    @GraphId
-    private Long relationshipId;
-
-    @Property
-    private byte[] privateKey;
-
-    @StartNode
-    private Bag bag;
-
-    @EndNode
-    private User user;
+    @Test
+    public void startApplication() throws Exception {
+        ApiApplication.main();
+    }
 
 }
