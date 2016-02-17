@@ -34,7 +34,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Validated
 @RestController
@@ -48,8 +47,8 @@ public class BagEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Bag>> get(
-            @Min(value = 1, message = "Page '${validatedValue}' must be greater than or equal to {value}.")
-            @RequestParam(required = false, defaultValue = "1") final Integer page,
+            @Min(value = 0, message = "Page '${validatedValue}' must be greater than or equal to {value}.")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
             @Min(value = 1, message = "PerPage '${validatedValue}' must be greater than or equal to {value}.")
             @Max(value = 20, message = "PerPage '${validatedValue}' must be less than or equal to {value}.")

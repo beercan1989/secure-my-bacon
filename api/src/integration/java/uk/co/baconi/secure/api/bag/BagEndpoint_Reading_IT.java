@@ -38,6 +38,22 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 body(isJson(withJsonPath("data[0].name"))).
                 body(isJson(withoutJsonPath("data[0].publicKey"))).
 
+                body(isJson(withJsonPath("data[1].id"))).
+                body(isJson(withJsonPath("data[1].name"))).
+                body(isJson(withoutJsonPath("data[1].publicKey"))).
+
+                body(isJson(withJsonPath("data[2].id"))).
+                body(isJson(withJsonPath("data[2].name"))).
+                body(isJson(withoutJsonPath("data[2].publicKey"))).
+
+                body(isJson(withJsonPath("data[3].id"))).
+                body(isJson(withJsonPath("data[3].name"))).
+                body(isJson(withoutJsonPath("data[3].publicKey"))).
+
+                body(isJson(withJsonPath("data[4].id"))).
+                body(isJson(withJsonPath("data[4].name"))).
+                body(isJson(withoutJsonPath("data[4].publicKey"))).
+
                 body(isJson(withJsonPath("paging.page"))).
                 body(isJson(withJsonPath("paging.perPage"))).
                 body(isJson(withJsonPath("paging.totalCount"))).
@@ -45,16 +61,28 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 body("data[0].id", isA(Integer.class)).
                 body("data[0].name", isA(String.class)).
 
+                body("data[1].id", isA(Integer.class)).
+                body("data[1].name", isA(String.class)).
+
+                body("data[2].id", isA(Integer.class)).
+                body("data[2].name", isA(String.class)).
+
+                body("data[3].id", isA(Integer.class)).
+                body("data[3].name", isA(String.class)).
+
+                body("data[4].id", isA(Integer.class)).
+                body("data[4].name", isA(String.class)).
+
                 body("paging.page", isA(Integer.class)).
                 body("paging.perPage", isA(Integer.class)).
                 body("paging.totalCount", isA(Integer.class)).
 
-                body("paging.page", is(equalTo(1))).
+                body("paging.page", is(equalTo(0))).
                 body("paging.perPage", is(equalTo(5))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
-    //queryParam("page", 1).
+    //queryParam("page", 0).
     //queryParam("perPage", 5).
 }
