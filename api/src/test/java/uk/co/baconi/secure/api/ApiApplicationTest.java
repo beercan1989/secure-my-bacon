@@ -22,6 +22,7 @@ public class ApiApplicationTest {
 
     @Test
     public void startApplication() throws Exception {
+        // TODO - Replace
         ApiApplication.main();
     }
 
