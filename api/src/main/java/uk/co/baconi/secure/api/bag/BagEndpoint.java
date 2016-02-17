@@ -47,20 +47,20 @@ public class BagEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Bag>> get(
-            @Min(value = 0, message = "Page '${validatedValue}' must be greater than or equal to {value}.")
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-            @Min(value = 1, message = "PerPage '${validatedValue}' must be greater than or equal to {value}.")
-            @Max(value = 20, message = "PerPage '${validatedValue}' must be less than or equal to {value}.")
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
             @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.debug("paged: {}", paged);
+        LOG.trace("paged: {}", paged);
 
         final PaginatedResult<Bag> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.debug("paginatedResult: {}", paginatedResult);
+        LOG.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.
                 ok().
