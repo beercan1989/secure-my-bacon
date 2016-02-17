@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 James Bacon
+ * Copyright 2016 James Bacon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api;
+package uk.co.baconi.secure.base.password;
 
-import org.junit.Test;
-import uk.co.baconi.secure.api.Application;
+import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.stereotype.Repository;
 
-public class ApplicationIT {
-
-    @Test
-    public void startApplication() throws Exception {
-        Application.main();
-    }
-
+@Repository
+public interface PasswordGraphRepository extends GraphRepository<Password> {
 }

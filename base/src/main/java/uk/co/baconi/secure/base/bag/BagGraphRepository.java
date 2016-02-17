@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 James Bacon
+ * Copyright 2016 James Bacon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,11 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.lock;
+package uk.co.baconi.secure.base.bag;
 
-import org.neo4j.ogm.annotation.*;
-import uk.co.baconi.secure.api.bag.Bag;
-import uk.co.baconi.secure.api.password.Password;
-import uk.co.baconi.secure.api.user.User;
+import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.stereotype.Repository;
 
-@RelationshipEntity(type = "SECURED_BY")
-public class SymmetricLock {
-
-    @GraphId
-    private Long relationshipId;
-
-    @Property
-    private byte[] key;
-
-    @StartNode
-    private Password password;
-
-    @EndNode
-    private Bag bag;
-
+@Repository
+public interface BagGraphRepository extends GraphRepository<Bag> {
 }
