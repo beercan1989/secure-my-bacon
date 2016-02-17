@@ -30,7 +30,7 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
-public class UserEndPoint {
+public class UserEndpoint {
 
     @Autowired
     private UserGraphRepository userGraphRepository;
