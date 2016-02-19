@@ -17,13 +17,14 @@
 package uk.co.baconi.secure.base.password;
 
 import org.junit.Test;
+import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-public class PasswordTest {
+public class PasswordTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToReadProperties() {
