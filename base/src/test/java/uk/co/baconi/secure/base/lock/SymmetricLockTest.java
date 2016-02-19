@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.base.lock;
 
 import org.junit.Test;
+import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.password.Password;
 
@@ -26,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
-public class SymmetricLockTest {
+public class SymmetricLockTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToChangeKey() {

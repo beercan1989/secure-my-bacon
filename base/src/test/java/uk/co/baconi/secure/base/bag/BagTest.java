@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.base.bag;
 
 import org.junit.Test;
+import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
@@ -26,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-public class BagTest {
+public class BagTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToReadProperties() {

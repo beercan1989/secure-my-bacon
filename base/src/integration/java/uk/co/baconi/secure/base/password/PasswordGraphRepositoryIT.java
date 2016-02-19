@@ -17,21 +17,15 @@
 package uk.co.baconi.secure.base.password;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.co.baconi.secure.base.BaseConfiguration;
+import uk.co.baconi.secure.base.BaseIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseConfiguration.class, loader = SpringApplicationContextLoader.class)
-public class PasswordGraphRepositoryIT {
+public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
 
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;

@@ -17,19 +17,13 @@
 package uk.co.baconi.secure.base.bag;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.co.baconi.secure.base.BaseConfiguration;
+import uk.co.baconi.secure.base.BaseIntegrationTest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = BaseConfiguration.class, loader = SpringApplicationContextLoader.class)
-public class BagGraphRepositoryIT {
+public class BagGraphRepositoryIT extends BaseIntegrationTest {
 
     // TODO - Review embbedded server once Spring Data Neo4j 4.1 released: http://docs.spring.io/spring-data/data-neo4j/docs/4.1.0.M1/reference/html/#_drivers
 
