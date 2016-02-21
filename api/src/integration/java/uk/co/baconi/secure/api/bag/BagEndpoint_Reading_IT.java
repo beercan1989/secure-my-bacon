@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.*;
 import static org.hamcrest.Matchers.*;
 
 public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -29,60 +28,57 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
     public void onFindingAllBags() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/bags").
+            get("/bags").
 
-                then().assertThat().
+            then().assertThat().
 
-                body(isJson(withJsonPath("data[0].id"))).
-                body(isJson(withJsonPath("data[0].name"))).
-                body(isJson(withoutJsonPath("data[0].publicKey"))).
+            statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body(isJson(withJsonPath("data[1].id"))).
-                body(isJson(withJsonPath("data[1].name"))).
-                body(isJson(withoutJsonPath("data[1].publicKey"))).
+            body("data[0].id", isA(Integer.class)).
+            body("data[0].name", isA(String.class)).
 
-                body(isJson(withJsonPath("data[2].id"))).
-                body(isJson(withJsonPath("data[2].name"))).
-                body(isJson(withoutJsonPath("data[2].publicKey"))).
+            body("data[1].id", isA(Integer.class)).
+            body("data[1].name", isA(String.class)).
 
-                body(isJson(withJsonPath("data[3].id"))).
-                body(isJson(withJsonPath("data[3].name"))).
-                body(isJson(withoutJsonPath("data[3].publicKey"))).
+            body("data[2].id", isA(Integer.class)).
+            body("data[2].name", isA(String.class)).
 
-                body(isJson(withJsonPath("data[4].id"))).
-                body(isJson(withJsonPath("data[4].name"))).
-                body(isJson(withoutJsonPath("data[4].publicKey"))).
+            body("data[3].id", isA(Integer.class)).
+            body("data[3].name", isA(String.class)).
 
-                body(isJson(withJsonPath("paging.page"))).
-                body(isJson(withJsonPath("paging.perPage"))).
-                body(isJson(withJsonPath("paging.totalCount"))).
+            body("data[4].id", isA(Integer.class)).
+            body("data[4].name", isA(String.class)).
 
-                body("data[0].id", isA(Integer.class)).
-                body("data[0].name", isA(String.class)).
+            body("paging.page", isA(Integer.class)).
+            body("paging.perPage", isA(Integer.class)).
+            body("paging.totalCount", isA(Integer.class)).
 
-                body("data[1].id", isA(Integer.class)).
-                body("data[1].name", isA(String.class)).
+            body("paging.page", is(equalTo(0))).
+            body("paging.perPage", is(equalTo(5)));
 
-                body("data[2].id", isA(Integer.class)).
-                body("data[2].name", isA(String.class)).
+        withNoAuthentication().
+            queryParam("page", 5).
+            queryParam("perPage", 5).
+            get("/bags").
 
-                body("data[3].id", isA(Integer.class)).
-                body("data[3].name", isA(String.class)).
+            then().assertThat().
 
-                body("data[4].id", isA(Integer.class)).
-                body("data[4].name", isA(String.class)).
+            statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                body("paging.page", isA(Integer.class)).
-                body("paging.perPage", isA(Integer.class)).
-                body("paging.totalCount", isA(Integer.class)).
+            body("paging.page", is(equalTo(5))).
+            body("paging.perPage", is(equalTo(5)));
 
-                body("paging.page", is(equalTo(0))).
-                body("paging.perPage", is(equalTo(5))).
+        withNoAuthentication().
+            queryParam("page", 5).
+            queryParam("perPage", 5).
+            get("/bags").
 
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.OK.value()))).
+
+            body("paging.page", is(equalTo(5))).
+            body("paging.perPage", is(equalTo(5)))
+        ;
     }
-
-    //queryParam("page", 0).
-    //queryParam("perPage", 5).
 }

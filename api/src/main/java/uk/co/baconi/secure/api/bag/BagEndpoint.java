@@ -68,7 +68,7 @@ public class BagEndpoint {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<String>> handleResourceNotFoundException(final ConstraintViolationException exception) {
+    public ResponseEntity<List<String>> handleConstraintViolationException(final ConstraintViolationException exception) {
 
         final List<String> violations = exception.
                 getConstraintViolations().
