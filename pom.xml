@@ -69,8 +69,6 @@
         <spring.boot.version>1.3.2.RELEASE</spring.boot.version>
 
         <spring.data.neo4j.version>4.0.0.RELEASE</spring.data.neo4j.version>
-
-        <json-path.version>2.1.0</json-path.version>
     </properties>
 
     <build>

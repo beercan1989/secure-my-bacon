@@ -61,17 +61,17 @@ public abstract class IntegratedApiEndpoint {
 
 
     protected RequestSpecification withValidAuthentication() {
-        return with().header(apiKeyHeader, apiKeyValidValue);
+        return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyValidValue);
     }
 
 
     protected RequestSpecification withNoAuthentication() {
-        return with();
+        return with().baseUri(getBaseUrl());
     }
 
 
     protected RequestSpecification withInvalidAuthentication() {
-        return with().header(apiKeyHeader, apiKeyInvalidValue);
+        return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyInvalidValue);
     }
 
 
