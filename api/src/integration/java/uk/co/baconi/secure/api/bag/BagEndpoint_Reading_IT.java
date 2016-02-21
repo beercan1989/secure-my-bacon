@@ -24,11 +24,13 @@ import static org.hamcrest.Matchers.*;
 
 public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
+    private final String endpoint = "/bags";
+
     @Test // 200
     public void onFindingAllBags() {
 
         withNoAuthentication().
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -55,11 +57,15 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
             body("paging.page", is(equalTo(0))).
             body("paging.perPage", is(equalTo(5)));
+    }
+
+    @Test // 200
+    public void onFindingAllBagsWithPaging() {
 
         withNoAuthentication().
             queryParam("page", 5).
             queryParam("perPage", 5).
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -71,7 +77,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         withNoAuthentication().
             queryParam("page", 55).
             queryParam("perPage", 10).
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -87,7 +93,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         // Max PerPage
         withNoAuthentication().
             queryParam("perPage", 50).
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -100,7 +106,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         // Min PerPage
         withNoAuthentication().
             queryParam("perPage", -5).
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -113,7 +119,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         // NaN PerPage
         withNoAuthentication().
             queryParam("perPage", "fred").
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -127,7 +133,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         // Min Page
         withNoAuthentication().
             queryParam("page", -10).
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
@@ -140,7 +146,7 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
         // NaN Page
         withNoAuthentication().
             queryParam("page", "bob").
-            get("/bags").
+            get(endpoint).
 
             then().assertThat().
 
