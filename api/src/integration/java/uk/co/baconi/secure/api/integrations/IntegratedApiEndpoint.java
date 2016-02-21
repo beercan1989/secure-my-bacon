@@ -35,7 +35,7 @@ import static com.jayway.restassured.RestAssured.with;
 @SpringApplicationConfiguration(IntegrationApiApplication.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("integration")
-public class IntegratedApiEndpoint {
+public abstract class IntegratedApiEndpoint {
 
     //
     // HTTP Server Values
