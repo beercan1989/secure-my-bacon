@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static org.hamcrest.Matchers.*;
 
 public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -34,8 +32,6 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 get("/users").
 
                 then().assertThat().
-
-                body(isJson(withJsonPath("[0].name"))).
 
                 body("[0].name", isA(String.class)).
 

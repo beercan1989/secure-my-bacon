@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static org.hamcrest.Matchers.*;
 
 public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -30,18 +28,15 @@ public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
     public void onFindingAllPasswords() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/asymmetric-locks").
+            baseUri(getBaseUrl()).
+            get("/asymmetric-locks").
 
-                then().assertThat().
+            then().assertThat().
 
-                body(isJson(withJsonPath("[0].user.name"))).
-                body(isJson(withJsonPath("[0].bag.name"))).
+            body("[0].user.name", isA(String.class)).
+            body("[0].bag.name", isA(String.class)).
 
-                body("[0].user.name", isA(String.class)).
-                body("[0].bag.name", isA(String.class)).
-
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+            statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
 }

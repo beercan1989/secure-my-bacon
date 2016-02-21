@@ -42,9 +42,7 @@ public class SymmetricLockEndpoint {
                 stream(symmetricLockGraphRepository.findAll().spliterator(), false).
                 collect(Collectors.toList());
 
-        return ResponseEntity.
-                ok().
-                body(allSymmetricLocks);
+        return ResponseEntity.ok(allSymmetricLocks);
     }
 
 
