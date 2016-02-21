@@ -1,9 +1,9 @@
 package uk.co.baconi.secure.base;
 
 import org.junit.Ignore;
-import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
 @Ignore("abstract unit test class")
-@Profile("unit")
+@ActiveProfiles("unit")
 public abstract class BaseUnitTest {
 }
