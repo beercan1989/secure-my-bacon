@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static org.hamcrest.Matchers.*;
 
 public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -34,11 +32,6 @@ public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 get("/symmetric-locks").
 
                 then().assertThat().
-
-                body(isJson(withJsonPath("[0].password.whereFor"))).
-                body(isJson(withJsonPath("[0].password.username"))).
-                body(isJson(withJsonPath("[0].password.password"))).
-                body(isJson(withJsonPath("[0].bag.name"))).
 
                 body("[0].password.whereFor", isA(String.class)).
                 body("[0].password.username", isA(String.class)).

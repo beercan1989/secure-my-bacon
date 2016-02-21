@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 
 info:
   version: "0.0.1"
@@ -9,54 +9,100 @@ paths:
     get:
       description: Get all bags
       parameters:
-        - $ref: '#/parameters/Page'
-        - $ref: '#/parameters/PerPage'
+        - $ref: "#/parameters/Page"
+        - $ref: "#/parameters/PerPage"
       responses:
         200:
           description: List of all bags in the system
           schema:
-            $ref: '#/definitions/PaginatedBagResult'
+            $ref: "#/definitions/PaginatedBagResult"
           examples:
             application/json:
               data:
                 - id: 0
-                  name: 'bag 1'
-                - id: 1
-                  name: 'bag 2'
-                - id: 2
-                  name: 'bag 3'
-                - id: 3
-                  name: 'bag 4'
-                - id: 4
-                  name: 'bag 5'
+                  name: "bag 1"
               paging:
-                page: 1
-                perPage: 5
+                page: 0
+                perPage: 1
                 totalCount: 200
+        400:
+          description: Validation failures
+          schema:
+            $ref: "#/definitions/ValidationErrors"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec10"
+              errors:
+                - "Page '-5' must be greater than or equal to 0"
+                - "PerPage '50' must be less than or equal to 20"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
 
   /users:
     get:
       description: Get all users
       parameters:
-        - $ref: '#/parameters/Page'
-        - $ref: '#/parameters/PerPage'
+        - $ref: "#/parameters/Page"
+        - $ref: "#/parameters/PerPage"
       responses:
         200:
           description: List of all users in the system
           schema:
-            $ref: '#/definitions/PaginatedUserResult'
+            $ref: "#/definitions/PaginatedUserResult"
+        400:
+          description: Validation failures
+          schema:
+            $ref: "#/definitions/ValidationErrors"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec10"
+              errors:
+                - "Page '-5' must be greater than or equal to 0"
+                - "PerPage '50' must be less than or equal to 20"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
 
   /passwords:
     get:
       description: Get all passwords
       parameters:
-        - $ref: '#/parameters/Page'
-        - $ref: '#/parameters/PerPage'
+        - $ref: "#/parameters/Page"
+        - $ref: "#/parameters/PerPage"
       responses:
         200:
           description: List of all passwords in the system
           schema:
-            $ref: '#/definitions/PaginatedPasswordResult'
+            $ref: "#/definitions/PaginatedPasswordResult"
+        400:
+          description: Validation failures
+          schema:
+            $ref: "#/definitions/ValidationErrors"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec10"
+              errors:
+                - "Page '-5' must be greater than or equal to 0"
+                - "PerPage '50' must be less than or equal to 20"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
 
 definitions:
 
@@ -69,16 +115,16 @@ definitions:
         description: List of bags, limited by pagination
         type: array
         items:
-          $ref: '#/definitions/Bag'
+          $ref: "#/definitions/Bag"
       paging:
-        $ref: '#/definitions/Pagination'
+        $ref: "#/definitions/Pagination"
 
   Bag:
     type: object
     description: Bag providing links to Passwords
     properties:
       id: 
-        $ref: '#/definitions/DatabaseID'
+        $ref: "#/definitions/DatabaseID"
       name:
         description: the display name of the bag
         type: string
@@ -92,16 +138,16 @@ definitions:
         description: List of users, limited by pagination
         type: array
         items:
-          $ref: '#/definitions/User'
+          $ref: "#/definitions/User"
       paging:
-        $ref: '#/definitions/Pagination'
+        $ref: "#/definitions/Pagination"
   
   User:
     type: object
     description: Represents a User of the system
     properties:
       id:
-        $ref: '#/definitions/DatabaseID'
+        $ref: "#/definitions/DatabaseID"
       name:
         description: the login identifier for the user
         type: string
@@ -115,16 +161,16 @@ definitions:
         description: List of passwords, limited by pagination
         type: array
         items:
-          $ref: '#/definitions/Password'
+          $ref: "#/definitions/Password"
       paging:
-        $ref: '#/definitions/Pagination'
+        $ref: "#/definitions/Pagination"
   
   Password:
     type: object
     description: Holds the encrypted data, along with where it is for and which account
     properties:
       id: 
-        $ref: '#/definitions/DatabaseID'
+        $ref: "#/definitions/DatabaseID"
       whereFor:
         description: information describing where the password is for
         type: string
@@ -157,6 +203,34 @@ definitions:
         description: the total number of possible results
         type: integer
         format: int64
+
+  ValidationErrors:
+    type: object
+    description: Validation failure response
+    properties:
+      uuid:
+        type: string
+        description: The ID placed in the logs, for investigation purposes.
+      errors:
+        type: array
+        description: Collection of the validation failures.
+        items:
+          $ref: "#/definitions/ValidationError"
+
+  ValidationError:
+    type: string
+    description: A message explaining the validation failure.
+    
+  Exception:
+    type: object
+    description: Basic information about the exception.
+    properties:
+      uuid:
+        type: string
+        description: The ID placed in the logs, for investigation purposes.
+      name:
+        type: string
+        description: The class name of the exception thrown.
 
 parameters:
 

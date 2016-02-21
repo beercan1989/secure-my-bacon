@@ -42,9 +42,7 @@ public class UserEndpoint {
                 stream(userGraphRepository.findAll().spliterator(), false).
                 collect(Collectors.toList());
 
-        return ResponseEntity.
-                ok().
-                body(allUsers);
+        return ResponseEntity.ok(allUsers);
     }
 
 }

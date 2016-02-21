@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
-import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static org.hamcrest.Matchers.*;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
@@ -34,10 +32,6 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 get("/passwords").
 
                 then().assertThat().
-
-                body(isJson(withJsonPath("[0].whereFor"))).
-                body(isJson(withJsonPath("[0].username"))).
-                body(isJson(withJsonPath("[0].password"))).
 
                 body("[0].whereFor", isA(String.class)).
                 body("[0].username", isA(String.class)).

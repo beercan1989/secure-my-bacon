@@ -42,9 +42,7 @@ public class AsymmetricLockEndpoint {
                 stream(asymmetricLockGraphRepository.findAll().spliterator(), false).
                 collect(Collectors.toList());
 
-        return ResponseEntity.
-                ok().
-                body(allAsymmetricLocks);
+        return ResponseEntity.ok(allAsymmetricLocks);
     }
 
 }

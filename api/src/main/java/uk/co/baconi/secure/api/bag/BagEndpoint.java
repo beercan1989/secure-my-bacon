@@ -23,17 +23,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Validated
 @RestController
@@ -47,12 +47,12 @@ public class BagEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Bag>> get(
-            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
-            @RequestParam(required = false, defaultValue = "0") final Integer page,
+        @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+        @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
-            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
-            @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
+        @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+        @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+        @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
 
@@ -62,22 +62,7 @@ public class BagEndpoint {
 
         LOG.trace("paginatedResult: {}", paginatedResult);
 
-        return ResponseEntity.
-                ok().
-                body(paginatedResult);
+        return ResponseEntity.ok(paginatedResult);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<String>> handleConstraintViolationException(final ConstraintViolationException exception) {
-
-        final List<String> violations = exception.
-                getConstraintViolations().
-                stream().
-                map(ConstraintViolation::getMessage).
-                collect(Collectors.toList());
-
-        return ResponseEntity.
-                badRequest().
-                body(violations);
-    }
 }

@@ -42,9 +42,7 @@ public class PasswordEndpoint {
                 stream(passwordGraphRepository.findAll().spliterator(), false).
                 collect(Collectors.toList());
 
-        return ResponseEntity.
-                ok().
-                body(allPasswords);
+        return ResponseEntity.ok(allPasswords);
     }
 
 }
