@@ -34,7 +34,6 @@ import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-
 @Validated
 @RestController
 @RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
@@ -52,7 +51,8 @@ public class BagEndpoint {
 
         @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
         @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
-        @RequestParam(required = false, defaultValue = "5") final Integer perPage) {
+        @RequestParam(required = false, defaultValue = "5") final Integer perPage
+    ) {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
 

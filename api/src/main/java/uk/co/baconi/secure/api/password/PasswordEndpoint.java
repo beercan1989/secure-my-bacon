@@ -16,33 +16,57 @@
 
 package uk.co.baconi.secure.api.password;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Validated
 @RestController
 @RequestMapping(value = "/passwords", produces = "application/json; charset=UTF-8")
 public class PasswordEndpoint {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PasswordEndpoint.class);
 
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Password>> get(){
+    public ResponseEntity<PaginatedResult<Password>> get(
+        @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+        @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        final List<Password> allPasswords = StreamSupport.
-                stream(passwordGraphRepository.findAll().spliterator(), false).
-                collect(Collectors.toList());
+        @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+        @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+        @RequestParam(required = false, defaultValue = "5") final Integer perPage
+    ) {
 
-        return ResponseEntity.ok(allPasswords);
+        final Page<Password> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));
+
+        LOG.trace("paged: {}", paged);
+
+        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(paged);
+
+        LOG.trace("paginatedResult: {}", paginatedResult);
+
+        return ResponseEntity.ok(paginatedResult);
     }
 
 }

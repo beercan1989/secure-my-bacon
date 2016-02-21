@@ -24,20 +24,126 @@ import static org.hamcrest.Matchers.*;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
+    private final String endpoint = "/passwords";
+
     @Test // 200
     public void onFindingAllPasswords() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/passwords").
+            baseUri(getBaseUrl()).
+            get(endpoint).
 
-                then().assertThat().
+            then().assertThat().
 
-                body("[0].whereFor", isA(String.class)).
-                body("[0].username", isA(String.class)).
-                body("[0].password", isA(String.class)).
+            body("data[0].whereFor", isA(String.class)).
+            body("data[0].username", isA(String.class)).
+            body("data[0].password", isA(String.class)).
 
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+            body("paging.page", isA(Integer.class)).
+            body("paging.perPage", isA(Integer.class)).
+            body("paging.totalCount", isA(Integer.class)).
+
+            body("paging.page", is(equalTo(0))).
+            body("paging.perPage", is(equalTo(5))).
+
+            statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
+    @Test // 200
+    public void onFindingAllPasswordsWithPaging() {
+
+        withNoAuthentication().
+            queryParam("page", 5).
+            queryParam("perPage", 5).
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.OK.value()))).
+
+            body("paging.page", is(equalTo(5))).
+            body("paging.perPage", is(equalTo(5)));
+
+        withNoAuthentication().
+            queryParam("page", 55).
+            queryParam("perPage", 10).
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.OK.value()))).
+
+            body("paging.page", is(equalTo(55))).
+            body("paging.perPage", is(equalTo(10)));
+    }
+
+    @Test
+    public void onFindingPasswordsWithInvalidPaging() {
+
+        // Max PerPage
+        withNoAuthentication().
+            queryParam("perPage", 50).
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+            body("uuid", isA(String.class)).
+            body("errors", is(not(nullValue()))).
+            body("errors[0]", is(equalTo("PerPage '50' must be less than or equal to 20")));
+
+        // Min PerPage
+        withNoAuthentication().
+            queryParam("perPage", -5).
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+            body("uuid", isA(String.class)).
+            body("errors", is(not(nullValue()))).
+            body("errors[0]", is(equalTo("PerPage '-5' must be greater than or equal to 1")));
+
+        // NaN PerPage
+        withNoAuthentication().
+            queryParam("perPage", "fred").
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+            body("uuid", isA(String.class)).
+            body("errors", is(not(nullValue()))).
+            body("errors[0]", is(equalTo("Param 'perPage' requires type 'java.lang.Integer' but was provided 'fred'")));
+
+
+        // Min Page
+        withNoAuthentication().
+            queryParam("page", -10).
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+            body("uuid", isA(String.class)).
+            body("errors", is(not(nullValue()))).
+            body("errors[0]", is(equalTo("Page '-10' must be greater than or equal to 0")));
+
+        // NaN Page
+        withNoAuthentication().
+            queryParam("page", "bob").
+            get(endpoint).
+
+            then().assertThat().
+
+            statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+            body("uuid", isA(String.class)).
+            body("errors", is(not(nullValue()))).
+            body("errors[0]", is(equalTo("Param 'page' requires type 'java.lang.Integer' but was provided 'bob'")));
+    }
 }
