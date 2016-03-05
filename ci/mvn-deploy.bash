@@ -3,11 +3,14 @@
 ## Exit on non-zero codes
 set -ev
 
+## Show current gpg version
+gpg --version
+
 ## Decrypt the encrypted private GPG key
 openssl aes-256-cbc -pass env:GPG_CIPHER_PASSWORD -in ci/gpg/private-key.asc.enc -out ci/gpg/private-key.asc -d
 
 ## Import the decrypted private GPG key
-gpg --homedir ci/gpg --import ci/gpg/private-key.asc
+gpg --homedir ci/gpg --batch --yes --import ci/gpg/private-key.asc
 
 ## Delete the decrypted private GPG key
 rm -v ci/gpg/private-key.asc
