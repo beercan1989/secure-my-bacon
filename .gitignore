@@ -1,11 +1,16 @@
 # IntelliJ
-.idea/
-*.iml
+**/.idea/
+**/*.iml
 
 # Maven
-target/
+**/target/
 **/pom.xml.releaseBackup
 **/release.properties
 
 # Vagrant
-.vagrant/
+**/.vagrant/
+
+# GPG for CI
+ci/gpg/private-key.asc
+ci/gpg/random_seed
+ci/gpg/*.gpg
