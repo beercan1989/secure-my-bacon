@@ -35,7 +35,7 @@ deploy:
   - provider: releases
     skip_cleanup: true
     api_key:
-      secure: ## TODO - Find and secure
+      secure: "TjSM4fQKW36sNL9TMRWjZWrehw5v4sjHz6ExmUHfqxl2/VUNmbwtVNrVDuTg5wxa3ec1mOxzKwCGHrdfjJrl55uu4POQuToUYGv+aaAVvVNtPjxinrhXF2bSr+qEFTZfXeJeg9VIhBO2L7UH6pp0+WyxvLvCtG8HTRUjm1vDJXmHAuX2lR+JTpoNxICxXlUl/pJd8cy0F/Pw3qwnwY5XZDuLtuBsK3wwm279zYNEzUr1TgIfy5dfLgaEXKoNK3FLYF8faNvUoQhuY9KL6SNfyvEwFPO+M8jTYXeY6g4n6AD9m+07+tNH6T5XNCL8ZT+AADiHXrl55BiPl6LiCouGMtcXlfgbnW9pwYfaTOzrWI8xL/e5sNFX6x541ChGzu0mkByHi2FFQQUUooB349Pnsfng2G+Mi2zPDPalSpS7V4l09rQkjU8iwRve3yxz8Q0FkJ//rva5d+CfkGKh5rwv6M11EKN08iUWTSnICVrN3Z6R/rwU1HQS9Lx3SKjWm3JGgGotvmtnBdAGpgbqDU8qY5zYJVsIFAQNRMGIKsFC/pPNv/BGwj8JhVlE/RGjk2YoRfXc0VYFAFb+B6h0NGW4coqL4maWWhtdu1LiQJcCxQML2Q+5EG+1ZEB64Ie8AgDeQcNilWAdI3bSkOXHwh5/Cj/wZQTGKEupXoq1BZXeNuQ="
     file:
       - ./base/target/base.pom
       - ./base/target/base.pom.asc
