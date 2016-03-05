@@ -8,7 +8,7 @@ Its like 'saving ones bacon' only its more secure.
 
 What are you on about?
 ----------------------
-I've had idea's about how I could provide a system to save things securley, basically a password system but its not just for single passwords. Its nothing new, it has already been done before and probably many times over.
+I've had idea's about how I could provide a system to save things securely, basically a password system but its not just for single passwords. Its nothing new, it has already been done before and probably many times over.
 
 What are you going to use?
 --------------------------
