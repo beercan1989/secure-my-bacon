@@ -1,21 +1,18 @@
 package uk.co.baconi.secure.base.pagination;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import uk.co.baconi.secure.base.BaseUnitTest;
-import uk.co.baconi.secure.base.bag.Bag;
-import uk.co.baconi.secure.base.lock.AsymmetricLock;
-import uk.co.baconi.secure.base.user.User;
 
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PaginatedResultTest extends BaseUnitTest {

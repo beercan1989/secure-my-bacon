@@ -46,12 +46,12 @@ public class BagEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Bag>> get(
-        @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
-        @RequestParam(required = false, defaultValue = "0") final Integer page,
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
-        @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
-        @RequestParam(required = false, defaultValue = "5") final Integer perPage
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
     ) {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));

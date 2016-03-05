@@ -54,11 +54,11 @@ public class GlobalExceptionHandler {
                                                                            final HttpStatus httpStatus,
                                                                            final Exception exception) {
         LOG.error(
-            "Error [{}] on url [{}] of [{}] with message [{}]",
-            response.getUuid(),
-            request.getRequestURL(),
-            exception.getClass().getName(),
-            exception.getMessage()
+                "Error [{}] on url [{}] of [{}] with message [{}]",
+                response.getUuid(),
+                request.getRequestURL(),
+                exception.getClass().getName(),
+                exception.getMessage()
         );
 
         LOG.debug("Stacktrace for [{}]:", response.getUuid(), exception);

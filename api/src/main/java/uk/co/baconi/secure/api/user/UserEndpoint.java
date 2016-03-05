@@ -36,7 +36,7 @@ public class UserEndpoint {
     private UserGraphRepository userGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> get(){
+    public ResponseEntity<List<User>> get() {
 
         final List<User> allUsers = StreamSupport.
                 stream(userGraphRepository.findAll().spliterator(), false).

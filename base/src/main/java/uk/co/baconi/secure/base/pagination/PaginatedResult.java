@@ -30,7 +30,7 @@ public class PaginatedResult<A> {
         this.paging = paging;
     }
 
-    public PaginatedResult(final Page<A> page){
+    public PaginatedResult(final Page<A> page) {
         this(page.getContent(), new Pagination(page.getNumber(), page.getSize(), page.getTotalElements()));
     }
 

@@ -28,15 +28,15 @@ public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
     public void onFindingAllPasswords() {
 
         withNoAuthentication().
-            baseUri(getBaseUrl()).
-            get("/asymmetric-locks").
+                baseUri(getBaseUrl()).
+                get("/asymmetric-locks").
 
-            then().assertThat().
+                then().assertThat().
 
-            body("[0].user.name", isA(String.class)).
-            body("[0].bag.name", isA(String.class)).
+                body("[0].user.name", isA(String.class)).
+                body("[0].bag.name", isA(String.class)).
 
-            statusCode(is(equalTo(HttpStatus.OK.value())));
+                statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
 }
