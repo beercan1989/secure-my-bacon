@@ -52,7 +52,7 @@ public class Bag {
     public Bag() {
     }
 
-    public Bag(final String name, final byte[] publicKey){
+    public Bag(final String name, final byte[] publicKey) {
         this.name = name;
         this.publicKey = publicKey;
     }
@@ -77,7 +77,7 @@ public class Bag {
         this.publicKey = publicKey;
     }
 
-    public Bag sharedWith(final AsymmetricLock sharedWith){
+    public Bag sharedWith(final AsymmetricLock sharedWith) {
 
         this.shared.add(sharedWith);
 

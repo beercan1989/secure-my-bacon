@@ -21,27 +21,27 @@ public class ValidationResponse implements BaseErrorResponse {
 
     public ValidationResponse(final ConstraintViolationException exception) {
         this(
-            exception.
-                getConstraintViolations().
-                stream().
-                map(
-                    ConstraintViolation::getMessage
-                ).
-                collect(
-                    Collectors.toList()
-                )
+                exception.
+                        getConstraintViolations().
+                        stream().
+                        map(
+                                ConstraintViolation::getMessage
+                        ).
+                        collect(
+                                Collectors.toList()
+                        )
         );
     }
 
     public ValidationResponse(final MethodArgumentTypeMismatchException exception) {
         this(
-            Collections.singletonList(
-                String.format("Param '%s' requires type '%s' but was provided '%s'",
-                    exception.getName(),
-                    exception.getRequiredType().getName(),
-                    exception.getValue()
+                Collections.singletonList(
+                        String.format("Param '%s' requires type '%s' but was provided '%s'",
+                                exception.getName(),
+                                exception.getRequiredType().getName(),
+                                exception.getValue()
+                        )
                 )
-            )
         );
     }
 
@@ -57,9 +57,9 @@ public class ValidationResponse implements BaseErrorResponse {
     @Override
     public String toString() {
         return "ValidationResponse{" +
-            "uuid=" + uuid +
-            ", errors='" + errors + '\'' +
-            '}';
+                "uuid=" + uuid +
+                ", errors='" + errors + '\'' +
+                '}';
     }
 
 }

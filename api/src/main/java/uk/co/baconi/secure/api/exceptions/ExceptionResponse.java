@@ -24,8 +24,8 @@ public class ExceptionResponse implements BaseErrorResponse {
     @Override
     public String toString() {
         return "ExceptionResponse{" +
-            "uuid=" + uuid +
-            ", name='" + name + '\'' +
-            '}';
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

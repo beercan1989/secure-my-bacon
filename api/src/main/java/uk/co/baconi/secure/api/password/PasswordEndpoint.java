@@ -27,16 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Validated
 @RestController
@@ -50,12 +46,12 @@ public class PasswordEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> get(
-        @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
-        @RequestParam(required = false, defaultValue = "0") final Integer page,
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
-        @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
-        @RequestParam(required = false, defaultValue = "5") final Integer perPage
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
     ) {
 
         final Page<Password> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));

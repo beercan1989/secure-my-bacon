@@ -36,7 +36,7 @@ public class SymmetricLockEndpoint {
     private SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<SymmetricLock>> get(){
+    public ResponseEntity<List<SymmetricLock>> get() {
 
         final List<SymmetricLock> allSymmetricLocks = StreamSupport.
                 stream(symmetricLockGraphRepository.findAll().spliterator(), false).

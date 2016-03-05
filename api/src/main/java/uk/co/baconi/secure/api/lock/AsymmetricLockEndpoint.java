@@ -36,7 +36,7 @@ public class AsymmetricLockEndpoint {
     private AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<AsymmetricLock>> get(){
+    public ResponseEntity<List<AsymmetricLock>> get() {
 
         final List<AsymmetricLock> allAsymmetricLocks = StreamSupport.
                 stream(asymmetricLockGraphRepository.findAll().spliterator(), false).

@@ -56,7 +56,7 @@ public class User {
         return name;
     }
 
-    public User sharedWith(final AsymmetricLock lock){
+    public User sharedWith(final AsymmetricLock lock) {
 
         shared.add(lock);
 
