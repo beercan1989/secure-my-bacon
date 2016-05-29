@@ -4,7 +4,6 @@ language: java
 # Not using the container build slaves as Neo4j has problems with it.
 ##
 sudo: required
-dist: trusty
 
 services:
   - docker
