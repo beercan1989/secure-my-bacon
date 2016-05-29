@@ -45,7 +45,7 @@ deploy:
 
 env:
   global:
-    - NEO4J_VERSION="2.3.2"
+    - NEO4J_VERSION="2.3.4"
 
     ##
     # Secured global variables for GPG, OSSRH and Coveralls integration
