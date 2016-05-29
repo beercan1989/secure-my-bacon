@@ -11,8 +11,9 @@ AUTH_HEADER="Authorization: Basic $(echo -n neo4j:password | base64)"
 ACCEPT_HEADER="Accept: application/json; charset=UTF-8"
 
 ## Wait until Neo4j server has started
-echo 'Waiting for Neo4j to have started: '
+echo -n 'Waiting for Neo4j to have started: '
 until curl -s -H "${AUTH_HEADER}" -H "${ACCEPT_HEADER}" 'http://localhost:7474/user/neo4j'; do
     echo -n '.'
     sleep 1s
 done
+echo
