@@ -94,6 +94,6 @@ public class BaseConfiguration extends Neo4jConfiguration {
     }
 
     private boolean isNotEmpty(final String string) {
-        return string == null || !string.trim().isEmpty();
+        return string != null && !string.trim().isEmpty();
     }
 }
