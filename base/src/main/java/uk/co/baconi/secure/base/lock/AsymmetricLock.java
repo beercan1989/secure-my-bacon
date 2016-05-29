@@ -16,6 +16,10 @@
 
 package uk.co.baconi.secure.base.lock;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.user.User;
@@ -23,7 +27,11 @@ import uk.co.baconi.secure.base.user.User;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Getter
+@NoArgsConstructor
 @RelationshipEntity(type = AsymmetricLock.SHARED_WITH)
+@EqualsAndHashCode(exclude = "id")
+@ToString(exclude = "privateKey")
 public class AsymmetricLock {
 
     public static final String SHARED_WITH = "SHARED_WITH";
@@ -40,10 +48,6 @@ public class AsymmetricLock {
     @EndNode
     private User user;
 
-    // Here for Neo4J annotations
-    public AsymmetricLock() {
-    }
-
     public AsymmetricLock(final Bag bag, final User user, final byte[] privateKey) {
         this.bag = bag;
         this.user = user;
@@ -54,48 +58,8 @@ public class AsymmetricLock {
         this.user.sharedWith(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public byte[] getPrivateKey() {
-        return privateKey;
-    }
-
     public void setPrivateKey(byte[] privateKey) {
         this.privateKey = privateKey;
     }
 
-    public Bag getBag() {
-        return bag;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AsymmetricLock that = (AsymmetricLock) o;
-        return Objects.equals(privateKey, that.privateKey) &&
-                Objects.equals(bag, that.bag) &&
-                Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(privateKey, bag, user);
-    }
-
-    @Override
-    public String toString() {
-        return "AsymmetricLock{" +
-                "id=" + id +
-                ", privateKey=" + Arrays.toString(privateKey) +
-                ", bag=" + bag +
-                ", user=" + user +
-                '}';
-    }
 }

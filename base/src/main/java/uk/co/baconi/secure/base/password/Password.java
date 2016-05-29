@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.base.password;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -25,7 +26,11 @@ import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import java.util.Objects;
 
+@NoArgsConstructor
 @NodeEntity
+@Getter
+@EqualsAndHashCode(exclude={"id", "securedBy"})
+@ToString(exclude = {"password", "securedBy"})
 public class Password {
 
     @GraphId
@@ -44,46 +49,23 @@ public class Password {
     @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
-    // Here for Neo4J annotations
-    public Password() {
-    }
-
     public Password(final String whereFor, final String username, final String password) {
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getWhereFor() {
-        return whereFor;
-    }
 
     public void setWhereFor(final String whereFor) {
         this.whereFor = whereFor;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public SymmetricLock getSecuredBy() {
-        return securedBy;
     }
 
     public Password securedBy(final SymmetricLock securedBy) {
@@ -91,30 +73,5 @@ public class Password {
         this.securedBy = securedBy;
 
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Password password1 = (Password) o;
-        return Objects.equals(whereFor, password1.whereFor) &&
-                Objects.equals(username, password1.username) &&
-                Objects.equals(password, password1.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(whereFor, username, password);
-    }
-
-    @Override
-    public String toString() {
-        return "Password{" +
-                "id=" + id +
-                ", whereFor='" + whereFor + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
     }
 }

@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.base.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -28,6 +29,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @NodeEntity
+@Getter
+@NoArgsConstructor
+@ToString(exclude="shared")
+@EqualsAndHashCode(exclude={"id", "shared"})
 public class User {
 
     @GraphId
@@ -40,20 +45,8 @@ public class User {
     @Relationship(type = AsymmetricLock.SHARED_WITH, direction = Relationship.INCOMING)
     private Set<AsymmetricLock> shared = new HashSet<>();
 
-    // Here for Neo4J annotations
-    public User() {
-    }
-
     public User(final String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public User sharedWith(final AsymmetricLock lock) {
@@ -61,30 +54,5 @@ public class User {
         shared.add(lock);
 
         return this;
-    }
-
-    public Set<AsymmetricLock> getShared() {
-        return shared;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(name, user.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }
