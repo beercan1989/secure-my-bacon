@@ -17,6 +17,10 @@
 package uk.co.baconi.secure.base.bag;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -28,6 +32,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@EqualsAndHashCode(exclude = {"id", "shared", "secured"})
+@ToString(exclude = {"shared", "secured"})
+@NoArgsConstructor
 public class Bag {
 
     @GraphId
@@ -48,29 +56,14 @@ public class Bag {
     @Relationship(type = SymmetricLock.SECURED_BY, direction = Relationship.INCOMING)
     private Set<SymmetricLock> secured = new HashSet<>();
 
-    // Here for Neo4J annotations
-    public Bag() {
-    }
 
     public Bag(final String name, final byte[] publicKey) {
         this.name = name;
         this.publicKey = publicKey;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public byte[] getPublicKey() {
-        return publicKey;
     }
 
     public void setPublicKey(byte[] publicKey) {
@@ -84,10 +77,6 @@ public class Bag {
         return this;
     }
 
-    public Set<AsymmetricLock> getShared() {
-        return shared;
-    }
-
     public Bag securedWith(final SymmetricLock securedWith) {
 
         this.secured.add(securedWith);
@@ -95,30 +84,4 @@ public class Bag {
         return this;
     }
 
-    public Set<SymmetricLock> getSecured() {
-        return secured;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bag bag = (Bag) o;
-        return Objects.equals(name, bag.name) &&
-                Objects.equals(publicKey, bag.publicKey);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, publicKey);
-    }
-
-    @Override
-    public String toString() {
-        return "Bag{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", publicKey=" + Arrays.toString(publicKey) +
-                '}';
-    }
 }
