@@ -1,20 +1,11 @@
 language: java
 
 ##
-# Not using the container build slaves as Neo4j has problems with it.
+# Config to force us into the container build slaves
 ##
-sudo: required
-
-services:
-  - docker
+sudo: false
 
 jdk: oraclejdk8
-
-before_install:
-  ##
-  # Download, install and run Neo4j for the integration tests.
-  ##
-  - ci/setup-neo4j.bash
 
 ##
 # Enable integration tests during the testing phase
@@ -48,8 +39,6 @@ deploy:
 
 env:
   global:
-    - NEO4J_VERSION="3.0.1"
-
     ##
     # Secured global variables for GPG, OSSRH and Coveralls integration
     ##
