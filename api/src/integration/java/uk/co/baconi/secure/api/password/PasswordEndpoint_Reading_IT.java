@@ -35,6 +35,8 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
+                body("data", is(not(emptyCollectionOf(String.class)))).
+
                 body("data[0].whereFor", isA(String.class)).
                 body("data[0].username", isA(String.class)).
                 body("data[0].password", isA(String.class)).

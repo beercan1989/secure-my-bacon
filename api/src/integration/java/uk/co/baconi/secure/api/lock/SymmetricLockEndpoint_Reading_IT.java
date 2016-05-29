@@ -33,6 +33,8 @@ public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
+                body(".", is(not(emptyCollectionOf(String.class)))).
+
                 body("[0].password.whereFor", isA(String.class)).
                 body("[0].password.username", isA(String.class)).
                 body("[0].password.password", isA(String.class)).

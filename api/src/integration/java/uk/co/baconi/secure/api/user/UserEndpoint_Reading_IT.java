@@ -33,6 +33,8 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
+                body(".", is(not(emptyCollectionOf(String.class)))).
+
                 body("[0].name", isA(String.class)).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));

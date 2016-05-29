@@ -25,13 +25,15 @@ import static org.hamcrest.Matchers.*;
 public class AsymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
     @Test // 200
-    public void onFindingAllPasswords() {
+    public void onFindingAllAsymmetricLocks() {
 
         withNoAuthentication().
                 baseUri(getBaseUrl()).
                 get("/asymmetric-locks").
 
                 then().assertThat().
+
+                body(".", is(not(emptyCollectionOf(String.class)))).
 
                 body("[0].user.name", isA(String.class)).
                 body("[0].bag.name", isA(String.class)).
