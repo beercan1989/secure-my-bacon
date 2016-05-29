@@ -36,6 +36,8 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
                 statusCode(is(equalTo(HttpStatus.OK.value()))).
 
+                body("data", is(not(emptyCollectionOf(String.class)))).
+
                 body("data[0].id", isA(Integer.class)).
                 body("data[0].name", isA(String.class)).
 
