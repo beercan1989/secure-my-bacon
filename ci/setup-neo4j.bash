@@ -11,6 +11,9 @@ tar -xzf neo4j-community-${NEO4J_VERSION}-unix.tar.gz
 ## Start Neo4J
 neo4j-community-${NEO4J_VERSION}/bin/neo4j start
 
+## Tail the Neo4j server logs, TODO - Remove once working
+tail -n+0 -F neo4j-community-3.0.1/logs/neo4j.log &
+
 AUTH_HEADER="Authorization: Basic $(echo -n neo4j:neo4j | base64)"
 ACCEPT_HEADER="Accept: application/json; charset=UTF-8"
 
