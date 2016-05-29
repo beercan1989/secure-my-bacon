@@ -125,9 +125,9 @@ public class PasswordTest extends BaseUnitTest {
         final String passwordAsString = password.toString();
 
         assertThat(passwordAsString, containsString("id=null,"));
-        assertThat(passwordAsString, containsString("whereFor='https://github.com/login',"));
-        assertThat(passwordAsString, containsString("username='beercan1989',"));
-        assertThat(passwordAsString, containsString("password='p@55w0rd!'"));
+        assertThat(passwordAsString, containsString("whereFor=https://github.com/login,"));
+        assertThat(passwordAsString, not(containsString("password=")));
+        assertThat(passwordAsString, containsString("username=beercan1989)"));
     }
 
     @Test

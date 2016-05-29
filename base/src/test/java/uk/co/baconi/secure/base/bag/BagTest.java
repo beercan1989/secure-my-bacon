@@ -141,7 +141,7 @@ public class BagTest extends BaseUnitTest {
         final String bagAsString = bag.toString();
 
         assertThat(bagAsString, containsString("id=null,"));
-        assertThat(bagAsString, containsString("name='Substeps',"));
+        assertThat(bagAsString, containsString("name=Substeps,"));
         assertThat(bagAsString, containsString("publicKey=" + Arrays.toString("public key".getBytes())));
     }
 

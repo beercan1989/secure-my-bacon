@@ -31,6 +31,6 @@ public class PaginationTest extends BaseUnitTest {
 
         assertThat(paginationAsString, containsString("page=0,"));
         assertThat(paginationAsString, containsString("perPage=2,"));
-        assertThat(paginationAsString, containsString("totalCount=5}"));
+        assertThat(paginationAsString, containsString("totalCount=5)"));
     }
 }

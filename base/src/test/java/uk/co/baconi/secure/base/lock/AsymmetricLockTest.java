@@ -119,7 +119,7 @@ public class AsymmetricLockTest extends BaseUnitTest {
         final String lockAsString = lock.toString();
 
         assertThat(lockAsString, containsString("id=null,"));
-        assertThat(lockAsString, containsString("privateKey=" + Arrays.toString(privateKey) + ','));
+        assertThat(lockAsString, not(containsString("privateKey=")));
         assertThat(lockAsString, containsString("bag=" + bag + ','));
         assertThat(lockAsString, containsString("user=" + user));
     }

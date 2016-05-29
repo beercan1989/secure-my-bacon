@@ -88,7 +88,7 @@ public class UserTest extends BaseUnitTest {
         final String userAsString = user.toString();
 
         assertThat(userAsString, containsString("id=null,"));
-        assertThat(userAsString, containsString("name='beercan1989'"));
+        assertThat(userAsString, containsString("name=beercan1989"));
     }
 
     @Test

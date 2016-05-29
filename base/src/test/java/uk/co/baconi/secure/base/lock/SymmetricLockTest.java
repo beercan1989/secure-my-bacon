@@ -118,7 +118,7 @@ public class SymmetricLockTest extends BaseUnitTest {
         final String lockAsString = lock.toString();
 
         assertThat(lockAsString, containsString("id=null,"));
-        assertThat(lockAsString, containsString("key=" + Arrays.toString(key) + ','));
+        assertThat(lockAsString, not(containsString("key=")));
         assertThat(lockAsString, containsString("password=" + password + ','));
         assertThat(lockAsString, containsString("bag=" + bag));
     }
