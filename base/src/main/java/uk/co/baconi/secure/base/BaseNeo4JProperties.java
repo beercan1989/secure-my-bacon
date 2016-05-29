@@ -16,59 +16,37 @@
 
 package uk.co.baconi.secure.base;
 
-import org.hibernate.validator.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-
+@Getter
+@Setter
 @Component
 @ConfigurationProperties(prefix = "neo4j")
 public class BaseNeo4JProperties {
 
-    @Valid
-    @NotBlank
     private String url;
-
-    @Valid
-    @NotBlank
     private String username;
-
-    @Valid
-    @NotBlank
     private String password;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String driver;
+    private Integer connectionPoolSize;
+    private String encryptionLevel;
+    private String trustStrategy;
+    private String trustCertificateFile;
 
     @Override
     public String toString() {
-        return "Neo4J{" +
+        return "BaseNeo4JProperties{" +
                 "url='" + url + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='[REDACTED]'" +
+                ", driver='" + driver + '\'' +
+                ", connectionPoolSize=" + connectionPoolSize +
+                ", encryptionLevel='" + encryptionLevel + '\'' +
+                ", trustStrategy='" + trustStrategy + '\'' +
+                ", trustCertificateFile='" + trustCertificateFile + '\'' +
                 '}';
     }
-
 }

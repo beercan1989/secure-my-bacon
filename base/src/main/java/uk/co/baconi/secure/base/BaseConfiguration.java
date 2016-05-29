@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base;
 
+import org.neo4j.ogm.config.DriverConfiguration;
 import org.neo4j.ogm.session.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
-import org.springframework.data.neo4j.server.Neo4jServer;
-import org.springframework.data.neo4j.server.RemoteServer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -49,17 +48,48 @@ public class BaseConfiguration extends Neo4jConfiguration {
     @Autowired
     private BaseNeo4JProperties neo4JProperties;
 
-    @Override
-    public Neo4jServer neo4jServer() {
-
+    @Bean
+    public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
         LOG.info("Properties: {}", neo4JProperties);
 
-        return new RemoteServer(neo4JProperties.getUrl(), neo4JProperties.getUsername(), neo4JProperties.getPassword());
+        org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
+
+        final DriverConfiguration driverConfiguration = config.driverConfiguration();
+
+        if(neo4JProperties.getDriver() != null) {
+            driverConfiguration.setDriverClassName(neo4JProperties.getDriver());
+        }
+
+        if(neo4JProperties.getUsername() != null && neo4JProperties.getPassword() != null) {
+            driverConfiguration.setCredentials(neo4JProperties.getUsername(), neo4JProperties.getPassword());
+        }
+
+        if(neo4JProperties.getUrl() != null) {
+            driverConfiguration.setURI(neo4JProperties.getUrl());
+        }
+
+        if(neo4JProperties.getConnectionPoolSize() != null) {
+            driverConfiguration.setConnectionPoolSize(neo4JProperties.getConnectionPoolSize());
+        }
+
+        if(neo4JProperties.getEncryptionLevel() != null) {
+            driverConfiguration.setEncryptionLevel(neo4JProperties.getEncryptionLevel());
+        }
+
+        if(neo4JProperties.getTrustStrategy() != null) {
+            driverConfiguration.setTrustStrategy(neo4JProperties.getTrustStrategy());
+
+            if(neo4JProperties.getTrustCertificateFile() != null) {
+                driverConfiguration.setTrustCertFile(neo4JProperties.getTrustCertificateFile());
+            }
+        }
+
+        return config;
     }
 
     @Bean
     public SessionFactory getSessionFactory() {
-        return new SessionFactory("uk.co.baconi.secure.base");
+        return new SessionFactory(getNeo4jConfiguration(), "uk.co.baconi.secure.base");
     }
 
 }
