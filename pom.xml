@@ -67,14 +67,36 @@
     </developers>
 
     <properties>
-        <spring.boot.version>1.3.2.RELEASE</spring.boot.version>
-        <spring.data.neo4j.version>4.0.0.RELEASE</spring.data.neo4j.version>
+        <spring.boot.version>1.3.5.RELEASE</spring.boot.version>
+
+        <spring.data.neo4j.version>4.1.1.RELEASE</spring.data.neo4j.version>
+        <neo4j.ogm.version>2.0.1</neo4j.ogm.version><!-- 2.0.2 -->
+        <neo4j.version>2.3.4</neo4j.version><!-- 3.0.1 -->
 
         <!-- GPG Configuration -->
         <root-path>.</root-path>
         <gpg.homedir>${root-path}/ci/gpg</gpg.homedir>
         <gpg.executable>gpg</gpg.executable>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.8</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <finalName>${project.artifactId}</finalName>
