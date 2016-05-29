@@ -36,7 +36,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
-            <version>${spring.data.neo4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
