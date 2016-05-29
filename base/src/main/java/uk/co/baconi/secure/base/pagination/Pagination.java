@@ -16,36 +16,17 @@
 
 package uk.co.baconi.secure.base.pagination;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
+@AllArgsConstructor
 public class Pagination {
 
     private final int page;
     private final int perPage;
     private final long totalCount;
 
-    public Pagination(final int page, final int perPage, final long totalCount) {
-        this.page = page;
-        this.perPage = perPage;
-        this.totalCount = totalCount;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public int getPerPage() {
-        return perPage;
-    }
-
-    public long getTotalCount() {
-        return totalCount;
-    }
-
-    @Override
-    public String toString() {
-        return "Pagination{" +
-                "page=" + page +
-                ", perPage=" + perPage +
-                ", totalCount=" + totalCount +
-                '}';
-    }
 }

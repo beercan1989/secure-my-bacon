@@ -16,37 +16,23 @@
 
 package uk.co.baconi.secure.base.pagination;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Getter
+@ToString
+@AllArgsConstructor
 public class PaginatedResult<A> {
 
     private final List<A> data;
     private final Pagination paging;
 
-    public PaginatedResult(final List<A> data, final Pagination paging) {
-        this.data = data;
-        this.paging = paging;
-    }
-
     public PaginatedResult(final Page<A> page) {
         this(page.getContent(), new Pagination(page.getNumber(), page.getSize(), page.getTotalElements()));
     }
 
-    public List<A> getData() {
-        return data;
-    }
-
-    public Pagination getPaging() {
-        return paging;
-    }
-
-    @Override
-    public String toString() {
-        return "PaginatedResult{" +
-                "data=" + data +
-                ", paging=" + paging +
-                '}';
-    }
 }
