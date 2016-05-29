@@ -19,6 +19,7 @@ sudo apt-get --assume-yes install neo4j=${NEO4J_VERSION}
 ## Enable external connections
 sed -i 's/^# *dbms.connector.bolt.address=0.0.0.0:7687/dbms.connector.bolt.address=0.0.0.0:7687/' /etc/neo4j/neo4j.conf
 sed -i 's/^# *dbms.connector.http.address=0.0.0.0:7474/dbms.connector.http.address=0.0.0.0:7474/' /etc/neo4j/neo4j.conf
+sed -i 's/^dbms.connector.https.enabled=.*/dbms.connector.https.enabled=false/' /etc/neo4j/neo4j.conf
 
 ## Change default user:password from [neo4j/neo4j] http://neo4j.com/docs/stable/rest-api-security.html
 curl -X POST \
