@@ -62,6 +62,6 @@ public class PaginatedResultTest extends BaseUnitTest {
         final String paginatedResultAsString = paginatedResult.toString();
 
         assertThat(paginatedResultAsString, containsString("data=[first, second],"));
-        assertThat(paginatedResultAsString, containsString("paging=Pagination{"));
+        assertThat(paginatedResultAsString, containsString("paging=Pagination("));
     }
 }
