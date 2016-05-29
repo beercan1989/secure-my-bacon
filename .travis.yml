@@ -1,9 +1,13 @@
 language: java
 
 ##
-# Config to force us into the container build slaves
+# Not using the container build slaves as Neo4j has problems with it.
 ##
-sudo: false
+sudo: required
+dist: trusty
+
+services:
+  - docker
 
 jdk: oraclejdk8
 
