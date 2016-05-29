@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 
 @Configuration
 @EnableAutoConfiguration
@@ -56,30 +57,30 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
         final DriverConfiguration driverConfiguration = config.driverConfiguration();
 
-        if(neo4JProperties.getDriver() != null) {
+        if( isNotEmpty(neo4JProperties.getDriver()) ) {
             driverConfiguration.setDriverClassName(neo4JProperties.getDriver());
         }
 
-        if(neo4JProperties.getUsername() != null && neo4JProperties.getPassword() != null) {
+        if( isNotEmpty(neo4JProperties.getUsername()) && isNotEmpty(neo4JProperties.getPassword()) ) {
             driverConfiguration.setCredentials(neo4JProperties.getUsername(), neo4JProperties.getPassword());
         }
 
-        if(neo4JProperties.getUrl() != null) {
+        if( isNotEmpty(neo4JProperties.getUrl()) ) {
             driverConfiguration.setURI(neo4JProperties.getUrl());
         }
 
-        if(neo4JProperties.getConnectionPoolSize() != null) {
+        if( neo4JProperties.getConnectionPoolSize() != null ) {
             driverConfiguration.setConnectionPoolSize(neo4JProperties.getConnectionPoolSize());
         }
 
-        if(neo4JProperties.getEncryptionLevel() != null) {
+        if( isNotEmpty(neo4JProperties.getEncryptionLevel()) ) {
             driverConfiguration.setEncryptionLevel(neo4JProperties.getEncryptionLevel());
         }
 
-        if(neo4JProperties.getTrustStrategy() != null) {
+        if( isNotEmpty(neo4JProperties.getTrustStrategy()) ) {
             driverConfiguration.setTrustStrategy(neo4JProperties.getTrustStrategy());
 
-            if(neo4JProperties.getTrustCertificateFile() != null) {
+            if( isNotEmpty(neo4JProperties.getTrustCertificateFile()) ) {
                 driverConfiguration.setTrustCertFile(neo4JProperties.getTrustCertificateFile());
             }
         }
@@ -92,4 +93,7 @@ public class BaseConfiguration extends Neo4jConfiguration {
         return new SessionFactory(getNeo4jConfiguration(), "uk.co.baconi.secure.base");
     }
 
+    private boolean isNotEmpty(final String string) {
+        return string == null || !string.trim().isEmpty();
+    }
 }
