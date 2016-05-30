@@ -24,16 +24,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Validated
 @RestController
@@ -90,15 +86,15 @@ public class UserEndpoint {
         return ResponseEntity.ok(user);
     }
 
-//    @RequestMapping("/by-name/{userName}")
-//    public ResponseEntity<User> findByName(@PathVariable("userName") final String name){
-//
-//        LOG.trace("findByName: {}", name);
-//
-//        final User user = userGraphRepository.findByName(name);
-//
-//        LOG.trace("foundUser: {}", user);
-//
-//        return ResponseEntity.ok(user);
-//    }
+    @RequestMapping("/by-name/{userName}")
+    public ResponseEntity<User> findByName(@PathVariable("userName") final String name){
+
+        LOG.trace("findByName: {}", name);
+
+        final User user = userGraphRepository.findByName(name);
+
+        LOG.trace("foundUser: {}", user);
+
+        return ResponseEntity.ok(user);
+    }
 }
