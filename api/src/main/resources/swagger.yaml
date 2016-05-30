@@ -2,18 +2,18 @@ swagger: "2.0"
 
 info:
   version: "0.0.1"
-  title: Secure My Bacon
+  title: "Secure My Bacon"
 
 paths:
   /bags:
     get:
-      description: Get all bags
+      description: "Get all bags"
       parameters:
         - $ref: "#/parameters/Page"
         - $ref: "#/parameters/PerPage"
       responses:
         200:
-          description: List of all bags in the system
+          description: "List of all bags in the system"
           schema:
             $ref: "#/definitions/PaginatedBagResult"
           examples:
@@ -26,7 +26,7 @@ paths:
                 perPage: 1
                 totalCount: 200
         400:
-          description: Validation failures
+          description: "Validation failures"
           schema:
             $ref: "#/definitions/ValidationErrors"
           examples:
@@ -36,7 +36,7 @@ paths:
                 - "Page '-5' must be greater than or equal to 0"
                 - "PerPage '50' must be less than or equal to 20"
         500:
-          description: Internal Server Error
+          description: "Internal Server Error"
           schema:
             $ref: "#/definitions/Exception"
           examples:
@@ -46,17 +46,17 @@ paths:
 
   /users:
     get:
-      description: Get all users
+      description: "Get all users"
       parameters:
         - $ref: "#/parameters/Page"
         - $ref: "#/parameters/PerPage"
       responses:
         200:
-          description: List of all users in the system
+          description: "List of all users in the system"
           schema:
             $ref: "#/definitions/PaginatedUserResult"
         400:
-          description: Validation failures
+          description: "Validation failures"
           schema:
             $ref: "#/definitions/ValidationErrors"
           examples:
@@ -66,7 +66,95 @@ paths:
                 - "Page '-5' must be greater than or equal to 0"
                 - "PerPage '50' must be less than or equal to 20"
         500:
-          description: Internal Server Error
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
+
+    post:
+      description: "Create a new user"
+      parameters:
+        - name: user
+          in: body
+          description: "Details required to create a new User"
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: "The name of the user"
+      responses:
+        200:
+          description: "The new user with database id"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Validation failures"
+          schema:
+            $ref: "#/definitions/ValidationErrors"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec10"
+              errors:
+                - "UserName must not be blank"
+                - "UserName 'w.smithers' is already in use"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
+
+  /users/by-id/{userId}:
+    get:
+      description: "Retrieve User by id"
+      parameters:
+        - name: userId
+          in: path
+          description: "ID of the User to fetch"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: "The requested user"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "No User exists with that ID"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Exception"
+          examples:
+            application/json:
+              uuid: "72e7947e-9561-4297-844a-70179560ec11"
+              name: "java.lang.NullPointerException"
+
+  /users/by-name/{userName}:
+    get:
+      description: "Retrieve User by name"
+      parameters:
+        - name: userName
+          in: path
+          description: "Name of the User to fetch"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "The requested user"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "No User exists with that name"
+        500:
+          description: "Internal Server Error"
           schema:
             $ref: "#/definitions/Exception"
           examples:
@@ -76,17 +164,17 @@ paths:
 
   /passwords:
     get:
-      description: Get all passwords
+      description: "Get all passwords"
       parameters:
         - $ref: "#/parameters/Page"
         - $ref: "#/parameters/PerPage"
       responses:
         200:
-          description: List of all passwords in the system
+          description: "List of all passwords in the system"
           schema:
             $ref: "#/definitions/PaginatedPasswordResult"
         400:
-          description: Validation failures
+          description: "Validation failures"
           schema:
             $ref: "#/definitions/ValidationErrors"
           examples:
@@ -96,7 +184,7 @@ paths:
                 - "Page '-5' must be greater than or equal to 0"
                 - "PerPage '50' must be less than or equal to 20"
         500:
-          description: Internal Server Error
+          description: "Internal Server Error"
           schema:
             $ref: "#/definitions/Exception"
           examples:
@@ -107,12 +195,12 @@ paths:
 definitions:
 
   PaginatedBagResult:
-    description: Paginated result set of bags
+    description: "Paginated result set of bags"
     type: object
     properties:
       data:
         title: Bags
-        description: List of bags, limited by pagination
+        description: "List of bags, limited by pagination"
         type: array
         items:
           $ref: "#/definitions/Bag"
@@ -121,21 +209,21 @@ definitions:
 
   Bag:
     type: object
-    description: Bag providing links to Passwords
+    description: "Bag providing links to Passwords"
     properties:
       id: 
         $ref: "#/definitions/DatabaseID"
       name:
-        description: the display name of the bag
+        description: "the display name of the bag"
         type: string
   
   PaginatedUserResult:
-    description: Paginated result set of users
+    description: "Paginated result set of users"
     type: object
     properties:
       data:
         title: Users
-        description: List of users, limited by pagination
+        description: "List of users, limited by pagination"
         type: array
         items:
           $ref: "#/definitions/User"
@@ -144,21 +232,21 @@ definitions:
   
   User:
     type: object
-    description: Represents a User of the system
+    description: "Represents a User of the system"
     properties:
       id:
         $ref: "#/definitions/DatabaseID"
       name:
-        description: the login identifier for the user
+        description: "the login identifier for the user"
         type: string
   
   PaginatedPasswordResult:
-    description: Paginated result set of passwords
+    description: "Paginated result set of passwords"
     type: object
     properties:
       data:
         title: Users
-        description: List of passwords, limited by pagination
+        description: "List of passwords, limited by pagination"
         type: array
         items:
           $ref: "#/definitions/Password"
@@ -167,70 +255,70 @@ definitions:
   
   Password:
     type: object
-    description: Holds the encrypted data, along with where it is for and which account
+    description: "Holds the encrypted data, along with where it is for and which account"
     properties:
       id: 
         $ref: "#/definitions/DatabaseID"
       whereFor:
-        description: information describing where the password is for
+        description: "information describing where the password is for"
         type: string
       username:
-        description: usually the username to be used when logging in
+        description: "usually the username to be used when logging in"
         type: string
       password:
-        description: the data that is stored in an encrypted state
+        description: "the data that is stored in an encrypted state"
         type: string
         
   DatabaseID:
     title: Neo4J ID
-    description: the database id
+    description: "the database id"
     type: integer
     format: int32
   
   Pagination:
     type: object
-    description: Pagination details
+    description: "Pagination details"
     properties:
       page:
-        description: the offset for pagination
+        description: "the offset for pagination"
         type: integer
         format: int32
       perPage:
-        description: the number of results per page
+        description: "the number of results per page"
         type: integer
         format: int32
       totalCount:
-        description: the total number of possible results
+        description: "the total number of possible results"
         type: integer
         format: int64
 
   ValidationErrors:
     type: object
-    description: Validation failure response
+    description: "Validation failure response"
     properties:
       uuid:
         type: string
-        description: The ID placed in the logs, for investigation purposes.
+        description: "The ID placed in the logs, for investigation purposes."
       errors:
         type: array
-        description: Collection of the validation failures.
+        description: "Collection of the validation failures."
         items:
           $ref: "#/definitions/ValidationError"
 
   ValidationError:
     type: string
-    description: A message explaining the validation failure.
+    description: "A message explaining the validation failure."
     
   Exception:
     type: object
-    description: Basic information about the exception.
+    description: "Basic information about the exception."
     properties:
       uuid:
         type: string
-        description: The ID placed in the logs, for investigation purposes.
+        description: "The ID placed in the logs, for investigation purposes."
       name:
         type: string
-        description: The class name of the exception thrown.
+        description: "The class name of the exception thrown."
 
 parameters:
 
