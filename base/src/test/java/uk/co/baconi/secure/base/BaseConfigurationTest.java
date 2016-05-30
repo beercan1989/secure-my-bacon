@@ -18,7 +18,6 @@ package uk.co.baconi.secure.base;
 
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
-import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.config.DriverConfiguration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
