@@ -18,12 +18,14 @@ package uk.co.baconi.secure.base;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
 @Component
+@ToString(exclude = "password")
 @ConfigurationProperties(prefix = "neo4j")
 public class BaseNeo4JProperties {
 
@@ -36,17 +38,4 @@ public class BaseNeo4JProperties {
     private String trustStrategy;
     private String trustCertificateFile;
 
-    @Override
-    public String toString() {
-        return "BaseNeo4JProperties{" +
-                "url='" + url + '\'' +
-                ", username='" + username + '\'' +
-                ", password='[REDACTED]'" +
-                ", driver='" + driver + '\'' +
-                ", connectionPoolSize=" + connectionPoolSize +
-                ", encryptionLevel='" + encryptionLevel + '\'' +
-                ", trustStrategy='" + trustStrategy + '\'' +
-                ", trustCertificateFile='" + trustCertificateFile + '\'' +
-                '}';
-    }
 }
