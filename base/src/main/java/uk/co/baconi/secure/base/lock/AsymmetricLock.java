@@ -24,9 +24,6 @@ import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.user.User;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 @Getter
 @NoArgsConstructor
 @RelationshipEntity(type = AsymmetricLock.SHARED_WITH)
