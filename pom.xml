@@ -81,8 +81,17 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Import dependency management from Spring Data ReleaseTrain -->
             <dependency>
-                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Hopper-SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Import dependency management from Spring Boot -->
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
@@ -94,6 +103,8 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-neo4j</artifactId>
                 <version>${spring.data.neo4j.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.neo4j</groupId>
@@ -112,6 +123,11 @@
             </dependency>
             <dependency>
                 <groupId>org.neo4j</groupId>
+                <artifactId>neo4j-ogm-embedded-driver</artifactId>
+                <version>${neo4j.ogm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.neo4j</groupId>
                 <artifactId>neo4j-ogm-test</artifactId>
                 <version>${neo4j.ogm.version}</version>
             </dependency>
@@ -119,6 +135,24 @@
                 <groupId>org.neo4j</groupId>
                 <artifactId>neo4j</artifactId>
                 <version>${neo4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.neo4j</groupId>
+                <artifactId>neo4j-kernel</artifactId>
+                <version>${neo4j.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.neo4j.app</groupId>
+                <artifactId>neo4j-server</artifactId>
+                <version>${neo4j.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.neo4j.test</groupId>
+                <artifactId>neo4j-harness</artifactId>
+                <version>${neo4j.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
