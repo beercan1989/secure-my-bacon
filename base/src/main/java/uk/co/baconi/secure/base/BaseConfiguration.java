@@ -16,6 +16,9 @@
 
 package uk.co.baconi.secure.base;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.config.DriverConfiguration;
 import org.neo4j.ogm.session.SessionFactory;
 import org.slf4j.Logger;
@@ -41,16 +44,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "uk.co.baconi.secure.base.password",
         "uk.co.baconi.secure.base.user"
 })
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 public class BaseConfiguration extends Neo4jConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseConfiguration.class);
 
-    private final BaseNeo4JProperties neo4JProperties;
-
     @Autowired
-    public BaseConfiguration(final BaseNeo4JProperties neo4JProperties) {
-        this.neo4JProperties = neo4JProperties;
-    }
+    private BaseNeo4JProperties neo4JProperties;
 
     @Bean
     public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
