@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.StringUtils;
 
 @Configuration
 @EnableAutoConfiguration
@@ -46,8 +45,12 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseConfiguration.class);
 
+    private final BaseNeo4JProperties neo4JProperties;
+
     @Autowired
-    private BaseNeo4JProperties neo4JProperties;
+    public BaseConfiguration(final BaseNeo4JProperties neo4JProperties) {
+        this.neo4JProperties = neo4JProperties;
+    }
 
     @Bean
     public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
