@@ -89,6 +89,22 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
-    // Find by name
+    @Test
+    public void onFindUserByName() throws IOException {
+
+        withNoAuthentication().
+                baseUri(getBaseUrl()).
+                get("/users/by-name/{name}", "user-0").
+
+                then().assertThat().
+
+                body("id", isA(Number.class)).
+                body("name", isA(String.class)).
+
+                body("id", is(equalTo(1))).
+                body("name", is(equalTo("user-0"))).
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
+    }
 
 }
