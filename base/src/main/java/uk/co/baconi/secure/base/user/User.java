@@ -25,7 +25,6 @@ import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @NodeEntity

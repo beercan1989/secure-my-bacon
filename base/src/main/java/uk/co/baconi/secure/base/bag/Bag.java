@@ -27,9 +27,7 @@ import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
