@@ -1,1 +1,1 @@
-web: java -jar api/target/api.war
+web: java -jar -Dspring.profiles.active=heroku api/target/api.war
