@@ -16,10 +16,7 @@
 
 package uk.co.baconi.secure.base.lock;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.password.Password;
@@ -36,6 +33,7 @@ public class SymmetricLock {
     @GraphId
     private Long id;
 
+    @Setter
     @Property
     private byte[] key;
 
@@ -53,10 +51,6 @@ public class SymmetricLock {
 
         this.bag.securedWith(this);
         this.password.securedBy(this);
-    }
-
-    public void setKey(final byte[] key) {
-        this.key = key;
     }
 
 }

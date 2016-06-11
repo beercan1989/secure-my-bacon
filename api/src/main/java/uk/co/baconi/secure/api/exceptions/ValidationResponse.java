@@ -1,5 +1,7 @@
 package uk.co.baconi.secure.api.exceptions;
 
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Getter
+@ToString
 public class ValidationResponse implements BaseErrorResponse {
 
     private final UUID uuid;
@@ -44,22 +48,4 @@ public class ValidationResponse implements BaseErrorResponse {
                 )
         );
     }
-
-    @Override
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    @Override
-    public String toString() {
-        return "ValidationResponse{" +
-                "uuid=" + uuid +
-                ", errors='" + errors + '\'' +
-                '}';
-    }
-
 }

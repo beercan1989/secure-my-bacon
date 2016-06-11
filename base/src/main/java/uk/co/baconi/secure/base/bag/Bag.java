@@ -17,10 +17,7 @@
 package uk.co.baconi.secure.base.bag;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -39,11 +36,13 @@ public class Bag {
     @GraphId
     private Long id;
 
+    @Setter
     @Property
     private String name;
 
-    @JsonIgnore
+    @Setter
     @Property
+    @JsonIgnore
     private byte[] publicKey;
 
     @JsonIgnore
@@ -57,14 +56,6 @@ public class Bag {
 
     public Bag(final String name, final byte[] publicKey) {
         this.name = name;
-        this.publicKey = publicKey;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPublicKey(byte[] publicKey) {
         this.publicKey = publicKey;
     }
 
