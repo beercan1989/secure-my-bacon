@@ -1,0 +1,12 @@
+{
+  "name": "secure-my-bacon",
+  "scripts": {},
+  "env": {},
+  "formation": {},
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/java"
+    }
+  ]
+}
