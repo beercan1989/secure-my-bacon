@@ -16,10 +16,7 @@
 
 package uk.co.baconi.secure.base.lock;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.user.User;
@@ -36,6 +33,7 @@ public class AsymmetricLock {
     @GraphId
     private Long id;
 
+    @Setter
     @Property
     private byte[] privateKey;
 
@@ -53,10 +51,6 @@ public class AsymmetricLock {
 
         this.bag.sharedWith(this);
         this.user.sharedWith(this);
-    }
-
-    public void setPrivateKey(byte[] privateKey) {
-        this.privateKey = privateKey;
     }
 
 }

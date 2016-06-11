@@ -36,12 +36,15 @@ public class Password {
     @GraphId
     private Long id;
 
+    @Setter
     @Property
     private String whereFor;
 
+    @Setter
     @Property
     private String username;
 
+    @Setter
     @Property
     private String password;
 
@@ -53,19 +56,6 @@ public class Password {
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
-    }
-
-
-    public void setWhereFor(final String whereFor) {
-        this.whereFor = whereFor;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Password securedBy(final SymmetricLock securedBy) {
