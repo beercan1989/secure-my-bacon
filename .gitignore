@@ -14,3 +14,6 @@
 ci/gpg/private-key.asc
 ci/gpg/random_seed
 ci/gpg/*.gpg
+
+# Heroku Deployment Folder
+heroku/
