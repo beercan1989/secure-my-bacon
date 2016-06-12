@@ -26,7 +26,7 @@
 
     <artifactId>api</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <root-path>..</root-path>
@@ -130,18 +130,6 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
 
@@ -150,28 +138,6 @@
             <id>heroku</id>
             <build>
                 <plugins>
-                    <!-- Clean up any previous Heroku deployments, only useful for local builds -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>heroku-pre-build-cleanup</id>
-                                <phase>clean</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                                <configuration>
-                                    <filesets>
-                                        <fileset>
-                                            <directory>${root-path}/heroku</directory>
-                                        </fileset>
-                                    </filesets>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <!-- Deploy API war file into the Heroku deployment folder -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -185,11 +151,14 @@
                                 </goals>
                                 <configuration>
                                     <target>
+                                        <echo>Making sure the 'heroku' deployment folder is empty.</echo>
+                                        <delete dir="${heroku.deployment.folder}"/>
+
                                         <echo>Making sure the 'heroku' deployment folder exists.</echo>
                                         <mkdir dir="${heroku.deployment.folder}"/>
 
-                                        <echo>Moving 'api.war' into 'heroku' deployment folder.</echo>
-                                        <copy file="${project.build.directory}/api.war" tofile="${heroku.deployment.folder}/api.war"/>
+                                        <echo>Moving 'api.jar' into 'heroku' deployment folder.</echo>
+                                        <copy file="${project.build.directory}/api.jar" tofile="${heroku.deployment.folder}/api.jar"/>
                                     </target>
                                 </configuration>
                             </execution>
