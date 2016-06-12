@@ -50,12 +50,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Neo4j Embedded mode -->
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-ogm-embedded-driver</artifactId>
-        </dependency>
-
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
