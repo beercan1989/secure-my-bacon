@@ -94,7 +94,13 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
     @Bean
     public SessionFactory getSessionFactory() {
-        return new SessionFactory(getNeo4jConfiguration(), "uk.co.baconi.secure.base");
+        return new SessionFactory(
+                getNeo4jConfiguration(),
+                "uk.co.baconi.secure.base.bag",
+                "uk.co.baconi.secure.base.lock",
+                "uk.co.baconi.secure.base.password",
+                "uk.co.baconi.secure.base.user"
+        );
     }
 
     private boolean isNotEmpty(final String string) {
