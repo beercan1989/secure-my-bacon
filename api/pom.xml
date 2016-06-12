@@ -150,6 +150,7 @@
 
             <build>
                 <plugins>
+                    <!-- Clean up any previous Heroku deployments, only useful for local builds -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
@@ -170,6 +171,8 @@
                             </execution>
                         </executions>
                     </plugin>
+
+                    <!-- Deploy API war file into the Heroku deployment folder -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
@@ -192,6 +195,8 @@
                             </execution>
                         </executions>
                     </plugin>
+
+                    <!-- Deploy NewRelic into the Heroku deployment folder -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
