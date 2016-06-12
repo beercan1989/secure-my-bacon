@@ -77,6 +77,11 @@
         <root-path>.</root-path>
         <gpg.homedir>${root-path}/ci/gpg</gpg.homedir>
         <gpg.executable>gpg</gpg.executable>
+
+        <!-- Heroku Deployment Configuration -->
+        <heroku.deployment.folder>${root-path}/heroku</heroku.deployment.folder>
+        <heroku.deployment.flag>env.DYNO</heroku.deployment.flag>
+        <heroku.newrelic.version>3.29.0</heroku.newrelic.version>
     </properties>
 
     <dependencyManagement>
@@ -244,6 +249,12 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -286,4 +297,32 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>heroku</id>
+            <activation>
+                <property>
+                    <name>${heroku.deployment.flag}</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>heroku-post-build-cleanup</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
