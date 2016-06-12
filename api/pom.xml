@@ -50,6 +50,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Neo4J Driver -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-bolt-driver</artifactId>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
