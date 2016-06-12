@@ -308,6 +308,7 @@
             </activation>
             <build>
                 <plugins>
+                    <!-- Delete compiled code after build on Heroku to make the Slugs smaller -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
@@ -318,6 +319,31 @@
                                 <goals>
                                     <goal>clean</goal>
                                 </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Disable JaCoCo on a Heroku build as tests are skipped -->
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+
+                        <executions>
+                            <execution>
+                                <id>prepare-unit-test-agent</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>generate-unit-test-report</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>prepare-integration-test-agent</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>generate-integration-test-report</id>
+                                <phase>none</phase>
                             </execution>
                         </executions>
                     </plugin>
