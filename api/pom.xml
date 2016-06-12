@@ -142,12 +142,6 @@
     <profiles>
         <profile>
             <id>heroku</id>
-            <activation>
-                <property>
-                    <name>env.DYNO</name>
-                </property>
-            </activation>
-
             <build>
                 <plugins>
                     <!-- Clean up any previous Heroku deployments, only useful for local builds -->
@@ -184,13 +178,13 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <echo>Making sure the 'heroku' deployment folder exists.</echo>
                                         <mkdir dir="${heroku.deployment.folder}"/>
 
                                         <echo>Moving 'api.war' into 'heroku' deployment folder.</echo>
                                         <copy file="${project.build.directory}/api.war" tofile="${heroku.deployment.folder}/api.war"/>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
