@@ -29,7 +29,7 @@ import uk.co.baconi.secure.base.BaseConfiguration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-@Import(BaseConfiguration.class)
+@Import({BaseConfiguration.class, SpringFoxConfiguration.class})
 public class ApiApplication extends SpringBootServletInitializer {
 
     public static void main(final String... args) {
