@@ -45,7 +45,7 @@ public class PasswordEndpoint {
     private PasswordGraphRepository passwordGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Password>> get(
+    public ResponseEntity<PaginatedResult<Password>> findAllPaginated(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
