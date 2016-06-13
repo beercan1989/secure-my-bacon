@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base.lock;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
@@ -35,6 +36,7 @@ public class SymmetricLock {
 
     @Setter
     @Property
+    @JsonIgnore
     private byte[] key;
 
     @StartNode
