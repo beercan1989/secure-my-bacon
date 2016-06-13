@@ -16,34 +16,58 @@
 
 package uk.co.baconi.secure.api.lock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.baconi.secure.api.bag.BagEndpoint;
+import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
+import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Validated
 @RestController
 @RequestMapping(value = "/symmetric-locks", produces = "application/json; charset=UTF-8")
 public class SymmetricLockEndpoint {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SymmetricLockEndpoint.class);
 
     @Autowired
     private SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<SymmetricLock>> get() {
+    public ResponseEntity<PaginatedResult<SymmetricLock>> findAllPaginated(
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        final List<SymmetricLock> allSymmetricLocks = StreamSupport.
-                stream(symmetricLockGraphRepository.findAll().spliterator(), false).
-                collect(Collectors.toList());
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
+    ) {
 
-        return ResponseEntity.ok(allSymmetricLocks);
+        final Page<SymmetricLock> paged = symmetricLockGraphRepository.findAll(new PageRequest(page, perPage));
+
+        LOG.trace("paged: {}", paged);
+
+        final PaginatedResult<SymmetricLock> paginatedResult = new PaginatedResult<>(paged);
+
+        LOG.trace("paginatedResult: {}", paginatedResult);
+
+        return ResponseEntity.ok(paginatedResult);
     }
-
 
 }

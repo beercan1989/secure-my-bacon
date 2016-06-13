@@ -45,7 +45,7 @@ public class BagEndpoint {
     private BagGraphRepository bagGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Bag>> get(
+    public ResponseEntity<PaginatedResult<Bag>> findAllPaginated(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 

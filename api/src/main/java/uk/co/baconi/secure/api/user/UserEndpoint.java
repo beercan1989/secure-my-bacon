@@ -42,7 +42,7 @@ public class UserEndpoint {
     private UserGraphRepository userGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<User>> get(
+    public ResponseEntity<PaginatedResult<User>> findAllPaginated(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
@@ -74,7 +74,7 @@ public class UserEndpoint {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping("/by-id/{userId}")
+    @RequestMapping(value = "/by-id/{userId}", method = RequestMethod.GET)
     public ResponseEntity<User> findById(@PathVariable("userId") final Long id){
 
         LOG.trace("findById: {}", id);
@@ -86,7 +86,7 @@ public class UserEndpoint {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping("/by-name/{userName}")
+    @RequestMapping(value = "/by-name/{userName}", method = RequestMethod.GET)
     public ResponseEntity<User> findByName(@PathVariable("userName") final String name){
 
         LOG.trace("findByName: {}", name);
