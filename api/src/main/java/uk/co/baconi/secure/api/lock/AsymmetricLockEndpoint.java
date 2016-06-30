@@ -16,8 +16,7 @@
 
 package uk.co.baconi.secure.api.lock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,24 +28,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
-import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping(value = "/asymmetric-locks", produces = "application/json; charset=UTF-8")
 public class AsymmetricLockEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AsymmetricLockEndpoint.class);
+    private final AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @Autowired
-    private AsymmetricLockGraphRepository asymmetricLockGraphRepository;
+    public AsymmetricLockEndpoint(final AsymmetricLockGraphRepository asymmetricLockGraphRepository) {
+        this.asymmetricLockGraphRepository = asymmetricLockGraphRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<AsymmetricLock>> findAllPaginated(
@@ -60,11 +58,11 @@ public class AsymmetricLockEndpoint {
 
         final Page<AsymmetricLock> paged = asymmetricLockGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.trace("paged: {}", paged);
+        log.trace("paged: {}", paged);
 
         final PaginatedResult<AsymmetricLock> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.trace("paginatedResult: {}", paginatedResult);
+        log.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.ok(paginatedResult);
     }

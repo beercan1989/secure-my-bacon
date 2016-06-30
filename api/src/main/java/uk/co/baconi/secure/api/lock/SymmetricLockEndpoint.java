@@ -16,8 +16,7 @@
 
 package uk.co.baconi.secure.api.lock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,27 +26,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.baconi.secure.api.bag.BagEndpoint;
-import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping(value = "/symmetric-locks", produces = "application/json; charset=UTF-8")
 public class SymmetricLockEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SymmetricLockEndpoint.class);
+    private final SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @Autowired
-    private SymmetricLockGraphRepository symmetricLockGraphRepository;
+    public SymmetricLockEndpoint(final SymmetricLockGraphRepository symmetricLockGraphRepository) {
+        this.symmetricLockGraphRepository = symmetricLockGraphRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<SymmetricLock>> findAllPaginated(
@@ -61,11 +58,11 @@ public class SymmetricLockEndpoint {
 
         final Page<SymmetricLock> paged = symmetricLockGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.trace("paged: {}", paged);
+        log.trace("paged: {}", paged);
 
         final PaginatedResult<SymmetricLock> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.trace("paginatedResult: {}", paginatedResult);
+        log.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.ok(paginatedResult);
     }

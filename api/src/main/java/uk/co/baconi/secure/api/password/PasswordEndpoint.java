@@ -16,8 +16,7 @@
 
 package uk.co.baconi.secure.api.password;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,15 +33,18 @@ import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping(value = "/passwords", produces = "application/json; charset=UTF-8")
 public class PasswordEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PasswordEndpoint.class);
+    private final PasswordGraphRepository passwordGraphRepository;
 
     @Autowired
-    private PasswordGraphRepository passwordGraphRepository;
+    public PasswordEndpoint(final PasswordGraphRepository passwordGraphRepository) {
+        this.passwordGraphRepository = passwordGraphRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> findAllPaginated(
@@ -56,11 +58,11 @@ public class PasswordEndpoint {
 
         final Page<Password> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.trace("paged: {}", paged);
+        log.trace("paged: {}", paged);
 
         final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.trace("paginatedResult: {}", paginatedResult);
+        log.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.ok(paginatedResult);
     }
