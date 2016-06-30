@@ -19,7 +19,8 @@ package uk.co.baconi.secure.base;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
 public class BaseNeo4JPropertiesTest {
 

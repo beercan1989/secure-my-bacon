@@ -24,8 +24,6 @@ import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
-import java.util.Objects;
-
 @NoArgsConstructor
 @NodeEntity
 @Getter

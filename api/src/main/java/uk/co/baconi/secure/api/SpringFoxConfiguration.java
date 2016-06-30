@@ -16,28 +16,26 @@
 
 package uk.co.baconi.secure.api;
 
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
-import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import uk.co.baconi.secure.api.exceptions.ExceptionResponse;
 import uk.co.baconi.secure.api.exceptions.ValidationResponse;
 
 import static com.google.common.collect.Sets.newHashSet;
-
 import static springfox.documentation.swagger.web.UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS;
 
 @Configuration
