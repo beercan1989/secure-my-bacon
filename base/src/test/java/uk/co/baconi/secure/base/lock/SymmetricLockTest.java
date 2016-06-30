@@ -21,8 +21,6 @@ import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.password.Password;
 
-import java.util.Arrays;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
