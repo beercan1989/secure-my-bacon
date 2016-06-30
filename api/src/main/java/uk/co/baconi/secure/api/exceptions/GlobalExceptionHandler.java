@@ -1,7 +1,6 @@
 package uk.co.baconi.secure.api.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+@Slf4j
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
     @Order(Ordered.LOWEST_PRECEDENCE)
     @ExceptionHandler(Exception.class)
@@ -53,7 +50,7 @@ public class GlobalExceptionHandler {
                                                                            final HttpServletRequest request,
                                                                            final HttpStatus httpStatus,
                                                                            final Exception exception) {
-        LOG.error(
+        log.error(
                 "Error [{}] on url [{}] of [{}] with message [{}]",
                 response.getUuid(),
                 request.getRequestURL(),
@@ -61,9 +58,9 @@ public class GlobalExceptionHandler {
                 exception.getMessage()
         );
 
-        LOG.debug("Stacktrace for [{}]:", response.getUuid(), exception);
+        log.debug("Stacktrace for [{}]:", response.getUuid(), exception);
 
-        LOG.trace("Response for [{}]:", response.getUuid(), response);
+        log.trace("Response for [{}]:", response.getUuid(), response);
 
         return ResponseEntity.status(httpStatus).body(response);
     }

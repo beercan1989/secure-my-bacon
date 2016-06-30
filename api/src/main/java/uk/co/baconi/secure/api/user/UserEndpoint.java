@@ -16,8 +16,7 @@
 
 package uk.co.baconi.secure.api.user;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,18 +30,21 @@ import uk.co.baconi.secure.base.user.UserGraphRepository;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
 public class UserEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserEndpoint.class);
+    private final UserGraphRepository userGraphRepository;
 
     @Autowired
-    private UserGraphRepository userGraphRepository;
+    public UserEndpoint(final UserGraphRepository userGraphRepository) {
+        this.userGraphRepository = userGraphRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<User>> findAllPaginated(
+    public ResponseEntity<PaginatedResult<User>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
@@ -53,11 +55,11 @@ public class UserEndpoint {
 
         final Page<User> paged = userGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.trace("paged: {}", paged);
+        log.trace("paged: {}", paged);
 
         final PaginatedResult<User> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.trace("paginatedResult: {}", paginatedResult);
+        log.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.ok(paginatedResult);
     }
@@ -65,11 +67,11 @@ public class UserEndpoint {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<User> create(@RequestBody final NewUser newUser){
 
-        LOG.trace("createUser: {}", newUser);
+        log.trace("createUser: {}", newUser);
 
         final User user = userGraphRepository.save(new User(newUser.getName()));
 
-        LOG.trace("createdUser: {}", user);
+        log.trace("createdUser: {}", user);
 
         return ResponseEntity.ok(user);
     }
@@ -77,11 +79,11 @@ public class UserEndpoint {
     @RequestMapping(value = "/by-id/{userId}", method = RequestMethod.GET)
     public ResponseEntity<User> findById(@PathVariable("userId") final Long id){
 
-        LOG.trace("findById: {}", id);
+        log.trace("findById: {}", id);
 
         final User user = userGraphRepository.findOne(id);
 
-        LOG.trace("foundUser: {}", user);
+        log.trace("foundUser: {}", user);
 
         return ResponseEntity.ok(user);
     }
@@ -89,11 +91,11 @@ public class UserEndpoint {
     @RequestMapping(value = "/by-name/{userName}", method = RequestMethod.GET)
     public ResponseEntity<User> findByName(@PathVariable("userName") final String name){
 
-        LOG.trace("findByName: {}", name);
+        log.trace("findByName: {}", name);
 
         final User user = userGraphRepository.findByName(name);
 
-        LOG.trace("foundUser: {}", user);
+        log.trace("foundUser: {}", user);
 
         return ResponseEntity.ok(user);
     }
