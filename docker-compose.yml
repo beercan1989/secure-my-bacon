@@ -1,0 +1,23 @@
+version: '2'
+services:
+
+  neo4j:
+    image: neo4j:3.0.1
+    ports:
+     - "7474:7474"
+     - "7687:7687"
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    volumes:
+      - "/binary"
+    environment:
+      GRAPHENEDB_BOLT_URL: bolt://neo4j:7687
+      GRAPHENEDB_BOLT_USER: neo4j
+      GRAPHENEDB_BOLT_PASSWORD: neo4j
+    ports:
+      - "8080:8080"
+    links:
+      - "neo4j:neo4j"
