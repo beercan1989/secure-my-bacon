@@ -45,7 +45,7 @@ public class SymmetricLockEndpoint {
     private final SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<SymmetricLock>> findAllPaginated(
+    public ResponseEntity<PaginatedResult<SymmetricLock>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
