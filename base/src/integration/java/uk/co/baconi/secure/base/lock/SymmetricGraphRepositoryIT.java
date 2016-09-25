@@ -31,9 +31,9 @@ public class SymmetricGraphRepositoryIT extends BaseIntegrationTest {
     private SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @Test
-    public void shouldBeAbleToCreateLock() {
+    public void shouldBeAbleToCreateSymmetricLock() {
         final Password password = new Password("whereFor", "username", "password");
-        final Bag bag = new Bag("bag", "public key".getBytes());
+        final Bag bag = new Bag("shouldBeAbleToCreateSymmetricLock_Bag", "public key".getBytes());
         final byte[] key = "key".getBytes();
 
         final SymmetricLock lock = new SymmetricLock(password, bag, key);

@@ -53,13 +53,13 @@ public class UserGraphRepositoryIT extends BaseIntegrationTest {
 
     @Test
     public void shouldBeAbleToShareUserWithAGroup() {
-        final String name = "shouldBeAbleToShareUserWithAGroup";
+        final String name = "shouldBeAbleToShareUserWithAGroup_User";
 
         final User user = new User(name);
 
         userGraphRepository.save(user);
 
-        final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
+        final Bag gitHubBag = new Bag("shouldBeAbleToShareUserWithAGroup_Group", "public key".getBytes());
 
         final AsymmetricLock sharedWith = new AsymmetricLock(gitHubBag, user, "privateKey".getBytes());
 
