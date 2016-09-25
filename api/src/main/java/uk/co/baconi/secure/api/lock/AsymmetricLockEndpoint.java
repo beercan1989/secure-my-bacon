@@ -45,7 +45,7 @@ public class AsymmetricLockEndpoint {
     private final AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<AsymmetricLock>> findAllPaginated(
+    public ResponseEntity<PaginatedResult<AsymmetricLock>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
