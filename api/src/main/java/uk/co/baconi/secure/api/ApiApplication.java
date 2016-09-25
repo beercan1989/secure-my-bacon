@@ -17,20 +17,17 @@
 package uk.co.baconi.secure.api;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import uk.co.baconi.secure.base.BaseConfiguration;
 
 @Configuration
-@EnableAutoConfiguration
-@ComponentScan
+@SpringBootApplication
 @Import({BaseConfiguration.class, SpringFoxConfiguration.class})
-public class ApiApplication extends SpringBootServletInitializer {
+public class ApiApplication {
 
     public static void main(final String... args) {
         SpringApplication.run(ApiApplication.class, args);
