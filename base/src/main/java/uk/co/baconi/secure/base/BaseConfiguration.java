@@ -28,15 +28,17 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableAutoConfiguration
 @ComponentScan
-@EnableConfigurationProperties
+@EnableAutoConfiguration
 @EnableTransactionManagement
+@EnableConfigurationProperties
+@Import(SchemaConfiguration.class)
 @EnableNeo4jRepositories({
         "uk.co.baconi.secure.base.bag",
         "uk.co.baconi.secure.base.lock",
@@ -52,9 +54,9 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
     @Bean
     public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
-        LOG.info("Properties: {}", neo4JProperties);
+        LOG.info("Neo4JProperties: {}", neo4JProperties);
 
-        org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
+        final org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
 
         final DriverConfiguration driverConfiguration = config.driverConfiguration();
 
