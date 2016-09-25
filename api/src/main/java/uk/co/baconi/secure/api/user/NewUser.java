@@ -17,14 +17,14 @@
 package uk.co.baconi.secure.api.user;
 
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 @ToString
 @AllArgsConstructor
 public class NewUser {
 
-    @NotEmpty
+    @NotBlank
     private final String name;
 
 }
