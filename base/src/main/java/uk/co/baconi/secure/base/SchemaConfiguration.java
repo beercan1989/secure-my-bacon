@@ -40,13 +40,8 @@ public class SchemaConfiguration {
 
         log.info("createUniqueIndexes: START");
 
-        // User
         createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT exists(user.name)");
-
-        // Group
         createConstraint("CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (group:Group) ASSERT exists(group.name)");
 
         log.info("createUniqueIndexes: END");
     }
