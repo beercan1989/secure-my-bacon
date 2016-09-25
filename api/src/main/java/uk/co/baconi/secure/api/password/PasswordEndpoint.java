@@ -16,10 +16,13 @@
 
 package uk.co.baconi.secure.api.password;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,18 +39,14 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(value = "/passwords", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@RequestMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordEndpoint {
 
     private final PasswordGraphRepository passwordGraphRepository;
 
-    @Autowired
-    public PasswordEndpoint(final PasswordGraphRepository passwordGraphRepository) {
-        this.passwordGraphRepository = passwordGraphRepository;
-    }
-
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Password>> findAllPaginated(
+    public ResponseEntity<PaginatedResult<Password>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 

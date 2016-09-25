@@ -16,10 +16,12 @@
 
 package uk.co.baconi.secure.api.user;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +36,11 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserEndpoint {
 
     private final UserGraphRepository userGraphRepository;
-
-    @Autowired
-    public UserEndpoint(final UserGraphRepository userGraphRepository) {
-        this.userGraphRepository = userGraphRepository;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<User>> findAll(
@@ -65,7 +63,7 @@ public class UserEndpoint {
         return ResponseEntity.ok(paginatedResult);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> create(@Valid @RequestBody final NewUser newUser){
 
         log.trace("createUser: {}", newUser);

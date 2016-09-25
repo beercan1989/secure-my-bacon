@@ -16,10 +16,12 @@
 
 package uk.co.baconi.secure.api.bag;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,15 +38,11 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@RequestMapping(value = "/bags", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class BagEndpoint {
 
     private final BagGraphRepository bagGraphRepository;
-
-    @Autowired
-    public BagEndpoint(final BagGraphRepository bagGraphRepository) {
-        this.bagGraphRepository = bagGraphRepository;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Bag>> findAllPaginated(
