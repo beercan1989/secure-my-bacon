@@ -41,7 +41,7 @@ public class SchemaConfiguration {
         log.info("createUniqueIndexes: START");
 
         createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
 
         log.info("createUniqueIndexes: END");
     }
