@@ -31,9 +31,9 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     private PasswordGraphRepository passwordGraphRepository;
 
     @Test
-    public void shouldBeAbleToCreateAndRetrieveBag() {
+    public void shouldBeAbleToCreateAndRetrievePassword() {
         final String whereFor = "https://github.com/login";
-        final String username = "beercan1989";
+        final String username = "shouldBeAbleToCreateAndRetrievePassword";
         final String passw0rd = "password";
 
         final Password password = new Password(whereFor, username, passw0rd);
@@ -58,9 +58,9 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     }
 
     @Test
-    public void shouldBeAbleToSecureWithAGroup() {
+    public void shouldBeAbleToSecurePasswordWithAGroup() {
         final String whereFor = "https://github.com/login";
-        final String username = "beercan1989";
+        final String username = "shouldBeAbleToSecurePasswordWithAGroup";
         final String passw0rd = "password";
 
         final Password password = new Password(whereFor, username, passw0rd);
