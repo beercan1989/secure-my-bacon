@@ -21,8 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.specification.RequestSpecification;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -31,10 +30,9 @@ import java.io.IOException;
 
 import static com.jayway.restassured.RestAssured.with;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(IntegrationApiApplication.class)
-@WebIntegrationTest(randomPort = true)
 @ActiveProfiles("integration")
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class IntegratedApiEndpoint {
 
     //
