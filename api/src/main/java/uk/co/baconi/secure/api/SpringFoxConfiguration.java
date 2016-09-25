@@ -17,6 +17,8 @@
 package uk.co.baconi.secure.api;
 
 import com.fasterxml.classmate.TypeResolver;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,10 +43,10 @@ import static springfox.documentation.swagger.web.UiConfiguration.Constants.DEFA
 @Configuration
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
+@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor=@__({@Autowired}))
 public class SpringFoxConfiguration {
 
-    @Autowired
-    private ApiVersion apiVersion;
+    private final ApiVersion apiVersion;
 
     @Bean
     public Docket apiDocumentation(final TypeResolver typeResolver) {
