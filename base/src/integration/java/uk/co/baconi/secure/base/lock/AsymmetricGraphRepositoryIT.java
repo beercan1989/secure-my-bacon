@@ -31,9 +31,9 @@ public class AsymmetricGraphRepositoryIT extends BaseIntegrationTest {
     private AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @Test
-    public void shouldBeAbleToCreateLock() {
+    public void shouldBeAbleToCreateAsymmetricLock() {
         final User user = new User("username");
-        final Bag bag = new Bag("bag", "public key".getBytes());
+        final Bag bag = new Bag("shouldBeAbleToCreateAsymmetricLockBag", "public key".getBytes());
         final byte[] privateKey = "private key".getBytes();
 
         final AsymmetricLock lock = new AsymmetricLock(bag, user, privateKey);
