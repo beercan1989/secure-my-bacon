@@ -31,8 +31,8 @@ public class UserGraphRepositoryIT extends BaseIntegrationTest {
     private UserGraphRepository userGraphRepository;
 
     @Test
-    public void shouldBeAbleToCreateAndRetrieveBag() {
-        final String name = "beercan1989";
+    public void shouldBeAbleToCreateAndRetrieveUser() {
+        final String name = "shouldBeAbleToCreateAndRetrieveUser";
 
         final User user = new User(name);
 
@@ -52,8 +52,8 @@ public class UserGraphRepositoryIT extends BaseIntegrationTest {
     }
 
     @Test
-    public void shouldBeAbleToShareWithAGroup() {
-        final String name = "beercan1989";
+    public void shouldBeAbleToShareUserWithAGroup() {
+        final String name = "shouldBeAbleToShareUserWithAGroup";
 
         final User user = new User(name);
 
