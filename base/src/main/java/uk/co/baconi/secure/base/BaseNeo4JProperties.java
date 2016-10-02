@@ -40,4 +40,14 @@ public class BaseNeo4JProperties {
     private String trustStrategy;
     private String trustCertificateFile;
 
+    /**
+     * Enables changing the default neo4j password on every start up
+     */
+    private Boolean enableDefaultPasswordChangingOnStartUp;
+    private String defaultPassword;
+
+    /**
+     * Enables the creation of things like predefined indexes on every start up
+     */
+    private Boolean enableAutoSchemaCreationOnStartUp;
 }
