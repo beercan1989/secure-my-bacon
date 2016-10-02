@@ -14,34 +14,44 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.user;
+package uk.co.baconi.secure.api.bag;
 
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.api.user.NewUser;
+import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.user.User;
+import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserEndpoint_Writing_IT extends IntegratedApiEndpoint {
+public class BagEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
-    private final String endpoint = "/users";
+    @Autowired
+    private UserGraphRepository userGraphRepository;
+
+    private final String endpoint = "/bags";
 
     @Test
-    public void onCreateNewUser() throws IOException {
+    public void onCreateNewBag() throws IOException {
+
+        userGraphRepository.save(new User("onCreateNewBag-existing-user"));
 
         withNoAuthentication().
                 contentType(ContentType.JSON).
-                body(convertToJson(new NewUser("new-clean-user"))).
+                body(convertToJson(new NewBag("new-clean-bag", "onCreateNewBag-existing-user"))).
                 post(endpoint).
 
                 then().assertThat().
 
                 body("id", isA(Number.class)).
                 body("name", isA(String.class)).
-                body("name", is(equalTo("new-clean-user"))).
+                body("name", is(equalTo("new-clean-bag"))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
