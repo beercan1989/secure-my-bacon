@@ -16,23 +16,29 @@
 
 package uk.co.baconi.secure.api.user;
 
-import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.api.integrations.PaginationIntegrationTest;
 
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
+public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest {
+
+    private final String endpoint = "/users";
+
+    @Override
+    public String endpoint() {
+        return endpoint;
+    }
 
     @Test // 200
     public void onFindingAllUsers() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/users").
+                get(endpoint).
 
                 then().assertThat().
 
@@ -55,28 +61,10 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
     }
 
     @Test
-    public void onCreateNewUser() throws IOException {
-
-        withNoAuthentication().
-                baseUri(getBaseUrl()).
-                contentType(ContentType.JSON).
-                body(convertToJson(new NewUser("new-clean-user"))).
-                post("/users").
-
-                then().assertThat().
-
-                body("id", isA(Number.class)).
-                body("name", isA(String.class)).
-
-                statusCode(is(equalTo(HttpStatus.OK.value())));
-    }
-
-    @Test
     public void onFindUserById() throws IOException {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/users/by-id/{id}", 1).
+                get("{base}/by-id/{id}", endpoint, 1).
 
                 then().assertThat().
 
@@ -93,8 +81,7 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
     public void onFindUserByName() throws IOException {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/users/by-name/{name}", "user-0").
+                get("{base}/by-name/{name}", endpoint, "user-0").
 
                 then().assertThat().
 
@@ -107,4 +94,9 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
 
+    @Test
+    @Override
+    public void onFindingWithWithInvalidPaging() {
+        onFindingWithWithInvalidPagingImpl();
+    }
 }
