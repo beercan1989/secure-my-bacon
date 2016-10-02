@@ -1,15 +1,7 @@
-FROM maven:3-jdk-8
+FROM java:8-jre-alpine
 
-## Share the local code into the docker
-COPY . /code
-
-## Build the project
-WORKDIR /code
-RUN mvn clean install -DskipTests=true && \
-    mkdir /binary && \
-    cp -v api/target/api.jar /binary/api.jar && \
-    find . -mindepth 1 -delete
+ADD api/target/api.jar /opt/secure-my-bacon/api.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "-Dspring.profiles.active=heroku", "/binary/api.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=heroku,docker", "/opt/secure-my-bacon/api.jar"]
