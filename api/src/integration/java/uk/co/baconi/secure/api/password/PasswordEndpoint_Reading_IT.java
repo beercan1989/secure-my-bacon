@@ -19,18 +19,23 @@ package uk.co.baconi.secure.api.password;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.api.integrations.PaginationIntegrationTest;
 
 import static org.hamcrest.Matchers.*;
 
-public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
+public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest {
 
     private final String endpoint = "/passwords";
+
+    @Override
+    public String endpoint() {
+        return endpoint;
+    }
 
     @Test // 200
     public void onFindingAllPasswords() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
                 get(endpoint).
 
                 then().assertThat().
@@ -80,72 +85,8 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint {
     }
 
     @Test
-    public void onFindingPasswordsWithInvalidPaging() {
-
-        // Max PerPage
-        withNoAuthentication().
-                queryParam("perPage", 50).
-                get(endpoint).
-
-                then().assertThat().
-
-                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
-
-                body("uuid", isA(String.class)).
-                body("errors", is(not(nullValue()))).
-                body("errors[0]", is(equalTo("PerPage '50' must be less than or equal to 20")));
-
-        // Min PerPage
-        withNoAuthentication().
-                queryParam("perPage", -5).
-                get(endpoint).
-
-                then().assertThat().
-
-                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
-
-                body("uuid", isA(String.class)).
-                body("errors", is(not(nullValue()))).
-                body("errors[0]", is(equalTo("PerPage '-5' must be greater than or equal to 1")));
-
-        // NaN PerPage
-        withNoAuthentication().
-                queryParam("perPage", "fred").
-                get(endpoint).
-
-                then().assertThat().
-
-                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
-
-                body("uuid", isA(String.class)).
-                body("errors", is(not(nullValue()))).
-                body("errors[0]", is(equalTo("Param 'perPage' requires type 'java.lang.Integer' but was provided 'fred'")));
-
-
-        // Min Page
-        withNoAuthentication().
-                queryParam("page", -10).
-                get(endpoint).
-
-                then().assertThat().
-
-                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
-
-                body("uuid", isA(String.class)).
-                body("errors", is(not(nullValue()))).
-                body("errors[0]", is(equalTo("Page '-10' must be greater than or equal to 0")));
-
-        // NaN Page
-        withNoAuthentication().
-                queryParam("page", "bob").
-                get(endpoint).
-
-                then().assertThat().
-
-                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
-
-                body("uuid", isA(String.class)).
-                body("errors", is(not(nullValue()))).
-                body("errors[0]", is(equalTo("Param 'page' requires type 'java.lang.Integer' but was provided 'bob'")));
+    @Override
+    public void onFindingWithWithInvalidPaging() {
+        onFindingWithWithInvalidPagingImpl();
     }
 }

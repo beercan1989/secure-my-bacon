@@ -33,7 +33,7 @@ import static com.jayway.restassured.RestAssured.with;
 @ActiveProfiles("integration")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class IntegratedApiEndpoint {
+public abstract class IntegratedApiEndpoint implements Authentication {
 
     //
     // HTTP Server Values
@@ -58,17 +58,20 @@ public abstract class IntegratedApiEndpoint {
     }
 
 
-    protected RequestSpecification withValidAuthentication() {
+    @Override
+    public RequestSpecification withValidAuthentication() {
         return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyValidValue);
     }
 
 
-    protected RequestSpecification withNoAuthentication() {
+    @Override
+    public RequestSpecification withNoAuthentication() {
         return with().baseUri(getBaseUrl());
     }
 
 
-    protected RequestSpecification withInvalidAuthentication() {
+    @Override
+    public RequestSpecification withInvalidAuthentication() {
         return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyInvalidValue);
     }
 

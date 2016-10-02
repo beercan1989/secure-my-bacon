@@ -74,6 +74,7 @@ public class BagEndpoint {
 
         log.trace("createBag: {}", newBag);
 
+        // TODO - Verify user exists
         // Find user who this bag will initially belong to
         final User user = userGraphRepository.findByName(newBag.getUserName());
         log.trace("foundUser: {}", user);
