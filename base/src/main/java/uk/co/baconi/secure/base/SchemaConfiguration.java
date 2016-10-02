@@ -23,36 +23,68 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.neo4j.ogm.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
 
 @Slf4j
 @Configuration
-@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor=@__({@Autowired}))
+@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
 public class SchemaConfiguration {
 
     private final Neo4jOperations neo4jOperations;
+    private final BaseNeo4JProperties properties;
+    private final org.neo4j.ogm.config.Configuration neo4jConfiguration;
 
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @PostConstruct
+    public void changeDefaultNeo4jPassword() {
+
+        if (properties.getEnableDefaultPasswordChangingOnStartUp()) {
+
+            log.info("changeDefaultNeo4jPassword: START");
+
+            final String wantedPassword = properties.getPassword();
+            final String defaultPassword = properties.getDefaultPassword();
+
+            neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), defaultPassword);
+
+            final Result result = neo4jOperations.query("CALL dbms.changePassword({password})", singletonMap("password", wantedPassword));
+            log.debug("result.queryStatistics: {}", result.queryStatistics());
+
+            neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), wantedPassword);
+
+            log.info("changeDefaultNeo4jPassword: END");
+        }
+    }
+
+    @Order(Ordered.LOWEST_PRECEDENCE)
     @PostConstruct
     public void createConstrains() {
 
-        log.info("createUniqueIndexes: START");
+        if (properties.getEnableAutoSchemaCreationOnStartUp()) {
 
-        createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
+            log.info("createUniqueIndexes: START");
 
-        log.info("createUniqueIndexes: END");
+            createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
+            createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
+
+            log.info("createUniqueIndexes: END");
+        }
     }
 
     private void createConstraint(final String constraint) {
 
         log.debug("createConstraint: {}", constraint);
 
-        final Result result = neo4jOperations.query(constraint, Collections.emptyMap());
+        final Result result = neo4jOperations.query(constraint, emptyMap());
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("createConstraintResults: {}", ToStringBuilder.reflectionToString(result.queryStatistics()));
         }
     }
