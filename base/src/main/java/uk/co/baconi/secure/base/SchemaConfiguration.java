@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.neo4j.ogm.model.Result;
+import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -44,29 +45,11 @@ public class SchemaConfiguration {
     @PostConstruct
     public void perform() {
 
-        if (properties.getEnableDefaultPasswordChangingOnStartUp()) {
-            changeDefaultNeo4jPassword();
-        }
-
         if (properties.getEnableAutoSchemaCreationOnStartUp()) {
             createIndexes();
+        } else {
+            log.info("enableAutoSchemaCreationOnStartUp: DISABLED");
         }
-    }
-
-    private void changeDefaultNeo4jPassword() {
-        log.info("changeDefaultNeo4jPassword: START");
-
-        final String wantedPassword = properties.getPassword();
-        final String defaultPassword = properties.getDefaultPassword();
-
-        neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), defaultPassword);
-
-        final Result result = neo4jOperations.query("CALL dbms.changePassword({password})", singletonMap("password", wantedPassword));
-        log.debug("result.queryStatistics: {}", result.queryStatistics());
-
-        neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), wantedPassword);
-
-        log.info("changeDefaultNeo4jPassword: END");
     }
 
     private void createIndexes() {
