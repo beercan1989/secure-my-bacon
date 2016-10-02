@@ -41,41 +41,41 @@ public class SchemaConfiguration {
     private final BaseNeo4JProperties properties;
     private final org.neo4j.ogm.config.Configuration neo4jConfiguration;
 
-    @Order(Ordered.HIGHEST_PRECEDENCE)
     @PostConstruct
-    public void changeDefaultNeo4jPassword() {
+    public void perform() {
 
         if (properties.getEnableDefaultPasswordChangingOnStartUp()) {
+            changeDefaultNeo4jPassword();
+        }
 
-            log.info("changeDefaultNeo4jPassword: START");
-
-            final String wantedPassword = properties.getPassword();
-            final String defaultPassword = properties.getDefaultPassword();
-
-            neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), defaultPassword);
-
-            final Result result = neo4jOperations.query("CALL dbms.changePassword({password})", singletonMap("password", wantedPassword));
-            log.debug("result.queryStatistics: {}", result.queryStatistics());
-
-            neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), wantedPassword);
-
-            log.info("changeDefaultNeo4jPassword: END");
+        if (properties.getEnableAutoSchemaCreationOnStartUp()) {
+            createIndexes();
         }
     }
 
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    @PostConstruct
-    public void createConstrains() {
+    private void changeDefaultNeo4jPassword() {
+        log.info("changeDefaultNeo4jPassword: START");
 
-        if (properties.getEnableAutoSchemaCreationOnStartUp()) {
+        final String wantedPassword = properties.getPassword();
+        final String defaultPassword = properties.getDefaultPassword();
 
-            log.info("createUniqueIndexes: START");
+        neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), defaultPassword);
 
-            createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
-            createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
+        final Result result = neo4jOperations.query("CALL dbms.changePassword({password})", singletonMap("password", wantedPassword));
+        log.debug("result.queryStatistics: {}", result.queryStatistics());
 
-            log.info("createUniqueIndexes: END");
-        }
+        neo4jConfiguration.driverConfiguration().setCredentials(properties.getUsername(), wantedPassword);
+
+        log.info("changeDefaultNeo4jPassword: END");
+    }
+
+    private void createIndexes() {
+        log.info("createIndexes: START");
+
+        createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
+
+        log.info("createIndexes: END");
     }
 
     private void createConstraint(final String constraint) {
