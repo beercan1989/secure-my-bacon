@@ -21,17 +21,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.neo4j.ogm.model.Result;
-import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import javax.annotation.PostConstruct;
 
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
 
 @Slf4j
 @Configuration
@@ -40,7 +36,6 @@ public class SchemaConfiguration {
 
     private final Neo4jOperations neo4jOperations;
     private final BaseNeo4JProperties properties;
-    private final org.neo4j.ogm.config.Configuration neo4jConfiguration;
 
     @PostConstruct
     public void perform() {
