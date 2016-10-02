@@ -11,12 +11,10 @@ services:
     build:
       context: .
       dockerfile: docker/api.Dockerfile
-    volumes:
-      - "/binary"
     environment:
       GRAPHENEDB_BOLT_URL: bolt://neo4j:7687
       GRAPHENEDB_BOLT_USER: neo4j
-      GRAPHENEDB_BOLT_PASSWORD: neo4j
+      GRAPHENEDB_BOLT_PASSWORD: password
     ports:
       - "8080:8080"
     links:
