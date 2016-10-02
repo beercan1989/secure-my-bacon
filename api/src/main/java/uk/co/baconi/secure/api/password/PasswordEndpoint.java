@@ -24,25 +24,30 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.SymmetricLock;
+import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Slf4j
 @Validated
 @RestController
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @RequestMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordEndpoint {
 
     private final PasswordGraphRepository passwordGraphRepository;
+    private final BagGraphRepository bagGraphRepository;
+    private final SymmetricLockGraphRepository symmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> findAll(
@@ -65,4 +70,29 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(paginatedResult);
     }
 
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Password> create(@Valid @RequestBody final NewPassword newPassword) {
+
+        log.trace("createPassword: {}", newPassword);
+
+        // Find user who this bag will initially belong to
+        final Bag bag = bagGraphRepository.findByName(newPassword.getBag().getName());
+        log.trace("foundBag: {}", bag);
+
+        // TODO - Generate symmetric key
+        final byte[] symmetricKey = {9, 10, 11, 12};
+
+        final String whereFor = newPassword.getPassword().getWhereFor();
+        final String username = newPassword.getPassword().getUsername();
+        final String pwd = newPassword.getPassword().getPassword();
+
+        // TODO - Secure 'pwd' with symmetric key
+        final Password password = passwordGraphRepository.save(new Password(whereFor, username, pwd));
+        log.trace("createdPassword: {}", password);
+
+        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey));
+        log.trace("createdSymmetricLock: {}", lock);
+
+        return ResponseEntity.ok(password);
+    }
 }
