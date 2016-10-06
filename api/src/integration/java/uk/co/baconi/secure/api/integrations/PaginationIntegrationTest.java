@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
 
 import static org.hamcrest.Matchers.*;
 
-public interface PaginationIntegrationTest extends Authentication {
+public interface PaginationIntegrationTest extends RestApiAuthentication {
 
     String endpoint();
 

@@ -33,7 +33,7 @@ import static com.jayway.restassured.RestAssured.with;
 @ActiveProfiles("integration")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class IntegratedApiEndpoint implements Authentication {
+public abstract class IntegratedApiEndpoint implements RestApiAuthentication {
 
     //
     // HTTP Server Values
