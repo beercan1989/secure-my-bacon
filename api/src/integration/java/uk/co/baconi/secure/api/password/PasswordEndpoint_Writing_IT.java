@@ -20,12 +20,9 @@ import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import uk.co.baconi.secure.api.bag.NewBag;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
-import uk.co.baconi.secure.base.user.User;
-import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import java.io.IOException;
 

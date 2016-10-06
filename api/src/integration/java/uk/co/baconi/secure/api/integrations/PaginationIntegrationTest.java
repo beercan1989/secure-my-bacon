@@ -17,7 +17,6 @@
 package uk.co.baconi.secure.api.integrations;
 
 import com.jayway.restassured.response.ValidatableResponse;
-import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
