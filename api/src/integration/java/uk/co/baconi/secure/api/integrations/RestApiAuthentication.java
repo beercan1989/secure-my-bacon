@@ -18,7 +18,7 @@ package uk.co.baconi.secure.api.integrations;
 
 import com.jayway.restassured.specification.RequestSpecification;
 
-public interface Authentication {
+public interface RestApiAuthentication {
 
     RequestSpecification withValidAuthentication();
     RequestSpecification withNoAuthentication();

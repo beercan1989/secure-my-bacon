@@ -17,6 +17,9 @@
 package uk.co.baconi.secure.api.integrations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.api.ApiApplication;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
@@ -71,5 +74,14 @@ public class IntegrationApiApplication extends ApiApplication {
 
     private static SymmetricLock createSymmetricLock(final SymmetricLockGraphRepository repository, final Password password, final Bag bag, final int id) {
         return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes()));
+    }
+
+    @RestController
+    public static class IntegrationTestController {
+
+        @RequestMapping(value = "/fake/throw-error", method = RequestMethod.GET)
+        public void testEndpointThatThrowsAnException() throws Exception {
+            throw new Exception("integration-test-only-error");
+        }
     }
 }
