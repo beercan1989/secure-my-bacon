@@ -21,8 +21,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.api.user.NewUser;
-import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
 
