@@ -18,6 +18,11 @@ after_success:
   ##
   - mvn coveralls:report
 
+  ##
+  # Report dependency version status to versioneye.com
+  ##
+  - mvn versioneye:update
+
 deploy:
   - provider: script
     skip_cleanup: true
