@@ -188,6 +188,7 @@
 
                     <configuration>
                         <apiKey>${env.VERSIONEYE_TOKEN}</apiKey>
+                        <projectId>57fd15139907da003a1a66af</projectId>
                     </configuration>
                 </plugin>
 
