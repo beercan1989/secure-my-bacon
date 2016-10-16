@@ -23,8 +23,6 @@ import uk.co.baconi.secure.api.tests.FindByIdIntegrationTest;
 import uk.co.baconi.secure.api.tests.FindByNameIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
-import java.io.IOException;
-
 import static org.hamcrest.Matchers.*;
 
 public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByIdIntegrationTest, FindByNameIntegrationTest {
