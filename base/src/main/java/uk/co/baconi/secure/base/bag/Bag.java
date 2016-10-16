@@ -19,8 +19,8 @@ package uk.co.baconi.secure.base.bag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import uk.co.baconi.secure.base.cipher.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
@@ -37,11 +37,9 @@ public class Bag {
     private Long id;
 
     @Setter
-    @Property
     private String name;
 
     @Setter
-    @Property
     @JsonIgnore
     private byte[] publicKey;
 

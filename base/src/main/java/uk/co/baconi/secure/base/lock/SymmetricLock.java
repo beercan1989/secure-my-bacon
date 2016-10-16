@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.SymmetricCipher;
 import uk.co.baconi.secure.base.password.Password;
 
 @Getter
@@ -33,6 +34,10 @@ public class SymmetricLock {
 
     @GraphId
     private Long id;
+
+    @Setter
+    @JsonIgnore
+    private SymmetricCipher cipherType;
 
     @Setter
     @Property
