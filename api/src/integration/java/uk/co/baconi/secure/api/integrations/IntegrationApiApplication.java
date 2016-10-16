@@ -80,8 +80,14 @@ public class IntegrationApiApplication extends ApiApplication {
     public static class IntegrationTestController {
 
         @RequestMapping(value = "/fake/throw-error", method = RequestMethod.GET)
-        public void testEndpointThatThrowsAnException() throws Exception {
-            throw new Exception("integration-test-only-error");
+        public void testEndpointThatThrowsAnException() throws FakeException {
+            throw new FakeException("integration-test-only-error");
+        }
+
+        private static class FakeException extends Exception {
+            FakeException(final String message) {
+                super(message);
+            }
         }
     }
 }

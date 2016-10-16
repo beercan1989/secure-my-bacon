@@ -22,7 +22,7 @@ public class GlobalExceptionHandlerIT extends IntegratedApiEndpoint {
                 and().
                 body("uuid", isA(String.class)).
                 body("name", isA(String.class)).
-                body("name", is(equalTo("java.lang.Exception")));
+                body("name", is(equalTo("uk.co.baconi.secure.api.integrations.IntegrationApiApplication$IntegrationTestController$FakeException")));
 
     }
 
