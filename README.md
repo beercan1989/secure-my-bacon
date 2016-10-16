@@ -22,11 +22,11 @@ What are you going to use?
 
 Whats the road map like?
 ------------------------
-* **0.0.1** - Travis-CI, Codacy, Coveralls, Reviewable integration
-* **0.1.0** - Basic api and encryption
-* **0.1.5** - Substeps coverage for the basic api
-* **0.2.0** - Basic frontend to consume the existing api
-* **0.2.5** - Substeps coverage for the basic frontend
-* **0.3.0** - Registration and sharing
-* **0.4.0** - Password recovery process via administrator accounts
-* **0.5.0** - Run standalone without Tomcat, aka desktop mode
+- [x] **0.0.1** - Travis-CI, Codacy, Coveralls, Reviewable integration
+- [ ] **0.1.0** - Basic api and encryption
+- [ ] **0.1.5** - Substeps coverage for the basic api
+- [ ] **0.2.0** - Basic frontend to consume the existing api
+- [ ] **0.2.5** - Substeps coverage for the basic frontend
+- [ ] **0.3.0** - Registration and sharing
+- [ ] **0.4.0** - Password recovery process via administrator accounts
+- [ ] **0.5.0** - Run standalone without Tomcat, aka desktop mode
