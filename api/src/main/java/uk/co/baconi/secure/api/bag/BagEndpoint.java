@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
@@ -91,5 +92,37 @@ public class BagEndpoint {
         log.trace("createdAsymmetricLock: {}", lock);
 
         return ResponseEntity.ok(bag);
+    }
+
+    @RequestMapping(value = "/by-id/{bagId}", method = RequestMethod.GET)
+    public ResponseEntity<Bag> findById(@PathVariable("bagId") final Long id) throws NotFoundException {
+
+        log.trace("findById: {}", id);
+
+        final Bag bag = bagGraphRepository.findOne(id);
+
+        log.trace("foundBag: {}", bag);
+
+        if (bag == null) {
+            throw NotFoundException.bagById(id);
+        } else {
+            return ResponseEntity.ok(bag);
+        }
+    }
+
+    @RequestMapping(value = "/by-name/{bagName}", method = RequestMethod.GET)
+    public ResponseEntity<Bag> findByName(@PathVariable("bagName") final String name) throws NotFoundException {
+
+        log.trace("findByName: {}", name);
+
+        final Bag bag = bagGraphRepository.findByName(name);
+
+        log.trace("foundBag: {}", bag);
+
+        if (bag == null) {
+            throw NotFoundException.bagByName(name);
+        } else {
+            return ResponseEntity.ok(bag);
+        }
     }
 }
