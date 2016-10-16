@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
@@ -36,7 +37,7 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserEndpoint {
 
@@ -64,7 +65,7 @@ public class UserEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<User> create(@Valid @RequestBody final NewUser newUser){
+    public ResponseEntity<User> create(@Valid @RequestBody final NewUser newUser) {
 
         log.trace("createUser: {}", newUser);
 
@@ -76,7 +77,7 @@ public class UserEndpoint {
     }
 
     @RequestMapping(value = "/by-id/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<User> findById(@PathVariable("userId") final Long id){
+    public ResponseEntity<User> findById(@PathVariable("userId") final Long id) throws NotFoundException {
 
         log.trace("findById: {}", id);
 
@@ -84,11 +85,15 @@ public class UserEndpoint {
 
         log.trace("foundUser: {}", user);
 
-        return ResponseEntity.ok(user);
+        if (user == null) {
+            throw NotFoundException.userById(id);
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 
     @RequestMapping(value = "/by-name/{userName}", method = RequestMethod.GET)
-    public ResponseEntity<User> findByName(@PathVariable("userName") final String name){
+    public ResponseEntity<User> findByName(@PathVariable("userName") final String name) throws NotFoundException {
 
         log.trace("findByName: {}", name);
 
@@ -96,6 +101,10 @@ public class UserEndpoint {
 
         log.trace("foundUser: {}", user);
 
-        return ResponseEntity.ok(user);
+        if (user == null) {
+            throw NotFoundException.userByName(name);
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 }
