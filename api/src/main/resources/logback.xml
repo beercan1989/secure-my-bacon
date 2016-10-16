@@ -21,8 +21,8 @@
         </encoder>
     </appender>
 
-    <logger name="uk.co.baconi.secure.api" level="${logging.api.level:-DEBUG}"/>
-    <logger name="uk.co.baconi.secure.base" level="${logging.base.level:-DEBUG}"/>
+    <logger name="uk.co.baconi.secure.api" level="${logging.api.level:-TRACE}"/>
+    <logger name="uk.co.baconi.secure.base" level="${logging.base.level:-TRACE}"/>
 
     <root level="${logging.root.level:-INFO}">
         <appender-ref ref="STDOUT"/>
