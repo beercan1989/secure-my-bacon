@@ -25,6 +25,13 @@ public class GlobalExceptionHandler {
         return handleResponse(new ExceptionResponse(exception), request, HttpStatus.INTERNAL_SERVER_ERROR, exception);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundException(final HttpServletRequest request,
+                                                        final NotFoundException exception) {
+
+        return handleResponse(new ExceptionResponse(exception), request, HttpStatus.NOT_FOUND, exception);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ValidationResponse> handleResourceNotFoundException(final HttpServletRequest request,
                                                                               final ConstraintViolationException exception) {
