@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.api.integrations;
+package uk.co.baconi.secure.api.tests;
 
 import com.jayway.restassured.response.ValidatableResponse;
 import org.springframework.http.HttpStatus;
+import uk.co.baconi.secure.api.integrations.RestApiAuthentication;
 
 import java.util.List;
 import java.util.function.BiFunction;
