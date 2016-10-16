@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.AsymmetricCipher;
 import uk.co.baconi.secure.base.user.User;
 
 @Getter
@@ -35,7 +36,10 @@ public class AsymmetricLock {
     private Long id;
 
     @Setter
-    @Property
+    @JsonIgnore
+    private AsymmetricCipher cipherType;
+
+    @Setter
     @JsonIgnore
     private byte[] privateKey;
 
