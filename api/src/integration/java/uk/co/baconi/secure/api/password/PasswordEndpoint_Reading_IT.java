@@ -19,7 +19,7 @@ package uk.co.baconi.secure.api.password;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.api.integrations.PaginationIntegrationTest;
+import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
 import static org.hamcrest.Matchers.*;
 
