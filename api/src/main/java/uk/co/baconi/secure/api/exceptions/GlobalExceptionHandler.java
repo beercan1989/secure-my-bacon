@@ -65,9 +65,9 @@ public class GlobalExceptionHandler {
                 exception.getMessage()
         );
 
-        log.debug("Stacktrace for [{}]:", response.getUuid(), exception);
+        log.debug("Stacktrace for [{}]: {}", response.getUuid(), exception);
 
-        log.trace("Response for [{}]:", response.getUuid(), response);
+        log.trace("Response for [{}]: {}", response.getUuid(), response);
 
         return ResponseEntity.status(httpStatus).body(response);
     }
