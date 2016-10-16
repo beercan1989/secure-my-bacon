@@ -19,13 +19,15 @@ package uk.co.baconi.secure.api.user;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.api.integrations.PaginationIntegrationTest;
+import uk.co.baconi.secure.api.tests.FindByIdIntegrationTest;
+import uk.co.baconi.secure.api.tests.FindByNameIntegrationTest;
+import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest {
+public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByIdIntegrationTest, FindByNameIntegrationTest {
 
     private final String endpoint = "/users";
 
@@ -61,37 +63,15 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
     }
 
     @Test
-    public void onFindUserById() throws IOException {
-
-        withNoAuthentication().
-                get("{base}/by-id/{id}", endpoint, 1).
-
-                then().assertThat().
-
-                body("id", isA(Number.class)).
-                body("name", isA(String.class)).
-
-                body("id", is(equalTo(1))).
-                body("name", is(equalTo("user-0"))).
-
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+    @Override
+    public void onFindById() {
+        onFindByIdImpl(1, "user-0");
     }
 
     @Test
-    public void onFindUserByName() throws IOException {
-
-        withNoAuthentication().
-                get("{base}/by-name/{name}", endpoint, "user-0").
-
-                then().assertThat().
-
-                body("id", isA(Number.class)).
-                body("name", isA(String.class)).
-
-                body("id", is(equalTo(1))).
-                body("name", is(equalTo("user-0"))).
-
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+    @Override
+    public void onFindByName() {
+        onFindByNameImpl("user-0", 1);
     }
 
     @Test
