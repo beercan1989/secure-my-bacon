@@ -44,13 +44,13 @@ public class Password {
 
     @Setter
     @Property
-    private String password;
+    private byte[] password;
 
     @JsonIgnore
     @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
-    public Password(final String whereFor, final String username, final String password) {
+    public Password(final String whereFor, final String username, final byte[] password) {
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key

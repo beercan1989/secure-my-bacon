@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
-import uk.co.baconi.secure.base.cipher.SymmetricCipher;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.password.Password;
 
 @Getter
@@ -37,7 +37,7 @@ public class SymmetricLock {
 
     @Setter
     @JsonIgnore
-    private SymmetricCipher cipherType;
+    private SymmetricCipher type;
 
     @Setter
     @Property
@@ -50,11 +50,12 @@ public class SymmetricLock {
     @EndNode
     private Bag bag;
 
-    public SymmetricLock(final Password password, final Bag bag, final byte[] key) {
+    public SymmetricLock(final Password password, final Bag bag, final byte[] key, final SymmetricCipher type) {
         this.password = password;
         this.bag = bag;
 
         this.key = key;  // TODO - Encryption with the source's public key
+        this.type = type;
 
         this.bag.securedWith(this);
         this.password.securedBy(this);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.base.cipher;
+package uk.co.baconi.secure.base.cipher.pbe;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

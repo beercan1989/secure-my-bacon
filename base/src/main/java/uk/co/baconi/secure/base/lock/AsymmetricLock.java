@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
-import uk.co.baconi.secure.base.cipher.AsymmetricCipher;
+import uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher;
 import uk.co.baconi.secure.base.user.User;
 
 @Getter

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.co.baconi.secure.base.cipher;
+package uk.co.baconi.secure.base.cipher.symmetric;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 /**
- * All supported asymmetric cipher types for securing bags for users.
+ * All supported symmetric cipher types for securing passwords with bags.
  *
  * Layout: {CIPHER}_{MODE}_{PADDING}
  *
@@ -29,9 +29,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public enum AsymmetricCipher {
+public enum SymmetricCipher {
 
-    RSA_ECB_PKCS1("RSA/ECB/PKCS1Padding");
+    AES_CBC_PKCS5("AES/CBC/PKCS5Padding");
 
     private final String type;
 }
