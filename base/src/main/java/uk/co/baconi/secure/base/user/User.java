@@ -21,7 +21,7 @@ import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-import uk.co.baconi.secure.base.cipher.PbeCipher;
+import uk.co.baconi.secure.base.cipher.pbe.PbeCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 
 import java.util.HashSet;

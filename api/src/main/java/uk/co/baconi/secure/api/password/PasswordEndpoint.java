@@ -27,6 +27,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricEngine;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricGenerator;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
@@ -47,6 +50,9 @@ public class PasswordEndpoint {
     private final PasswordGraphRepository passwordGraphRepository;
     private final BagGraphRepository bagGraphRepository;
     private final SymmetricLockGraphRepository symmetricLockGraphRepository;
+
+    private final SymmetricGenerator symmetricGenerator;
+    private final SymmetricEngine symmetricEngine;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> findAll(
@@ -78,18 +84,20 @@ public class PasswordEndpoint {
         final Bag bag = bagGraphRepository.findByName(newPassword.getBag().getName());
         log.trace("foundBag: {}", bag);
 
-        // TODO - Generate symmetric key
-        final byte[] symmetricKey = {9, 10, 11, 12};
+        final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS5;
+
+        final byte[] symmetricKey = symmetricGenerator.generateKey(symmetricType, 256);
 
         final String whereFor = newPassword.getPassword().getWhereFor();
         final String username = newPassword.getPassword().getUsername();
-        final String pwd = newPassword.getPassword().getPassword();
+        final byte[] pwd = symmetricEngine.encrypt(symmetricType, symmetricKey, newPassword.getPassword().getPassword());
 
-        // TODO - Secure 'pwd' with symmetric key
         final Password password = passwordGraphRepository.save(new Password(whereFor, username, pwd));
         log.trace("createdPassword: {}", password);
 
-        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey));
+        // TODO - Secure symmetricKey with bag.publicKey
+
+        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey, symmetricType));
         log.trace("createdSymmetricLock: {}", lock);
 
         return ResponseEntity.ok(password);
