@@ -59,7 +59,8 @@ public class PasswordEndpoint_Writing_IT extends IntegratedApiEndpoint {
                 body("id", isA(Number.class)).
                 body("whereFor", is(equalTo("onCreateNewPassword-whereFor"))).
                 body("username", is(equalTo("onCreateNewPassword-username"))).
-                body("password", is(equalTo("onCreateNewPassword-password"))).
+                body("password", isA(String.class)).
+                body("password", is(not(equalTo("onCreateNewPassword-password")))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
     }
