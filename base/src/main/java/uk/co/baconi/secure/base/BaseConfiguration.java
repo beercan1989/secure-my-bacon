@@ -18,6 +18,7 @@ package uk.co.baconi.secure.base;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.neo4j.ogm.config.DriverConfiguration;
 import org.neo4j.ogm.session.SessionFactory;
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.annotation.PostConstruct;
+import java.security.Security;
 
 @Configuration
 @ComponentScan
@@ -51,6 +55,12 @@ public class BaseConfiguration extends Neo4jConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(BaseConfiguration.class);
 
     private final BaseNeo4JProperties neo4JProperties;
+
+    @PostConstruct
+    public void registerSecurityProviders() {
+        LOG.info("Adding Security Provider: BouncyCastle");
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     @Bean
     public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
