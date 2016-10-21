@@ -74,7 +74,7 @@ public class IntegrationApiApplication extends ApiApplication {
     }
 
     private static SymmetricLock createSymmetricLock(final SymmetricLockGraphRepository repository, final Password password, final Bag bag, final int id) {
-        return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes(), SymmetricCipher.AES_CBC_PKCS5));
+        return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes(), SymmetricCipher.AES_CBC_PKCS7));
     }
 
     @RestController

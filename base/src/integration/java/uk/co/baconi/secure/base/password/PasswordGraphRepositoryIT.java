@@ -70,7 +70,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
 
         final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
 
-        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(password.getSecuredBy(), is(equalTo(securedWith)));
 

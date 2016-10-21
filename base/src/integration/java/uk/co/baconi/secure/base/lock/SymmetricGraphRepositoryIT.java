@@ -37,7 +37,7 @@ public class SymmetricGraphRepositoryIT extends BaseIntegrationTest {
         final Bag bag = new Bag("shouldBeAbleToCreateSymmetricLock_Bag", "public key".getBytes());
         final byte[] key = "key".getBytes();
 
-        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         final SymmetricLock saved = symmetricLockGraphRepository.save(lock);
 

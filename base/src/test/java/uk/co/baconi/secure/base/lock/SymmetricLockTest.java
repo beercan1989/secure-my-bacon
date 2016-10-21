@@ -32,7 +32,7 @@ public class SymmetricLockTest extends BaseUnitTest {
     public void shouldBeAbleToChangeKey() {
         final Password password = mock(Password.class);
         final Bag bag = mock(Bag.class);
-        final SymmetricLock lock = new SymmetricLock(password, bag, "".getBytes(), SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock = new SymmetricLock(password, bag, "".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
         verify(password).securedBy(lock);
         verify(bag).securedWith(lock);
@@ -51,7 +51,7 @@ public class SymmetricLockTest extends BaseUnitTest {
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
-        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         verify(password).securedBy(lock);
         verify(bag).securedWith(lock);
@@ -71,20 +71,20 @@ public class SymmetricLockTest extends BaseUnitTest {
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
-        final SymmetricLock lock1 = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
-        final SymmetricLock lock2 = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock1 = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS7);
+        final SymmetricLock lock2 = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(lock1, is(equalTo(lock2)));
         assertThat(lock1.hashCode(), is(equalTo(lock2.hashCode())));
 
-        final SymmetricLock lock3 = new SymmetricLock(mock(Password.class), bag, key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock3 = new SymmetricLock(mock(Password.class), bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(lock1, is(not(equalTo(lock3))));
         assertThat(lock2, is(not(equalTo(lock3))));
         assertThat(lock1.hashCode(), is(not(equalTo(lock3.hashCode()))));
         assertThat(lock2.hashCode(), is(not(equalTo(lock3.hashCode()))));
 
-        final SymmetricLock lock4 = new SymmetricLock(password, mock(Bag.class), key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock4 = new SymmetricLock(password, mock(Bag.class), key, SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(lock1, is(not(equalTo(lock4))));
         assertThat(lock2, is(not(equalTo(lock4))));
@@ -93,7 +93,7 @@ public class SymmetricLockTest extends BaseUnitTest {
         assertThat(lock2.hashCode(), is(not(equalTo(lock4.hashCode()))));
         assertThat(lock3.hashCode(), is(not(equalTo(lock4.hashCode()))));
 
-        final SymmetricLock lock5 = new SymmetricLock(password, bag, "diffent symmetric key".getBytes(), SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock5 = new SymmetricLock(password, bag, "diffent symmetric key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(lock1, is(not(equalTo(lock5))));
         assertThat(lock2, is(not(equalTo(lock5))));
@@ -112,7 +112,7 @@ public class SymmetricLockTest extends BaseUnitTest {
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
-        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
+        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         final String lockAsString = lock.toString();
 
