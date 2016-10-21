@@ -37,7 +37,7 @@ public class AsymmetricLock {
 
     @Setter
     @JsonIgnore
-    private AsymmetricCipher cipherType;
+    private AsymmetricCipher type;
 
     @Setter
     @JsonIgnore
@@ -50,9 +50,14 @@ public class AsymmetricLock {
     private User user;
 
     public AsymmetricLock(final Bag bag, final User user, final byte[] privateKey) {
+        this(bag, user, privateKey, AsymmetricCipher.RSA_ECB_PKCS1);
+    }
+
+    public AsymmetricLock(final Bag bag, final User user, final byte[] privateKey, final AsymmetricCipher type) {
         this.bag = bag;
         this.user = user;
 
+        this.type = type;
         this.privateKey = privateKey; // TODO - Encryption with the target's public key
 
         this.bag.sharedWith(this);

@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.baconi.secure.base.BaseIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.password.Password;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,11 +33,11 @@ public class SymmetricGraphRepositoryIT extends BaseIntegrationTest {
 
     @Test
     public void shouldBeAbleToCreateSymmetricLock() {
-        final Password password = new Password("whereFor", "username", "password");
+        final Password password = new Password("whereFor", "username", "password".getBytes());
         final Bag bag = new Bag("shouldBeAbleToCreateSymmetricLock_Bag", "public key".getBytes());
         final byte[] key = "key".getBytes();
 
-        final SymmetricLock lock = new SymmetricLock(password, bag, key);
+        final SymmetricLock lock = new SymmetricLock(password, bag, key, SymmetricCipher.AES_CBC_PKCS5);
 
         final SymmetricLock saved = symmetricLockGraphRepository.save(lock);
 

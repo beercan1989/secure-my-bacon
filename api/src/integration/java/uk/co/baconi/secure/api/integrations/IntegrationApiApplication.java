@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.api.ApiApplication;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
@@ -69,11 +70,11 @@ public class IntegrationApiApplication extends ApiApplication {
     }
 
     private static Password createPassword(final PasswordGraphRepository repository, final int id) {
-        return repository.save(new Password("whereFor-" + id, "username-" + id, "password-" + id));
+        return repository.save(new Password("whereFor-" + id, "username-" + id, ("password-" + id).getBytes()));
     }
 
     private static SymmetricLock createSymmetricLock(final SymmetricLockGraphRepository repository, final Password password, final Bag bag, final int id) {
-        return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes()));
+        return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes(), SymmetricCipher.AES_CBC_PKCS5));
     }
 
     @RestController

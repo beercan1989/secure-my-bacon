@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.baconi.secure.base.BaseIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +35,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     public void shouldBeAbleToCreateAndRetrievePassword() {
         final String whereFor = "https://github.com/login";
         final String username = "shouldBeAbleToCreateAndRetrievePassword";
-        final String passw0rd = "password";
+        final byte[] passw0rd = "password".getBytes();
 
         final Password password = new Password(whereFor, username, passw0rd);
 
@@ -63,13 +64,13 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         final String username = "shouldBeAbleToSecurePasswordWithAGroup";
         final String passw0rd = "password";
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final Password password = new Password(whereFor, username, passw0rd.getBytes());
 
         passwordGraphRepository.save(password);
 
         final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
 
-        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes());
+        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS5);
 
         assertThat(password.getSecuredBy(), is(equalTo(securedWith)));
 
