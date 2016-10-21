@@ -20,6 +20,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.crypto.KeyGenerator;
+import java.util.function.Supplier;
+
 /**
  * All supported symmetric cipher types for securing passwords with bags.
  *
@@ -31,7 +34,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public enum SymmetricCipher {
 
-    AES_CBC_PKCS5("AES/CBC/PKCS5Padding");
+    AES_CBC_PKCS7("AES/CBC/PKCS7Padding", "AES");
 
     private final String type;
+    private final String keyGeneratorType;
 }
