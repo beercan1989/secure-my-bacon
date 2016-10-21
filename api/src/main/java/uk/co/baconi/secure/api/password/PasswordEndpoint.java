@@ -27,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricEngine;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricGenerator;
@@ -36,9 +37,12 @@ import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
+import javax.crypto.SecretKey;
+import javax.security.auth.DestroyFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.security.spec.AlgorithmParameterSpec;
 
 @Slf4j
 @Validated
@@ -76,7 +80,7 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Password> create(@Valid @RequestBody final NewPassword newPassword) {
+    public ResponseEntity<Password> create(@Valid @RequestBody final NewPassword newPassword) throws EncryptionException {
 
         log.trace("createPassword: {}", newPassword);
 
@@ -84,22 +88,30 @@ public class PasswordEndpoint {
         final Bag bag = bagGraphRepository.findByName(newPassword.getBag().getName());
         log.trace("foundBag: {}", bag);
 
-        final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS5;
+        // TODO - Verify user has access to the bag
 
-        final byte[] symmetricKey = symmetricGenerator.generateKey(symmetricType, 256);
+        final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS7;
+        final int keySize = 256;
+
+        final SecretKey symmetricKey = symmetricGenerator.generateKey(symmetricType, keySize);
+        final AlgorithmParameterSpec parameterSpec = symmetricGenerator.generateParameters(symmetricType);
+
+        final byte[] pwd = symmetricEngine.encrypt(symmetricType, symmetricKey, parameterSpec, newPassword.getPassword().getPassword());
+        log.trace("encryptedPassword: [REDACTED]");
 
         final String whereFor = newPassword.getPassword().getWhereFor();
         final String username = newPassword.getPassword().getUsername();
-        final byte[] pwd = symmetricEngine.encrypt(symmetricType, symmetricKey, newPassword.getPassword().getPassword());
-
         final Password password = passwordGraphRepository.save(new Password(whereFor, username, pwd));
         log.trace("createdPassword: {}", password);
 
         // TODO - Secure symmetricKey with bag.publicKey
-
-        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey, symmetricType));
+        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey.getEncoded(), symmetricType));
         log.trace("createdSymmetricLock: {}", lock);
 
+        // TODO - Make sure the SecretKey is no longer stored in memory
+        // symmetricKey.destroy();
+
+        // TODO - Review exposing encrypted passwords
         return ResponseEntity.ok(password);
     }
 }
