@@ -33,10 +33,11 @@ public class CharsetCodec {
 
     public byte[] encode(final String string) {
 
-        final CharBuffer charBuffer = CharBuffer.wrap(string);
-        final ByteBuffer encoded = charset.encode(charBuffer);
+        // final CharBuffer charBuffer = CharBuffer.wrap(string);
+        // final ByteBuffer encoded = charset.encode(charBuffer);
+        // return encoded.array();
 
-        return encoded.array();
+        return string.getBytes(charset);
     }
 
     public String decode(final byte[] bytes) {
