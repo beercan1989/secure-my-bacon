@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @NoArgsConstructor
 @Component
-@ConfigurationProperties(prefix="secure.my.bacon.api")
+@ConfigurationProperties(prefix = "secure.my.bacon.api")
 @PropertySource("classpath:/version.properties")
 public class ApiVersion {
 

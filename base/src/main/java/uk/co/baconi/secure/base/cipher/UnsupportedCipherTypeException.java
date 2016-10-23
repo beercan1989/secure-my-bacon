@@ -22,7 +22,8 @@ public class UnsupportedCipherTypeException extends RuntimeException {
     public UnsupportedCipherTypeException(final SymmetricCipher type, final String operation) {
         super("Unsupported cipher [" + type + "] for operation [" + operation + "]");
     }
-    public UnsupportedCipherTypeException(final SymmetricCipher type, final String operation, final Exception exception){
+
+    public UnsupportedCipherTypeException(final SymmetricCipher type, final String operation, final Exception exception) {
         super("Unsupported cipher [" + type + "] for operation [" + operation + "]", exception);
     }
 }

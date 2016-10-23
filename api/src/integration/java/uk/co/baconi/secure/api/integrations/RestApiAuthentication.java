@@ -21,7 +21,9 @@ import com.jayway.restassured.specification.RequestSpecification;
 public interface RestApiAuthentication {
 
     RequestSpecification withValidAuthentication();
+
     RequestSpecification withNoAuthentication();
+
     RequestSpecification withInvalidAuthentication();
 
 }

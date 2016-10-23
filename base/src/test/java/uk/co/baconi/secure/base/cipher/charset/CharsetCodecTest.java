@@ -38,22 +38,6 @@ public class CharsetCodecTest extends BaseUnitTest {
         this.bytes = bytes;
     }
 
-    @Test
-    public void shouldBeAbleToEncodeString() {
-
-        final byte[] encodedResult = underTest.encode(string);
-        assertThat(encodedResult).containsExactly(bytes);
-    }
-
-    @Test
-    public void shouldBeAbleToDecodeString() {
-
-        final String decodedResult = underTest.decode(bytes);
-        assertThat(decodedResult).containsSequence(string);
-        assertThat(decodedResult).isEqualToIgnoringWhitespace(string);
-        assertThat(decodedResult).isEqualTo(string);
-    }
-
     @Parameters(name = "{index}: [{0}]")
     public static Iterable<Object[]> data() {
         return Arrays.asList(
@@ -77,5 +61,21 @@ public class CharsetCodecTest extends BaseUnitTest {
                         {"☺", new byte[]{-30, -104, -70}}
                 }
         );
+    }
+
+    @Test
+    public void shouldBeAbleToEncodeString() {
+
+        final byte[] encodedResult = underTest.encode(string);
+        assertThat(encodedResult).containsExactly(bytes);
+    }
+
+    @Test
+    public void shouldBeAbleToDecodeString() {
+
+        final String decodedResult = underTest.decode(bytes);
+        assertThat(decodedResult).containsSequence(string);
+        assertThat(decodedResult).isEqualToIgnoringWhitespace(string);
+        assertThat(decodedResult).isEqualTo(string);
     }
 }

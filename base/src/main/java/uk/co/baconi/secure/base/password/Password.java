@@ -27,7 +27,7 @@ import uk.co.baconi.secure.base.lock.SymmetricLock;
 @NoArgsConstructor
 @NodeEntity
 @Getter
-@EqualsAndHashCode(exclude={"id", "securedBy"})
+@EqualsAndHashCode(exclude = {"id", "securedBy"})
 @ToString(exclude = {"password", "securedBy"})
 public class Password {
 

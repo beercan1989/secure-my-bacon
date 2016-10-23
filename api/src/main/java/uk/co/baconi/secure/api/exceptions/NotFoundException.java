@@ -18,6 +18,10 @@ package uk.co.baconi.secure.api.exceptions;
 
 public class NotFoundException extends Exception {
 
+    private NotFoundException(final String message) {
+        super(message);
+    }
+
     public static NotFoundException bagByName(final String name) {
         return new NotFoundException("Unable to find [Bag] by name [" + name + "]");
     }
@@ -32,9 +36,5 @@ public class NotFoundException extends Exception {
 
     public static NotFoundException userById(final long id) {
         return new NotFoundException("Unable to find [User] by id [" + id + "]");
-    }
-
-    private NotFoundException(final String message) {
-        super(message);
     }
 }

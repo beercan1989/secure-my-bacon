@@ -43,7 +43,7 @@ import static springfox.documentation.swagger.web.UiConfiguration.Constants.DEFA
 @Configuration
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
-@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor=@__({@Autowired}))
+@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
 public class SpringFoxConfiguration {
 
     private final ApiVersion apiVersion;
@@ -60,8 +60,8 @@ public class SpringFoxConfiguration {
                 .useDefaultResponseMessages(false)
                 .protocols(newHashSet("http", "https"))
                 .additionalModels(
-                    typeResolver.resolve(ExceptionResponse.class),
-                    typeResolver.resolve(ValidationResponse.class)
+                        typeResolver.resolve(ExceptionResponse.class),
+                        typeResolver.resolve(ValidationResponse.class)
                 );
     }
 

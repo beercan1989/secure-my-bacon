@@ -30,15 +30,14 @@ import static org.hamcrest.Matchers.*;
 
 public class PasswordEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
+    private final String endpoint = "/passwords";
     @Autowired
     private BagGraphRepository bagGraphRepository;
-
-    private final String endpoint = "/passwords";
 
     @Test
     public void onCreateNewPassword() throws IOException {
 
-        bagGraphRepository.save(new Bag("onCreateNewPassword-existing-bag", new byte[]{1,2,3}));
+        bagGraphRepository.save(new Bag("onCreateNewPassword-existing-bag", new byte[]{1, 2, 3}));
 
         withNoAuthentication().
                 contentType(ContentType.JSON).

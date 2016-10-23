@@ -49,7 +49,7 @@ import java.security.Security;
         "uk.co.baconi.secure.base.password",
         "uk.co.baconi.secure.base.user"
 })
-@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor=@__({@Autowired}))
+@AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
 public class BaseConfiguration extends Neo4jConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseConfiguration.class);
@@ -70,30 +70,30 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
         final DriverConfiguration driverConfiguration = config.driverConfiguration();
 
-        if( isNotEmpty(neo4JProperties.getDriver()) ) {
+        if (isNotEmpty(neo4JProperties.getDriver())) {
             driverConfiguration.setDriverClassName(neo4JProperties.getDriver());
         }
 
-        if( isNotEmpty(neo4JProperties.getUsername()) && isNotEmpty(neo4JProperties.getPassword()) ) {
+        if (isNotEmpty(neo4JProperties.getUsername()) && isNotEmpty(neo4JProperties.getPassword())) {
             driverConfiguration.setCredentials(neo4JProperties.getUsername(), neo4JProperties.getPassword());
         }
 
-        if( isNotEmpty(neo4JProperties.getUrl()) ) {
+        if (isNotEmpty(neo4JProperties.getUrl())) {
             driverConfiguration.setURI(neo4JProperties.getUrl());
         }
 
-        if( neo4JProperties.getConnectionPoolSize() != null ) {
+        if (neo4JProperties.getConnectionPoolSize() != null) {
             driverConfiguration.setConnectionPoolSize(neo4JProperties.getConnectionPoolSize());
         }
 
-        if( isNotEmpty(neo4JProperties.getEncryptionLevel()) ) {
+        if (isNotEmpty(neo4JProperties.getEncryptionLevel())) {
             driverConfiguration.setEncryptionLevel(neo4JProperties.getEncryptionLevel());
         }
 
-        if( isNotEmpty(neo4JProperties.getTrustStrategy()) ) {
+        if (isNotEmpty(neo4JProperties.getTrustStrategy())) {
             driverConfiguration.setTrustStrategy(neo4JProperties.getTrustStrategy());
 
-            if( isNotEmpty(neo4JProperties.getTrustCertificateFile()) ) {
+            if (isNotEmpty(neo4JProperties.getTrustCertificateFile())) {
                 driverConfiguration.setTrustCertFile(neo4JProperties.getTrustCertificateFile());
             }
         }

@@ -20,14 +20,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.crypto.KeyGenerator;
-import java.util.function.Supplier;
-
 /**
  * All supported symmetric cipher types for securing passwords with bags.
- *
+ * <p>
  * Layout: {CIPHER}_{MODE}_{PADDING}
- *
  */
 @Getter
 @ToString

@@ -38,7 +38,8 @@ public class SymmetricGenerator {
 
                 return new IvParameterSpec(iv);
             }
-            default: throw new UnsupportedCipherTypeException(type, "generate-parameters");
+            default:
+                throw new UnsupportedCipherTypeException(type, "generate-parameters");
         }
     }
 

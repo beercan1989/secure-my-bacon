@@ -18,7 +18,10 @@ package uk.co.baconi.secure.base.lock;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.RelationshipEntity;
+import org.neo4j.ogm.annotation.StartNode;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher;
 import uk.co.baconi.secure.base.user.User;

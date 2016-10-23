@@ -30,10 +30,9 @@ import static org.hamcrest.Matchers.*;
 
 public class BagEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
+    private final String endpoint = "/bags";
     @Autowired
     private UserGraphRepository userGraphRepository;
-
-    private final String endpoint = "/bags";
 
     @Test
     public void onCreateNewBag() throws IOException {

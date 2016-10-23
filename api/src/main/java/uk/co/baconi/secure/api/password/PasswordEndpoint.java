@@ -38,7 +38,6 @@ import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
 import javax.crypto.SecretKey;
-import javax.security.auth.DestroyFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

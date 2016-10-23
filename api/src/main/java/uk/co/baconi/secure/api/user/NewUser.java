@@ -16,7 +16,9 @@
 
 package uk.co.baconi.secure.api.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Getter

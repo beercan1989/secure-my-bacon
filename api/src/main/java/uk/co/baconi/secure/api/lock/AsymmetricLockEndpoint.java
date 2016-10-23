@@ -38,7 +38,7 @@ import javax.validation.constraints.Min;
 @Slf4j
 @Validated
 @RestController
-@AllArgsConstructor(onConstructor=@__({@Autowired}))
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @RequestMapping(value = "/asymmetric-locks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AsymmetricLockEndpoint {
 

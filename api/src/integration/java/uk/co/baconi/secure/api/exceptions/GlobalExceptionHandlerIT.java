@@ -3,9 +3,7 @@ package uk.co.baconi.secure.api.exceptions;
 import org.junit.Test;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
 
 public class GlobalExceptionHandlerIT extends IntegratedApiEndpoint {
 

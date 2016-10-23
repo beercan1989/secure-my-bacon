@@ -22,9 +22,8 @@ import lombok.ToString;
 
 /**
  * All supported asymmetric cipher types for securing bags for users.
- *
+ * <p>
  * Layout: {CIPHER}_{MODE}_{PADDING}
- *
  */
 @Getter
 @ToString

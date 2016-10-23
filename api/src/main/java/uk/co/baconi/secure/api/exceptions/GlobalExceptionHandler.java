@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNotFoundException(final HttpServletRequest request,
-                                                        final NotFoundException exception) {
+                                                                     final NotFoundException exception) {
 
         return handleResponse(new ExceptionResponse(exception), request, HttpStatus.NOT_FOUND, exception);
     }
