@@ -69,6 +69,12 @@ public class CharsetCodecTest extends BaseUnitTest {
                         {"test-stri", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105}},
                         {"test-strin", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110}},
                         {"test-string", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110, 103}},
+
+                        // Kanji
+                        {"漢字", new byte[]{-26, -68, -94, -27, -83, -105}},
+
+                        // Smiley Face
+                        {"☺", new byte[]{-30, -104, -70}}
                 }
         );
     }
