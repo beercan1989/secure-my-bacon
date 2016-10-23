@@ -29,25 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class CharsetCodecTest extends BaseUnitTest {
 
-    @Parameters(name = "{index}: encode and decode [{0}]")
-    public static Iterable<Object[]> data() {
-        return Arrays.asList(
-                new Object[][]{
-                        {"", new byte[]{}},
-                        {" ", new byte[]{32}},
-                        {"  ", new byte[]{32, 32}},
-                        {"test", new byte[]{116, 101, 115, 116}},
-                        {"test-", new byte[]{116, 101, 115, 116, 45}},
-                        {"test-s", new byte[]{116, 101, 115, 116, 45, 115}},
-                        {"test-st", new byte[]{116, 101, 115, 116, 45, 115, 116}},
-                        {"test-str", new byte[]{116, 101, 115, 116, 45, 115, 116, 114}},
-                        {"test-stri", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105}},
-                        {"test-strin", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110}},
-                        {"test-string", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110, 103}},
-                }
-        );
-    }
-
     private final String string;
     private final byte[] bytes;
     private final CharsetCodec underTest = new CharsetCodec();
@@ -71,5 +52,24 @@ public class CharsetCodecTest extends BaseUnitTest {
         assertThat(decodedResult).containsSequence(string);
         assertThat(decodedResult).isEqualToIgnoringWhitespace(string);
         assertThat(decodedResult).isEqualTo(string);
+    }
+
+    @Parameters(name = "{index}: [{0}]")
+    public static Iterable<Object[]> data() {
+        return Arrays.asList(
+                new Object[][]{
+                        {"", new byte[]{}},
+                        {" ", new byte[]{32}},
+                        {"  ", new byte[]{32, 32}},
+                        {"test", new byte[]{116, 101, 115, 116}},
+                        {"test-", new byte[]{116, 101, 115, 116, 45}},
+                        {"test-s", new byte[]{116, 101, 115, 116, 45, 115}},
+                        {"test-st", new byte[]{116, 101, 115, 116, 45, 115, 116}},
+                        {"test-str", new byte[]{116, 101, 115, 116, 45, 115, 116, 114}},
+                        {"test-stri", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105}},
+                        {"test-strin", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110}},
+                        {"test-string", new byte[]{116, 101, 115, 116, 45, 115, 116, 114, 105, 110, 103}},
+                }
+        );
     }
 }
