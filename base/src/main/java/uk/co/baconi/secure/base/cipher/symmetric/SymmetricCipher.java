@@ -30,7 +30,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public enum SymmetricCipher {
 
-    AES_CBC_PKCS7("AES/CBC/PKCS7Padding", "AES");
+    AES_CBC_PKCS7("AES/CBC/PKCS7Padding", "AES"),
+    AES_GCM_NONE("AES/GCM/NoPadding", "AES");
 
     private final String type;
     private final String keyGeneratorType;
