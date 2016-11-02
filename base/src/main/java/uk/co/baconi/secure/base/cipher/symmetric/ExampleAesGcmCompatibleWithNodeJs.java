@@ -4,8 +4,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import uk.co.baconi.secure.base.cipher.DecryptionException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
-import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
-import uk.co.baconi.secure.base.cipher.symmetric.SymmetricEngine;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -14,7 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Security;
 
-public class Test {
+public class ExampleAesGcmCompatibleWithNodeJs {
+
+    private ExampleAesGcmCompatibleWithNodeJs() {}
 
     public static void main(final String[] args) throws IOException, DecryptionException {
 
