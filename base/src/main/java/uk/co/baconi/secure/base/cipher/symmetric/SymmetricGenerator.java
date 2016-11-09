@@ -15,12 +15,10 @@ public class SymmetricGenerator {
 
     public SecretKey generateKey(final SymmetricCipher type, final int bits) {
         switch (type) {
-            case AES_CBC_PKCS7: {
-                return generateKeyImpl(type, bits);
-            }
-            default: {
+            case AES_CBC_PKCS7:
+            case AES_GCM_NONE: return generateSecretKey(type, bits);
+            default:
                 throw new UnsupportedCipherTypeException(type, "generate-key");
-            }
         }
     }
 
@@ -29,21 +27,24 @@ public class SymmetricGenerator {
      */
     public AlgorithmParameterSpec generateParameters(final SymmetricCipher type) {
         switch (type) {
-            case AES_CBC_PKCS7: {
-
-                // AES uses 128-bit blocks but supports up to 256-bit keys
-                final byte[] iv = new byte[16];
-                SecureRandom secureRandom = new SecureRandom();
-                secureRandom.nextBytes(iv);
-
-                return new IvParameterSpec(iv);
-            }
+            case AES_CBC_PKCS7: return generateIv(16);
+            case AES_GCM_NONE: return generateIv(12);
             default:
                 throw new UnsupportedCipherTypeException(type, "generate-parameters");
         }
     }
 
-    private SecretKey generateKeyImpl(final SymmetricCipher type, final int bits) {
+    private IvParameterSpec generateIv(final int bytes) {
+
+        final byte[] iv = new byte[bytes];
+
+        final SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(iv);
+
+        return new IvParameterSpec(iv);
+    }
+
+    private SecretKey generateSecretKey(final SymmetricCipher type, final int bits) {
 
         final KeyGenerator keyGen;
         try {

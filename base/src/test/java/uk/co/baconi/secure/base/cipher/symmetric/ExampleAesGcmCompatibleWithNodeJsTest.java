@@ -2,6 +2,8 @@ package uk.co.baconi.secure.base.cipher.symmetric;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
+import org.junit.Test;
+import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.cipher.DecryptionException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
 
@@ -12,11 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Security;
 
-public class ExampleAesGcmCompatibleWithNodeJs {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private ExampleAesGcmCompatibleWithNodeJs() {}
+public class ExampleAesGcmCompatibleWithNodeJsTest extends BaseUnitTest {
 
-    public static void main(final String[] args) throws IOException, DecryptionException {
+    @Test
+    public void shouldBeAbleToDecryptFromNodeJs() throws IOException, DecryptionException {
 
         Security.addProvider(new BouncyCastleProvider());
 
@@ -37,8 +40,7 @@ public class ExampleAesGcmCompatibleWithNodeJs {
 
         final String result = engine.decrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, outputStream.toByteArray());
 
-        System.out.println("result: " + result);
-
+        assertThat(result).isNotNull();
     }
 
 }
