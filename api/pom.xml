@@ -31,7 +31,7 @@
     <properties>
         <root-path>..</root-path>
 
-        <springfox.version>2.5.0</springfox.version>
+        <springfox.version>2.6.1</springfox.version>
     </properties>
 
     <dependencies>
