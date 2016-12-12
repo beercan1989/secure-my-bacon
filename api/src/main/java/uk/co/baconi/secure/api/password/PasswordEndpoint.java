@@ -113,4 +113,13 @@ public class PasswordEndpoint {
         // TODO - Review exposing encrypted passwords
         return ResponseEntity.ok(password);
     }
+
+    @RequestMapping(value = "/{passwordId}/by-user/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Password> findPasswordByUser(@PathVariable("passwordId") final Long passwordId,
+                                                       @PathVariable("userId") final Long userId) {
+
+        final Password password = passwordGraphRepository.getPasswordByUser(passwordId, userId);
+
+        return ResponseEntity.ok(null);
+    }
 }
