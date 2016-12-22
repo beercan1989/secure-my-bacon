@@ -35,6 +35,7 @@ import java.util.Set;
 public class User {
 
     @GraphId
+    @Deprecated
     private Long id;
 
     private String name;

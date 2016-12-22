@@ -36,6 +36,7 @@ public class AsymmetricLock {
     public static final String SHARED_WITH = "SHARED_WITH";
 
     @GraphId
+    @Deprecated
     private Long id;
 
     @Setter

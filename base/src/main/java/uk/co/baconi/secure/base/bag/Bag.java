@@ -33,6 +33,7 @@ import java.util.Set;
 public class Bag {
 
     @GraphId
+    @Deprecated
     private Long id;
 
     @Setter

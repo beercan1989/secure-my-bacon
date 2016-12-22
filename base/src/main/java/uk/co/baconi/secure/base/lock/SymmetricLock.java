@@ -33,6 +33,7 @@ public class SymmetricLock {
     public static final String SECURED_BY = "SECURED_BY";
 
     @GraphId
+    @Deprecated
     private Long id;
 
     @Setter

@@ -112,13 +112,13 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
                 "shouldBeAbleToFindPasswordsByUser_password_3".getBytes()
         ));
 
-        final Bag bag = new Bag("shouldBeAbleToFindPasswordByUser_group", "public key".getBytes());
+        final Bag bag = new Bag("shouldBeAbleToFindPasswordsByUser_group", "public key".getBytes());
 
         new SymmetricLock(password_1, bag, "key_1".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
         new SymmetricLock(password_2, bag, "key_2".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
         new SymmetricLock(password_3, bag, "key_3".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
-        final User user = new User("shouldBeAbleToFindPasswordByUser_username");
+        final User user = new User("shouldBeAbleToFindPasswordsByUser_username");
 
         new AsymmetricLock(bag, user, "private key".getBytes());
 
@@ -141,38 +141,21 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         // Test Data Setup
         //
 
-        final String whereFor = "shouldBeAbleToFindPasswordByUser_whereFor";
-        final String username = "shouldBeAbleToFindPasswordByUser_username";
-        final String passw0rd = "shouldBeAbleToFindPasswordByUser_password";
-
-        final Password password = new Password(whereFor, username, passw0rd.getBytes());
-
-        passwordGraphRepository.save(password);
+        final Password password = new Password(
+                "shouldBeAbleToFindPasswordByUser_whereFor",
+                "shouldBeAbleToFindPasswordByUser_username",
+                "shouldBeAbleToFindPasswordByUser_password".getBytes()
+        );
 
         final Bag bag = new Bag("shouldBeAbleToFindPasswordByUser_group", "public key".getBytes());
 
-        final SymmetricLock securedWith = new SymmetricLock(password, bag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
-
-        assertThat(password.getSecuredBy(), is(equalTo(securedWith)));
+        new SymmetricLock(password, bag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
         final User user = new User("shouldBeAbleToFindPasswordByUser_username");
 
-        final AsymmetricLock sharedWith = new AsymmetricLock(bag, user, "private key".getBytes());
-
-        assertThat(bag.getShared(), contains(sharedWith));
-
-        assertThat(bag.getId(), is(nullValue()));
-        assertThat(securedWith.getId(), is(nullValue()));
-        assertThat(user.getId(), is(nullValue()));
-        assertThat(sharedWith.getId(), is(nullValue()));
+        new AsymmetricLock(bag, user, "private key".getBytes());
 
         passwordGraphRepository.save(password);
-
-        assertThat(password.getId(), is(not(nullValue())));
-        assertThat(bag.getId(), is(not(nullValue())));
-        assertThat(securedWith.getId(), is(not(nullValue())));
-        assertThat(user.getId(), is(not(nullValue())));
-        assertThat(sharedWith.getId(), is(not(nullValue())));
 
         //
         // Actual Test

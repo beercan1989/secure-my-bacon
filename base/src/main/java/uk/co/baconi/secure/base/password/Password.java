@@ -32,6 +32,7 @@ import uk.co.baconi.secure.base.lock.SymmetricLock;
 public class Password {
 
     @GraphId
+    @Deprecated
     private Long id;
 
     @Setter

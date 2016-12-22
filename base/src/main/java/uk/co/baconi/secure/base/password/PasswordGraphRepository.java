@@ -23,15 +23,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static uk.co.baconi.secure.base.lock.SymmetricLock.SECURED_BY;
-import static uk.co.baconi.secure.base.lock.AsymmetricLock.SHARED_WITH;
-
 @Repository
 public interface PasswordGraphRepository extends GraphRepository<Password> {
 
-    @Query("MATCH (password:Password)<-[:"+SECURED_BY+"]-(bag:Bag)<-[:"+SHARED_WITH+"]-(user)" +
-           "WHERE id(password)={passwordId} AND id(user)={userId}" +
-           "RETURN password")
+    /**
+     * TODO - Read up on this and find out exactly what the case is.
+     * @deprecated because relying on ID's may cause problems if keys get recycled after deletions
+     */
+    @Deprecated
+    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User)" +
+           "WHERE id(p)={passwordId} AND id(u)={userId}" +
+           "RETURN p")
     Password getPasswordByUser(@Param("passwordId") final Long passwordId, @Param("userId")  final Long userId);
 
     @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{name}}) RETURN p")
