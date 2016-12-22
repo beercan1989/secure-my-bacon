@@ -160,7 +160,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Actual Test
         //
-        final Password passwordByUser = passwordGraphRepository.getPasswordByUser(password.getId(), user.getId());
+        final Password passwordByUser = passwordGraphRepository.getPasswordByUser(password.getId(), user.getName());
         assertThat(passwordByUser, is(not(nullValue())));
         assertThat(passwordByUser.getId(), is(equalTo(password.getId())));
         assertThat(passwordByUser, is(equalTo(password)));

@@ -42,6 +42,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.List;
 
 @Slf4j
 @Validated
@@ -114,12 +115,28 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(password);
     }
 
-    @RequestMapping(value = "/{passwordId}/by-user/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<Password> findPasswordByUser(@PathVariable("passwordId") final Long passwordId,
-                                                       @PathVariable("userId") final Long userId) {
+    @RequestMapping(value = "/by-user/{name}", method = RequestMethod.GET)
+    public ResponseEntity<List<Password>> getPasswordsForUser(@PathVariable("name") final String name) {
 
-        final Password password = passwordGraphRepository.getPasswordByUser(passwordId, userId);
+        log.trace("findPasswordsByUser: {}", name);
 
-        return ResponseEntity.ok(null);
+        final List<Password> passwords = passwordGraphRepository.getPasswordsByUser(name);
+
+        log.trace("foundPasswords: {}", passwords);
+
+        return ResponseEntity.ok(passwords);
+    }
+
+    @RequestMapping(value = "/{passwordId}/by-user/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Password> getPasswordForUser(@PathVariable("passwordId") final Long passwordId,
+                                                       @PathVariable("name") final String userName) {
+
+        log.trace("findPasswordByUser: {}, {}", passwordId, userName);
+
+        final Password password = passwordGraphRepository.getPasswordByUser(passwordId, userName);
+
+        log.trace("findPassword: {}", password);
+
+        return ResponseEntity.ok(password);
     }
 }

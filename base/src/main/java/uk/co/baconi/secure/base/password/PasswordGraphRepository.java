@@ -31,11 +31,10 @@ public interface PasswordGraphRepository extends GraphRepository<Password> {
      * @deprecated because relying on ID's may cause problems if keys get recycled after deletions
      */
     @Deprecated
-    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User)" +
-           "WHERE id(p)={passwordId} AND id(u)={userId}" +
-           "RETURN p")
-    Password getPasswordByUser(@Param("passwordId") final Long passwordId, @Param("userId")  final Long userId);
+    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}})" +
+           "WHERE id(p)={passwordId} RETURN p")
+    Password getPasswordByUser(@Param("passwordId") final Long passwordId, @Param("userName")  final String userName);
 
-    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{name}}) RETURN p")
-    List<Password> getPasswordsByUser(@Param("name") final String name);
+    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
+    List<Password> getPasswordsByUser(@Param("userName") final String userName);
 }
