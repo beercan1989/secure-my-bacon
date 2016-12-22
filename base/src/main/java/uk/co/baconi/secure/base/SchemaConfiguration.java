@@ -50,6 +50,7 @@ public class SchemaConfiguration {
     private void createIndexes() {
         log.info("createIndexes: START");
 
+        // TODO - add constraint / index for Password to aid in queries
         createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
         createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
 

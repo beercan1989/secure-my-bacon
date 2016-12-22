@@ -25,6 +25,8 @@ import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.user.User;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -84,6 +86,52 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         assertThat(password.getId(), is(not(nullValue())));
         assertThat(gitHubBag.getId(), is(not(nullValue())));
         assertThat(securedWith.getId(), is(not(nullValue())));
+    }
+
+    @Test
+    public void shouldBeAbleToFindPasswordsByUser() {
+
+        //
+        // Test Data Setup
+        //
+        final Password password_1 = passwordGraphRepository.save(new Password(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_1",
+                "shouldBeAbleToFindPasswordsByUser_username_1",
+                "shouldBeAbleToFindPasswordsByUser_password_1".getBytes()
+        ));
+
+        final Password password_2 = passwordGraphRepository.save(new Password(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_2",
+                "shouldBeAbleToFindPasswordsByUser_username_2",
+                "shouldBeAbleToFindPasswordsByUser_password_2".getBytes()
+        ));
+
+        final Password password_3 = passwordGraphRepository.save(new Password(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_3",
+                "shouldBeAbleToFindPasswordsByUser_username_3",
+                "shouldBeAbleToFindPasswordsByUser_password_3".getBytes()
+        ));
+
+        final Bag bag = new Bag("shouldBeAbleToFindPasswordByUser_group", "public key".getBytes());
+
+        new SymmetricLock(password_1, bag, "key_1".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+        new SymmetricLock(password_2, bag, "key_2".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+        new SymmetricLock(password_3, bag, "key_3".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+
+        final User user = new User("shouldBeAbleToFindPasswordByUser_username");
+
+        new AsymmetricLock(bag, user, "private key".getBytes());
+
+        passwordGraphRepository.save(password_1);
+        passwordGraphRepository.save(password_2);
+        passwordGraphRepository.save(password_3);
+
+        //
+        // Actual Test
+        //
+        final List<Password> passwordsByUser = passwordGraphRepository.getPasswordsByUser(user.getName());
+        assertThat(passwordsByUser, is(not(nullValue())));
+        assertThat(passwordsByUser, containsInAnyOrder(password_1, password_2, password_3));
     }
 
     @Test

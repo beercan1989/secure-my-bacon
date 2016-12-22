@@ -20,15 +20,20 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
 import static uk.co.baconi.secure.base.lock.SymmetricLock.SECURED_BY;
 import static uk.co.baconi.secure.base.lock.AsymmetricLock.SHARED_WITH;
 
 @Repository
 public interface PasswordGraphRepository extends GraphRepository<Password> {
 
-    @Query("MATCH (password:Password)<-[:"+SECURED_BY+"]-(bag)<-[:"+SHARED_WITH+"]-(user)" +
+    @Query("MATCH (password:Password)<-[:"+SECURED_BY+"]-(bag:Bag)<-[:"+SHARED_WITH+"]-(user)" +
            "WHERE id(password)={passwordId} AND id(user)={userId}" +
            "RETURN password")
     Password getPasswordByUser(@Param("passwordId") final Long passwordId, @Param("userId")  final Long userId);
 
+    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{name}}) RETURN p")
+    List<Password> getPasswordsByUser(@Param("name") final String name);
 }
