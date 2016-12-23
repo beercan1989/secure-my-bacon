@@ -29,22 +29,22 @@ public class BaseConfigurationTest extends BaseUnitTest {
     @Test
     public void shouldNotSetDriverConfigWhenNotProvided() {
 
-        final BaseNeo4JProperties baseNeo4JProperties = mock(BaseNeo4JProperties.class);
-        final BaseConfiguration baseConfiguration = new BaseConfiguration(baseNeo4JProperties);
+        final Neo4JProperties neo4JProperties = mock(Neo4JProperties.class);
+        final BaseConfiguration baseConfiguration = new BaseConfiguration(neo4JProperties);
 
-        verifyZeroInteractions(baseNeo4JProperties);
+        verifyZeroInteractions(neo4JProperties);
 
-        when(baseNeo4JProperties.getConnectionPoolSize()).thenReturn(null);
+        when(neo4JProperties.getConnectionPoolSize()).thenReturn(null);
 
         final DriverConfiguration driverConfig = baseConfiguration.getNeo4jConfiguration().driverConfiguration();
 
-        verify(baseNeo4JProperties).getDriver();
-        verify(baseNeo4JProperties).getUsername();
-        verify(baseNeo4JProperties).getUrl();
-        verify(baseNeo4JProperties).getConnectionPoolSize();
-        verify(baseNeo4JProperties).getEncryptionLevel();
-        verify(baseNeo4JProperties).getTrustStrategy();
-        verifyNoMoreInteractions(baseNeo4JProperties);
+        verify(neo4JProperties).getDriver();
+        verify(neo4JProperties).getUsername();
+        verify(neo4JProperties).getUrl();
+        verify(neo4JProperties).getConnectionPoolSize();
+        verify(neo4JProperties).getEncryptionLevel();
+        verify(neo4JProperties).getTrustStrategy();
+        verifyNoMoreInteractions(neo4JProperties);
 
         assertThat(driverConfig.getDriverClassName(), is(nullValue()));
         assertThat(driverConfig.getCredentials(), is(nullValue()));
@@ -58,31 +58,31 @@ public class BaseConfigurationTest extends BaseUnitTest {
     @Test
     public void shouldSetDriverConfigWhenProvided() {
 
-        final BaseNeo4JProperties baseNeo4JProperties = mock(BaseNeo4JProperties.class);
-        final BaseConfiguration baseConfiguration = new BaseConfiguration(baseNeo4JProperties);
+        final Neo4JProperties neo4JProperties = mock(Neo4JProperties.class);
+        final BaseConfiguration baseConfiguration = new BaseConfiguration(neo4JProperties);
 
-        verifyZeroInteractions(baseNeo4JProperties);
+        verifyZeroInteractions(neo4JProperties);
 
-        when(baseNeo4JProperties.getDriver()).thenReturn("custom.driver");
-        when(baseNeo4JProperties.getUsername()).thenReturn("custom.user");
-        when(baseNeo4JProperties.getPassword()).thenReturn("custom.password");
-        when(baseNeo4JProperties.getUrl()).thenReturn("http://custom.url");
-        when(baseNeo4JProperties.getConnectionPoolSize()).thenReturn(666);
-        when(baseNeo4JProperties.getEncryptionLevel()).thenReturn("custom.encryption.level");
-        when(baseNeo4JProperties.getTrustStrategy()).thenReturn("custom.trust.nothing");
-        when(baseNeo4JProperties.getTrustCertificateFile()).thenReturn("custom.trust.file");
+        when(neo4JProperties.getDriver()).thenReturn("custom.driver");
+        when(neo4JProperties.getUsername()).thenReturn("custom.user");
+        when(neo4JProperties.getPassword()).thenReturn("custom.password");
+        when(neo4JProperties.getUrl()).thenReturn("http://custom.url");
+        when(neo4JProperties.getConnectionPoolSize()).thenReturn(666);
+        when(neo4JProperties.getEncryptionLevel()).thenReturn("custom.encryption.level");
+        when(neo4JProperties.getTrustStrategy()).thenReturn("custom.trust.nothing");
+        when(neo4JProperties.getTrustCertificateFile()).thenReturn("custom.trust.file");
 
         final DriverConfiguration driverConfig = baseConfiguration.getNeo4jConfiguration().driverConfiguration();
 
-        verify(baseNeo4JProperties, times(2)).getDriver();
-        verify(baseNeo4JProperties, times(2)).getUsername();
-        verify(baseNeo4JProperties, times(2)).getPassword();
-        verify(baseNeo4JProperties, times(2)).getUrl();
-        verify(baseNeo4JProperties, times(2)).getConnectionPoolSize();
-        verify(baseNeo4JProperties, times(2)).getEncryptionLevel();
-        verify(baseNeo4JProperties, times(2)).getTrustStrategy();
-        verify(baseNeo4JProperties, times(2)).getTrustCertificateFile();
-        verifyNoMoreInteractions(baseNeo4JProperties);
+        verify(neo4JProperties, times(2)).getDriver();
+        verify(neo4JProperties, times(2)).getUsername();
+        verify(neo4JProperties, times(2)).getPassword();
+        verify(neo4JProperties, times(2)).getUrl();
+        verify(neo4JProperties, times(2)).getConnectionPoolSize();
+        verify(neo4JProperties, times(2)).getEncryptionLevel();
+        verify(neo4JProperties, times(2)).getTrustStrategy();
+        verify(neo4JProperties, times(2)).getTrustCertificateFile();
+        verifyNoMoreInteractions(neo4JProperties);
 
         assertThat(driverConfig.getDriverClassName(), is(equalTo("custom.driver")));
         assertThat(driverConfig.getCredentials().credentials(), is(equalTo(Base64.encodeBase64String("custom.user".concat(":").concat("custom.password").getBytes()))));

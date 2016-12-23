@@ -16,9 +16,9 @@
 
 package uk.co.baconi.secure.base.lock;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
+import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
 @Repository
-public interface AsymmetricLockGraphRepository extends GraphRepository<AsymmetricLock> {
+public interface AsymmetricLockGraphRepository extends SmbGraphRepository<AsymmetricLock> {
 }

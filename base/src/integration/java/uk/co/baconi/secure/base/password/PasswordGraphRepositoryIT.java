@@ -129,7 +129,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Actual Test
         //
-        final List<Password> passwordsByUser = passwordGraphRepository.getPasswordsByUser(user.getName());
+        final List<Password> passwordsByUser = passwordGraphRepository.getPasswordsForUser(user.getName());
         assertThat(passwordsByUser, is(not(nullValue())));
         assertThat(passwordsByUser, containsInAnyOrder(password_1, password_2, password_3));
     }
@@ -160,7 +160,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Actual Test
         //
-        final Password passwordByUser = passwordGraphRepository.getPasswordByUser(password.getId(), user.getName());
+        final Password passwordByUser = passwordGraphRepository.getPasswordForUser(password.getUuid(), user.getName());
         assertThat(passwordByUser, is(not(nullValue())));
         assertThat(passwordByUser.getId(), is(equalTo(password.getId())));
         assertThat(passwordByUser, is(equalTo(password)));

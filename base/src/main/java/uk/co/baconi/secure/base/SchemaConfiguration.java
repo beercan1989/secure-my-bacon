@@ -35,7 +35,7 @@ import static java.util.Collections.emptyMap;
 public class SchemaConfiguration {
 
     private final Neo4jOperations neo4jOperations;
-    private final BaseNeo4JProperties properties;
+    private final Neo4JProperties properties;
 
     @PostConstruct
     public void perform() {
@@ -50,9 +50,9 @@ public class SchemaConfiguration {
     private void createIndexes() {
         log.info("createIndexes: START");
 
-        // TODO - add constraint / index for Password to aid in queries
-        createConstraint("CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (bag:Bag) ASSERT bag.name IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (u:User) ASSERT u.name IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (b:Bag) ASSERT b.name IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (p:Password) ASSERT p.uuid IS UNIQUE");
 
         log.info("createIndexes: END");
     }

@@ -18,11 +18,10 @@ package uk.co.baconi.secure.base;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.neo4j.ogm.config.DriverConfiguration;
 import org.neo4j.ogm.session.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -37,6 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.PostConstruct;
 import java.security.Security;
 
+@Slf4j
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
@@ -47,24 +47,24 @@ import java.security.Security;
         "uk.co.baconi.secure.base.bag",
         "uk.co.baconi.secure.base.lock",
         "uk.co.baconi.secure.base.password",
-        "uk.co.baconi.secure.base.user"
+        "uk.co.baconi.secure.base.user",
+        "uk.co.baconi.secure.base.repository"
 })
 @AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
 public class BaseConfiguration extends Neo4jConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BaseConfiguration.class);
-
-    private final BaseNeo4JProperties neo4JProperties;
+    private final Neo4JProperties neo4JProperties;
 
     @PostConstruct
     public void registerSecurityProviders() {
-        LOG.info("Adding Security Provider: BouncyCastle");
+        log.info("Adding Security Provider: BouncyCastle");
+
         Security.addProvider(new BouncyCastleProvider());
     }
 
     @Bean
     public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
-        LOG.info("Neo4JProperties: {}", neo4JProperties);
+        log.info("Creating Neo4J Configuration with Neo4JProperties: {}", neo4JProperties);
 
         final org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
 
@@ -103,12 +103,15 @@ public class BaseConfiguration extends Neo4jConfiguration {
 
     @Bean
     public SessionFactory getSessionFactory() {
+        log.info("Creating: SessionFactory");
+
         return new SessionFactory(
                 getNeo4jConfiguration(),
                 "uk.co.baconi.secure.base.bag",
                 "uk.co.baconi.secure.base.lock",
                 "uk.co.baconi.secure.base.password",
-                "uk.co.baconi.secure.base.user"
+                "uk.co.baconi.secure.base.user",
+                "uk.co.baconi.secure.base.repository"
         );
     }
 

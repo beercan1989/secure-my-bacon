@@ -16,7 +16,8 @@ public class SymmetricGenerator {
     public SecretKey generateKey(final SymmetricCipher type, final int bits) {
         switch (type) {
             case AES_CBC_PKCS7:
-            case AES_GCM_NONE: return generateSecretKey(type, bits);
+            case AES_GCM_NONE:
+                return generateSecretKey(type, bits);
             default:
                 throw new UnsupportedCipherTypeException(type, "generate-key");
         }
@@ -27,8 +28,10 @@ public class SymmetricGenerator {
      */
     public AlgorithmParameterSpec generateParameters(final SymmetricCipher type) {
         switch (type) {
-            case AES_CBC_PKCS7: return generateIv(16);
-            case AES_GCM_NONE: return generateIv(12);
+            case AES_CBC_PKCS7:
+                return generateIv(16);
+            case AES_GCM_NONE:
+                return generateIv(12);
             default:
                 throw new UnsupportedCipherTypeException(type, "generate-parameters");
         }

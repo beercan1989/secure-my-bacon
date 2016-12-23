@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 @ToString(exclude = "password")
 @ConfigurationProperties(prefix = "neo4j")
 @PropertySource("classpath:neo4j.properties")
-public class BaseNeo4JProperties {
+public class Neo4JProperties {
 
     private String url;
     private String username;

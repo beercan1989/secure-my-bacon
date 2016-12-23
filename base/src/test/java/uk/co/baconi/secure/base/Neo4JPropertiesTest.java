@@ -22,12 +22,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
-public class BaseNeo4JPropertiesTest {
+public class Neo4JPropertiesTest {
 
     @Test
     public void shouldHaveNiceToStringRepresentation() {
 
-        final BaseNeo4JProperties properties = new BaseNeo4JProperties();
+        final Neo4JProperties properties = new Neo4JProperties();
 
         final String propertiesAsString = properties.toString();
 

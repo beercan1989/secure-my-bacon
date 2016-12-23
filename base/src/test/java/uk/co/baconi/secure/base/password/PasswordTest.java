@@ -33,7 +33,7 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final byte[] passw0rd = "password".getBytes();
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final Password password = Password.forTest(whereFor, username, passw0rd);
 
         assertThat(password.getId(), is(nullValue()));
         assertThat(password.getWhereFor(), is(equalTo(whereFor)));
@@ -46,7 +46,7 @@ public class PasswordTest extends BaseUnitTest {
     public void shouldBeAbleToChangeProperties() {
 
         final SymmetricLock symmetricLock = mock(SymmetricLock.class);
-        final Password password = new Password("", "", "".getBytes()).securedBy(symmetricLock);
+        final Password password = Password.forTest("", "", "".getBytes()).securedBy(symmetricLock);
         assertThat(password.getSecuredBy(), is(equalTo(symmetricLock)));
 
         final String newWhereFor = "https://bitbucket.org/account/signin/?next=/";
@@ -73,20 +73,20 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final byte[] passw0rd = "password".getBytes();
 
-        final Password password1 = new Password(whereFor, username, passw0rd);
-        final Password password2 = new Password(whereFor, username, passw0rd);
+        final Password password1 = Password.forTest(whereFor, username, passw0rd);
+        final Password password2 = Password.forTest(whereFor, username, passw0rd);
 
         assertThat(password1, is(equalTo(password2)));
         assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
 
-        final Password password3 = new Password(whereFor, "beercan", passw0rd);
+        final Password password3 = Password.forTest(whereFor, "beercan", passw0rd);
 
         assertThat(password1, is(not(equalTo(password3))));
         assertThat(password2, is(not(equalTo(password3))));
         assertThat(password1.hashCode(), is(not(equalTo(password3.hashCode()))));
         assertThat(password2.hashCode(), is(not(equalTo(password3.hashCode()))));
 
-        final Password password4 = new Password(whereFor, username, "P@55w0rd!".getBytes());
+        final Password password4 = Password.forTest(whereFor, username, "P@55w0rd!".getBytes());
 
         assertThat(password1, is(not(equalTo(password4))));
         assertThat(password2, is(not(equalTo(password4))));
@@ -95,7 +95,7 @@ public class PasswordTest extends BaseUnitTest {
         assertThat(password2.hashCode(), is(not(equalTo(password4.hashCode()))));
         assertThat(password3.hashCode(), is(not(equalTo(password4.hashCode()))));
 
-        final Password password5 = new Password("https://bitbucket.org/account/signin/?next=/", username, passw0rd);
+        final Password password5 = Password.forTest("https://bitbucket.org/account/signin/?next=/", username, passw0rd);
 
         assertThat(password1, is(not(equalTo(password5))));
         assertThat(password2, is(not(equalTo(password5))));
@@ -120,7 +120,7 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final String passw0rd = "p@55w0rd!";
 
-        final Password password = new Password(whereFor, username, passw0rd.getBytes());
+        final Password password = Password.forTest(whereFor, username, passw0rd.getBytes());
 
         final String passwordAsString = password.toString();
 

@@ -17,24 +17,22 @@
 package uk.co.baconi.secure.base.password;
 
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface PasswordGraphRepository extends GraphRepository<Password> {
+public interface PasswordGraphRepository extends SmbGraphRepository<Password> {
 
-    /**
-     * TODO - Read up on this and find out exactly what the case is.
-     * @deprecated because relying on ID's may cause problems if keys get recycled after deletions
-     */
-    @Deprecated
-    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}})" +
-           "WHERE id(p)={passwordId} RETURN p")
-    Password getPasswordByUser(@Param("passwordId") final Long passwordId, @Param("userName")  final String userName);
+    Password findByUuid(final UUID uuid);
+
+    @Query("MATCH (p:Password {uuid:{uuid}})-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}}) RETURN p")
+    Password getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
 
     @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
-    List<Password> getPasswordsByUser(@Param("userName") final String userName);
+    List<Password> getPasswordsForUser(@Param("userName") final String userName);
+
 }

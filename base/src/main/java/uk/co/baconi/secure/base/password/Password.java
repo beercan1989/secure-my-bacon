@@ -22,11 +22,15 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
+import uk.co.baconi.secure.base.common.UuidConverter;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
-@NoArgsConstructor
-@NodeEntity
+import java.util.UUID;
+
 @Getter
+@NodeEntity
+@NoArgsConstructor
 @EqualsAndHashCode(exclude = {"id", "securedBy"})
 @ToString(exclude = {"password", "securedBy"})
 public class Password {
@@ -34,6 +38,10 @@ public class Password {
     @GraphId
     @Deprecated
     private Long id;
+
+    @Property
+    @Convert(UuidConverter.class)
+    private UUID uuid;
 
     @Setter
     @Property
@@ -52,6 +60,7 @@ public class Password {
     private SymmetricLock securedBy;
 
     public Password(final String whereFor, final String username, final byte[] password) {
+        this.uuid = UUID.randomUUID();
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
@@ -62,5 +71,11 @@ public class Password {
         this.securedBy = securedBy;
 
         return this;
+    }
+
+    static Password forTest(final String whereFor, final String username, final byte[] password) {
+        final Password forTest = new Password(whereFor, username, password);
+        forTest.uuid = null;
+        return forTest;
     }
 }
