@@ -37,6 +37,7 @@ public class AsymmetricLock {
 
     @GraphId
     @Deprecated
+    @JsonIgnore
     private Long id;
 
     @Setter

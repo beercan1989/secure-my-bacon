@@ -36,6 +36,7 @@ public class User {
 
     @GraphId
     @Deprecated
+    @JsonIgnore
     private Long id;
 
     private String name;

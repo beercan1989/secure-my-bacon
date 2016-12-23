@@ -37,6 +37,7 @@ public class Password {
 
     @GraphId
     @Deprecated
+    @JsonIgnore
     private Long id;
 
     @Property

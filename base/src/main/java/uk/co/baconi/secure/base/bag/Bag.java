@@ -34,6 +34,7 @@ public class Bag {
 
     @GraphId
     @Deprecated
+    @JsonIgnore
     private Long id;
 
     @Setter

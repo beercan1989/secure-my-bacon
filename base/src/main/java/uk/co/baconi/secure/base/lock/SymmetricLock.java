@@ -34,6 +34,7 @@ public class SymmetricLock {
 
     @GraphId
     @Deprecated
+    @JsonIgnore
     private Long id;
 
     @Setter
