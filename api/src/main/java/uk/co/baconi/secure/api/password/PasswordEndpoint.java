@@ -43,6 +43,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Validated
@@ -115,27 +116,39 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(password);
     }
 
-    @RequestMapping(value = "/by-user/{name}", method = RequestMethod.GET)
-    public ResponseEntity<List<Password>> getPasswordsForUser(@PathVariable("name") final String name) {
+    @RequestMapping(value = "/for-user/{user-name}", method = RequestMethod.GET)
+    public ResponseEntity<List<Password>> getPasswordsForUser(@PathVariable("user-name") final String name) {
 
         log.trace("findPasswordsByUser: {}", name);
 
-        final List<Password> passwords = passwordGraphRepository.getPasswordsByUser(name);
+        final List<Password> passwords = passwordGraphRepository.getPasswordsForUser(name);
 
         log.trace("foundPasswords: {}", passwords);
 
         return ResponseEntity.ok(passwords);
     }
 
-    @RequestMapping(value = "/{passwordId}/by-user/{name}", method = RequestMethod.GET)
-    public ResponseEntity<Password> getPasswordForUser(@PathVariable("passwordId") final Long passwordId,
-                                                       @PathVariable("name") final String userName) {
+    @RequestMapping(value = "/{password-uuid}", method = RequestMethod.GET)
+    public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) {
 
-        log.trace("findPasswordByUser: {}, {}", passwordId, userName);
+        log.trace("getPasswordByUuid: {}", uuid);
 
-        final Password password = passwordGraphRepository.getPasswordByUser(passwordId, userName);
+        final Password password = passwordGraphRepository.findByUuid(uuid);
 
-        log.trace("findPassword: {}", password);
+        log.trace("foundPassword: {}", password);
+
+        return ResponseEntity.ok(password);
+    }
+
+    @RequestMapping(value = "/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
+    public ResponseEntity<Password> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
+                                                       @PathVariable("user-name") final String userName) {
+
+        log.trace("getPasswordForUser: {}, {}", passwordUuid, userName);
+
+        final Password password = passwordGraphRepository.getPasswordForUser(passwordUuid, userName);
+
+        log.trace("foundPassword: {}", password);
 
         return ResponseEntity.ok(password);
     }
