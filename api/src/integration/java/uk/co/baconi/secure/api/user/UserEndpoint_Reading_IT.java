@@ -19,13 +19,12 @@ package uk.co.baconi.secure.api.user;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.api.tests.FindByIdIntegrationTest;
 import uk.co.baconi.secure.api.tests.FindByNameIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByIdIntegrationTest, FindByNameIntegrationTest {
+public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByNameIntegrationTest {
 
     private final String endpoint = "/users";
 
@@ -44,14 +43,13 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
 
                 body("data", is(not(emptyCollectionOf(String.class)))).
 
-                body("data[0].id", isA(Number.class)).
+                body("data[0].id", is(nullValue())).
                 body("data[0].name", isA(String.class)).
 
                 body("paging.page", isA(Integer.class)).
                 body("paging.perPage", isA(Integer.class)).
                 body("paging.totalCount", isA(Integer.class)).
 
-                body("data[0].id", is(equalTo(1))).
                 body("data[0].name", is(equalTo("user-0"))).
 
                 body("paging.page", is(equalTo(0))).
@@ -62,14 +60,8 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
 
     @Test
     @Override
-    public void onFindById() {
-        onFindByIdImpl(1, "user-0");
-    }
-
-    @Test
-    @Override
     public void onFindByName() {
-        onFindByNameImpl("user-0", 1);
+        onFindByNameImpl("user-0");
     }
 
     @Test

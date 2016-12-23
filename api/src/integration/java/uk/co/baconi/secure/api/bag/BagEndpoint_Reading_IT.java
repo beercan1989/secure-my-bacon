@@ -19,13 +19,12 @@ package uk.co.baconi.secure.api.bag;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
-import uk.co.baconi.secure.api.tests.FindByIdIntegrationTest;
 import uk.co.baconi.secure.api.tests.FindByNameIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
 import static org.hamcrest.Matchers.*;
 
-public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByIdIntegrationTest, FindByNameIntegrationTest {
+public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByNameIntegrationTest {
 
     private final String endpoint = "/bags";
 
@@ -46,19 +45,19 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pag
 
                 body("data", is(not(emptyCollectionOf(String.class)))).
 
-                body("data[0].id", isA(Integer.class)).
+                body("data[0].id", is(nullValue())).
                 body("data[0].name", isA(String.class)).
 
-                body("data[1].id", isA(Integer.class)).
+                body("data[1].id", is(nullValue())).
                 body("data[1].name", isA(String.class)).
 
-                body("data[2].id", isA(Integer.class)).
+                body("data[2].id", is(nullValue())).
                 body("data[2].name", isA(String.class)).
 
-                body("data[3].id", isA(Integer.class)).
+                body("data[3].id", is(nullValue())).
                 body("data[3].name", isA(String.class)).
 
-                body("data[4].id", isA(Integer.class)).
+                body("data[4].id", is(nullValue())).
                 body("data[4].name", isA(String.class)).
 
                 body("paging.page", isA(Integer.class)).
@@ -99,14 +98,8 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pag
 
     @Test
     @Override
-    public void onFindById() {
-        onFindByIdImpl(0, "bag-0");
-    }
-
-    @Test
-    @Override
     public void onFindByName() {
-        onFindByNameImpl("bag-0", 0);
+        onFindByNameImpl("bag-0");
     }
 
     @Test

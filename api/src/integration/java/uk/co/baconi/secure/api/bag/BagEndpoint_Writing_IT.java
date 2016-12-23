@@ -46,7 +46,7 @@ public class BagEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
-                body("id", isA(Number.class)).
+                body("id", is(nullValue())).
                 body("name", isA(String.class)).
                 body("name", is(equalTo("new-clean-bag"))).
 

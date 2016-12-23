@@ -76,24 +76,8 @@ public class UserEndpoint {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/by-id/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<User> findById(@PathVariable("userId") final Long id) throws NotFoundException {
-
-        log.trace("findById: {}", id);
-
-        final User user = userGraphRepository.findOne(id);
-
-        log.trace("foundUser: {}", user);
-
-        if (user == null) {
-            throw NotFoundException.userById(id);
-        } else {
-            return ResponseEntity.ok(user);
-        }
-    }
-
-    @RequestMapping(value = "/by-name/{userName}", method = RequestMethod.GET)
-    public ResponseEntity<User> findByName(@PathVariable("userName") final String name) throws NotFoundException {
+    @RequestMapping(value = "/by-name/{user-name}", method = RequestMethod.GET)
+    public ResponseEntity<User> findByName(@PathVariable("user-name") final String name) throws NotFoundException {
 
         log.trace("findByName: {}", name);
 

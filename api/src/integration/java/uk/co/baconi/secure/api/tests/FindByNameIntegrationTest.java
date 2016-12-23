@@ -27,7 +27,7 @@ public interface FindByNameIntegrationTest extends RestApiAuthentication {
 
     void onFindByName();
 
-    default void onFindByNameImpl(final String name, final int id) {
+    default void onFindByNameImpl(final String name) {
 
         // Found
         withNoAuthentication().
@@ -35,10 +35,7 @@ public interface FindByNameIntegrationTest extends RestApiAuthentication {
 
                 then().assertThat().
 
-                body("id", isA(Number.class)).
                 body("name", isA(String.class)).
-
-                body("id", is(equalTo(id))).
                 body("name", is(equalTo(name))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));

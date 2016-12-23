@@ -94,24 +94,8 @@ public class BagEndpoint {
         return ResponseEntity.ok(bag);
     }
 
-    @RequestMapping(value = "/by-id/{bagId}", method = RequestMethod.GET)
-    public ResponseEntity<Bag> findById(@PathVariable("bagId") final Long id) throws NotFoundException {
-
-        log.trace("findById: {}", id);
-
-        final Bag bag = bagGraphRepository.findOne(id);
-
-        log.trace("foundBag: {}", bag);
-
-        if (bag == null) {
-            throw NotFoundException.bagById(id);
-        } else {
-            return ResponseEntity.ok(bag);
-        }
-    }
-
-    @RequestMapping(value = "/by-name/{bagName}", method = RequestMethod.GET)
-    public ResponseEntity<Bag> findByName(@PathVariable("bagName") final String name) throws NotFoundException {
+    @RequestMapping(value = "/by-name/{bag-name}", method = RequestMethod.GET)
+    public ResponseEntity<Bag> findByName(@PathVariable("bag-name") final String name) throws NotFoundException {
 
         log.trace("findByName: {}", name);
 

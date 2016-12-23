@@ -55,7 +55,7 @@ public class PasswordEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
                 then().assertThat().
 
-                body("id", isA(Number.class)).
+                body("id", is(nullValue())).
                 body("whereFor", is(equalTo("onCreateNewPassword-whereFor"))).
                 body("username", is(equalTo("onCreateNewPassword-username"))).
                 body("password", isA(String.class)).

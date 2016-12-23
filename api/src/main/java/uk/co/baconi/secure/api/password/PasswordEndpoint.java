@@ -128,7 +128,7 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(passwords);
     }
 
-    @RequestMapping(value = "/{password-uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/by-uuid/{password-uuid}", method = RequestMethod.GET)
     public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) {
 
         log.trace("getPasswordByUuid: {}", uuid);
@@ -140,7 +140,7 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(password);
     }
 
-    @RequestMapping(value = "/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/by-uuid/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
     public ResponseEntity<Password> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
                                                        @PathVariable("user-name") final String userName) {
 
