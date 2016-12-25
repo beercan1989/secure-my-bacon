@@ -74,7 +74,7 @@
 
         <!-- Heroku Deployment Configuration -->
         <heroku.deployment.folder>${root-path}/heroku</heroku.deployment.folder>
-        <heroku.newrelic.version>3.32.0</heroku.newrelic.version>
+        <heroku.newrelic.version>3.34.0</heroku.newrelic.version>
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <neo4j-ogm.version>2.0.5</neo4j-ogm.version>
