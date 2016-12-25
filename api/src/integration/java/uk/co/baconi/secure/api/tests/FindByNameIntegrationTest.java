@@ -26,15 +26,13 @@ public interface FindByNameIntegrationTest extends RestApiAuthentication {
 
     String FIND_BY_NAME_PATH = "{base}/by-name/{name}";
 
-    String endpoint();
-
     void onFindByName();
 
-    default void onFindByNameImpl(final String name) {
+    default void onFindByNameImpl(final String endpoint, final String name) {
 
         // Found
         withNoAuthentication().
-                get(FIND_BY_NAME_PATH, endpoint(), name).
+                get(FIND_BY_NAME_PATH, endpoint, name).
 
                 then().assertThat().
 
@@ -45,7 +43,7 @@ public interface FindByNameIntegrationTest extends RestApiAuthentication {
 
         // Not Found
         withNoAuthentication().
-                get(FIND_BY_NAME_PATH, endpoint(), "does-not-exist-with-this-name").
+                get(FIND_BY_NAME_PATH, endpoint, "does-not-exist-with-this-name").
 
                 then().assertThat().
 

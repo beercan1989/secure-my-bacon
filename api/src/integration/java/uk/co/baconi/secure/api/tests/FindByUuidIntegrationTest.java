@@ -29,15 +29,13 @@ public interface FindByUuidIntegrationTest extends RestApiAuthentication {
 
     String FIND_BY_UUID_PATH = "{base}/by-uuid/{uuid}";
 
-    String endpoint();
-
     void onFindByUuid();
 
-    default void onFindByUuidImpl(final UUID uuid) {
+    default void onFindByUuidImpl(final String endpoint, final UUID uuid) {
 
         // Found
         withNoAuthentication().
-                get(FIND_BY_UUID_PATH, endpoint(), uuid).
+                get(FIND_BY_UUID_PATH, endpoint, uuid).
 
                 then().assertThat().
 
@@ -48,7 +46,7 @@ public interface FindByUuidIntegrationTest extends RestApiAuthentication {
 
         // Not Found
         withNoAuthentication().
-                get(FIND_BY_UUID_PATH, endpoint(), UUID.randomUUID()).
+                get(FIND_BY_UUID_PATH, endpoint, UUID.randomUUID()).
 
                 then().assertThat().
 
@@ -62,7 +60,7 @@ public interface FindByUuidIntegrationTest extends RestApiAuthentication {
 
         // Invalid UUID
         withNoAuthentication().
-                get(FIND_BY_UUID_PATH, endpoint(), "invalid-uuid-string").
+                get(FIND_BY_UUID_PATH, endpoint, "invalid-uuid-string").
 
                 then().assertThat().
 

@@ -27,15 +27,11 @@ import static org.hamcrest.Matchers.*;
 
 public interface PaginationIntegrationTest extends RestApiAuthentication {
 
-    String endpoint();
-
-    void onFindingWithWithInvalidPaging();
-
-    default void onFindingWithWithInvalidPagingImpl() {
+    default void onEndpointWithInvalidPagingImpl(final String endpoint) {
 
         final BiFunction<Object, Object, ValidatableResponse> perPageCheck = (perPage, error) -> withNoAuthentication().
                 queryParam("perPage", perPage).
-                get(endpoint()).
+                get(endpoint).
                 then().assertThat().
                 statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
                 body("uuid", isA(String.class)).
@@ -55,7 +51,7 @@ public interface PaginationIntegrationTest extends RestApiAuthentication {
 
         final BiFunction<Object, Object, ValidatableResponse> pageCheck = (page, error) -> withNoAuthentication().
                 queryParam("page", page).
-                get(endpoint()).
+                get(endpoint).
                 then().assertThat().
                 statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
                 body("uuid", isA(String.class)).

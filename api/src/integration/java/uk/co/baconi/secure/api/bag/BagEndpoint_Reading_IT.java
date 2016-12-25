@@ -28,14 +28,10 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pag
 
     private final String endpoint = "/bags";
 
-    @Override
-    public String endpoint() {
-        return endpoint;
-    }
-
-    @Test // 200
+    @Test
     public void onFindingAllBags() {
 
+        // Success
         withNoAuthentication().
                 get(endpoint).
 
@@ -66,6 +62,9 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pag
 
                 body("paging.page", is(equalTo(0))).
                 body("paging.perPage", is(equalTo(5)));
+
+        // Invalid Pagination
+        onEndpointWithInvalidPagingImpl(endpoint);
     }
 
     @Test // 200
@@ -99,12 +98,6 @@ public class BagEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pag
     @Test
     @Override
     public void onFindByName() {
-        onFindByNameImpl("bag-0");
-    }
-
-    @Test
-    @Override
-    public void onFindingWithWithInvalidPaging() {
-        onFindingWithWithInvalidPagingImpl();
+        onFindByNameImpl(endpoint, "bag-0");
     }
 }

@@ -16,31 +16,51 @@
 
 package uk.co.baconi.secure.api.password;
 
+import org.bouncycastle.util.encoders.Base64Encoder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Base64Utils;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
+import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
+import uk.co.baconi.secure.base.user.User;
 
 import static org.hamcrest.Matchers.*;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByUuidIntegrationTest {
 
     private final String endpoint = "/passwords";
+
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
-    @Override
-    public String endpoint() {
-        return endpoint;
+    private Password newPasswordForUser(final String nameSpace) {
+        final Bag bag = new Bag(nameSpace, nameSpace.getBytes());
+        final User user = new User(nameSpace);
+        final Password password = new Password(
+                nameSpace + "_whereFor",
+                nameSpace + "_username",
+                (nameSpace + "_password").getBytes()
+        );
+
+        new SymmetricLock(password, bag, nameSpace.getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+        new AsymmetricLock(bag, user, nameSpace.getBytes(), AsymmetricCipher.RSA_ECB_PKCS1);
+
+        return passwordGraphRepository.save(password);
     }
 
-    @Test // 200
+    @Test
     public void onFindingAllPasswords() {
 
+        // Success
         withNoAuthentication().
                 get(endpoint).
 
@@ -60,6 +80,9 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
                 body("paging.perPage", is(equalTo(5))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
+
+        // Invalid Pagination
+        onEndpointWithInvalidPagingImpl(endpoint);
     }
 
     @Test // 200
@@ -92,24 +115,53 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
     @Test
     @Override
-    public void onFindingWithWithInvalidPaging() {
-        onFindingWithWithInvalidPagingImpl();
+    public void onFindByUuid() {
+        onFindByUuidImpl(endpoint, newPasswordForUser(
+                "onFindByUuid"
+        ).getUuid());
     }
 
     @Test
-    @Override
-    public void onFindByUuid() {
-        onFindByUuidImpl(passwordGraphRepository.save(new Password(
-                "onFindByUuid",
-                "onFindByUuid",
-                "onFindByUuid".getBytes()
-        )).getUuid());
+    public void onGetPasswordsForUser() {
+
+        final String getPasswordsForUserPath = "{base}/for-user/{user-name}";
+
+        newPasswordForUser("onGetPasswordsForUser");
+
+        // success with some
+        withNoAuthentication().
+                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser").
+
+                then().assertThat().
+
+                body("data", is(not(emptyCollectionOf(String.class)))).
+                body("data", hasSize(1)).
+                body("data[0].whereFor", is(equalTo("onGetPasswordsForUser_whereFor"))).
+                body("data[0].username", is(equalTo("onGetPasswordsForUser_username"))).
+                body("data[0].password", is(equalTo(Base64Utils.encodeToString("onGetPasswordsForUser_password".getBytes())))).
+
+                body("paging.page", isA(Integer.class)).
+                body("paging.perPage", isA(Integer.class)).
+                body("paging.totalCount", isA(Integer.class)).
+
+                body("paging.page", is(equalTo(0))).
+                body("paging.perPage", is(equalTo(1))).
+                body("paging.totalCount", is(equalTo(1))).
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
+
+        // success with none
+
+        // no such user
+
+        // invalid paging
+        onEndpointWithInvalidPagingImpl(
+                getPasswordsForUserPath.
+                        replace("{base}", endpoint).
+                        replace("{user-name}", "onGetPasswordsForUser")
+        );
     }
 
-    // onGetPasswordsForUser user-name
-    // success with some
-    // success with none
-    // no such user
 
     // onGetPasswordForUser password-uuid user-name
     // success

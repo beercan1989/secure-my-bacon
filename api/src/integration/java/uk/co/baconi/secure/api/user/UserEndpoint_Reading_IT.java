@@ -28,14 +28,10 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
 
     private final String endpoint = "/users";
 
-    @Override
-    public String endpoint() {
-        return endpoint;
-    }
-
-    @Test // 200
+    @Test
     public void onFindingAllUsers() {
 
+        // Success
         withNoAuthentication().
                 get(endpoint).
 
@@ -56,17 +52,14 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
                 body("paging.perPage", is(equalTo(5))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
+
+        // Invalid Pagination
+        onEndpointWithInvalidPagingImpl(endpoint);
     }
 
     @Test
     @Override
     public void onFindByName() {
-        onFindByNameImpl("user-0");
-    }
-
-    @Test
-    @Override
-    public void onFindingWithWithInvalidPaging() {
-        onFindingWithWithInvalidPagingImpl();
+        onFindByNameImpl(endpoint,"user-0");
     }
 }
