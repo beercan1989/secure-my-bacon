@@ -16,25 +16,23 @@
 
 package uk.co.baconi.secure.api.exceptions;
 
+import java.util.UUID;
+
 public class NotFoundException extends Exception {
 
     private NotFoundException(final String message) {
         super(message);
     }
 
+    public static NotFoundException passwordByUuid(final UUID uuid) {
+        return new NotFoundException("Unable to find [Password] by uuid [" + uuid + "]");
+    }
+
     public static NotFoundException bagByName(final String name) {
         return new NotFoundException("Unable to find [Bag] by name [" + name + "]");
     }
 
-    public static NotFoundException bagById(final long id) {
-        return new NotFoundException("Unable to find [Bag] by id [" + id + "]");
-    }
-
     public static NotFoundException userByName(final String name) {
         return new NotFoundException("Unable to find [User] by name [" + name + "]");
-    }
-
-    public static NotFoundException userById(final long id) {
-        return new NotFoundException("Unable to find [User] by id [" + id + "]");
     }
 }

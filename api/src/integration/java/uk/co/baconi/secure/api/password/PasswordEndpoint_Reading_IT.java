@@ -17,15 +17,21 @@
 package uk.co.baconi.secure.api.password;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
+import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 
 import static org.hamcrest.Matchers.*;
 
-public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest {
+public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByUuidIntegrationTest {
 
     private final String endpoint = "/passwords";
+    @Autowired
+    private PasswordGraphRepository passwordGraphRepository;
 
     @Override
     public String endpoint() {
@@ -89,4 +95,25 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     public void onFindingWithWithInvalidPaging() {
         onFindingWithWithInvalidPagingImpl();
     }
+
+    @Test
+    @Override
+    public void onFindByUuid() {
+        onFindByUuidImpl(passwordGraphRepository.save(new Password(
+                "onFindByUuid",
+                "onFindByUuid",
+                "onFindByUuid".getBytes()
+        )).getUuid());
+    }
+
+    // onGetPasswordsForUser user-name
+    // success with some
+    // success with none
+    // no such user
+
+    // onGetPasswordForUser password-uuid user-name
+    // success
+    // no such password
+    // no such user
+    // invalid uuid
 }

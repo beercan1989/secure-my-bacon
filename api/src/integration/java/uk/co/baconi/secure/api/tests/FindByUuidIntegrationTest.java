@@ -20,32 +20,35 @@ import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.api.integrations.RestApiAuthentication;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.*;
 
-public interface FindByNameIntegrationTest extends RestApiAuthentication {
+public interface FindByUuidIntegrationTest extends RestApiAuthentication {
 
-    String FIND_BY_NAME_PATH = "{base}/by-name/{name}";
+    String FIND_BY_UUID_PATH = "{base}/by-uuid/{uuid}";
 
     String endpoint();
 
-    void onFindByName();
+    void onFindByUuid();
 
-    default void onFindByNameImpl(final String name) {
+    default void onFindByUuidImpl(final UUID uuid) {
 
         // Found
         withNoAuthentication().
-                get(FIND_BY_NAME_PATH, endpoint(), name).
+                get(FIND_BY_UUID_PATH, endpoint(), uuid).
 
                 then().assertThat().
 
-                body("name", isA(String.class)).
-                body("name", is(equalTo(name))).
+                body("uuid", isA(String.class)).
+                body("uuid", is(equalTo(uuid.toString()))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
 
         // Not Found
         withNoAuthentication().
-                get(FIND_BY_NAME_PATH, endpoint(), "does-not-exist-with-this-name").
+                get(FIND_BY_UUID_PATH, endpoint(), UUID.randomUUID()).
 
                 then().assertThat().
 
@@ -56,5 +59,21 @@ public interface FindByNameIntegrationTest extends RestApiAuthentication {
                 body("uuid", isA(String.class)).
                 body("name", isA(String.class)).
                 body("name", is(equalTo(NotFoundException.class.getName())));
+
+        // Invalid UUID
+        withNoAuthentication().
+                get(FIND_BY_UUID_PATH, endpoint(), "invalid-uuid-string").
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("errors", isA(Collection.class)).
+                body("errors[0]", containsString(
+                        "requires type 'java.util.UUID' but was provided 'invalid-uuid-string'"
+                ));
     }
 }

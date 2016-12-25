@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
@@ -129,7 +130,7 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(value = "/by-uuid/{password-uuid}", method = RequestMethod.GET)
-    public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) {
+    public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) throws NotFoundException {
 
         log.trace("getPasswordByUuid: {}", uuid);
 
@@ -137,7 +138,11 @@ public class PasswordEndpoint {
 
         log.trace("foundPassword: {}", password);
 
-        return ResponseEntity.ok(password);
+        if (password == null) {
+            throw NotFoundException.passwordByUuid(uuid);
+        } else {
+            return ResponseEntity.ok(password);
+        }
     }
 
     @RequestMapping(value = "/by-uuid/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
