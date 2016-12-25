@@ -70,6 +70,8 @@ public class PasswordEndpoint {
             @RequestParam(required = false, defaultValue = "5") final Integer perPage
     ) {
 
+        log.trace("findAll: {}, {}", page, perPage);
+
         final Page<Password> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));
 
         log.trace("paged: {}", paged);
@@ -118,15 +120,28 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(value = "/for-user/{user-name}", method = RequestMethod.GET)
-    public ResponseEntity<List<Password>> getPasswordsForUser(@PathVariable("user-name") final String name) {
+    public ResponseEntity<PaginatedResult<Password>> getPasswordsForUser(
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        log.trace("findPasswordsByUser: {}", name);
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage,
 
-        final List<Password> passwords = passwordGraphRepository.getPasswordsForUser(name);
+            @PathVariable("user-name") final String name
+    ) {
 
-        log.trace("foundPasswords: {}", passwords);
+        log.trace("getPasswordsForUser: {}, {}, {}", name, page, perPage);
 
-        return ResponseEntity.ok(passwords);
+        final Page<Password> paged = passwordGraphRepository.getPasswordsForUser(name, new PageRequest(page, perPage));
+
+        log.trace("page: {}", paged);
+
+        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(paged);
+
+        log.trace("paginatedResult: {}", paginatedResult);
+
+        return ResponseEntity.ok(paginatedResult);
     }
 
     @RequestMapping(value = "/by-uuid/{password-uuid}", method = RequestMethod.GET)

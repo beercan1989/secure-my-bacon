@@ -16,12 +16,13 @@
 
 package uk.co.baconi.secure.base.password;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -33,6 +34,6 @@ public interface PasswordGraphRepository extends SmbGraphRepository<Password> {
     Password getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
 
     @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
-    List<Password> getPasswordsForUser(@Param("userName") final String userName);
+    Page<Password> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageable);
 
 }
