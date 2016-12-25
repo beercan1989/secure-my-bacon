@@ -133,11 +133,11 @@ public class PasswordEndpoint {
 
         log.trace("getPasswordsForUser: {}, {}, {}", name, page, perPage);
 
-        final Page<Password> paged = passwordGraphRepository.getPasswordsForUser(name, new PageRequest(page, perPage));
+        final List<Password> fullPage = passwordGraphRepository.getPasswordsForUser(name);
 
-        log.trace("page: {}", paged);
+        log.trace("fullPage: {}", fullPage);
 
-        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(paged);
+        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(fullPage);
 
         log.trace("paginatedResult: {}", paginatedResult);
 

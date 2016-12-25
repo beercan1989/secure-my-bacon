@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -35,4 +36,7 @@ public class PaginatedResult<A> {
         this(page.getContent(), new Pagination(page.getNumber(), page.getSize(), page.getTotalElements()));
     }
 
+    public PaginatedResult(final List<A> data) {
+        this(data, new Pagination(0, data.size(), data.size()));
+    }
 }

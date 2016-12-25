@@ -35,42 +35,38 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
+    private Password newPassword(final String whereFor, final String username, final String password) {
+        return passwordGraphRepository.save(new Password(whereFor, username, password.getBytes()));
+    }
+
     @Test
     public void shouldBeAbleToCreateAndRetrievePassword() {
         final String whereFor = "https://github.com/login";
         final String username = "shouldBeAbleToCreateAndRetrievePassword";
-        final byte[] passw0rd = "password".getBytes();
+        final String passw0rd = "password";
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final Password saved = newPassword(whereFor, username, passw0rd);
 
-        final Password saved = passwordGraphRepository.save(password);
-
-        assertThat(saved, is(equalTo(password)));
         assertThat(saved.getId(), is(not(nullValue())));
         assertThat(saved.getWhereFor(), is(equalTo(whereFor)));
         assertThat(saved.getUsername(), is(equalTo(username)));
-        assertThat(saved.getPassword(), is(equalTo(passw0rd)));
+        assertThat(saved.getPassword(), is(equalTo(passw0rd.getBytes())));
         assertThat(saved.getSecuredBy(), is(nullValue()));
 
-        final Password one = passwordGraphRepository.findOne(password.getId());
+        final Password one = passwordGraphRepository.findByUuid(saved.getUuid());
 
         assertThat(one, is(equalTo(saved)));
-        assertThat(one.getId(), is(equalTo(password.getId())));
-        assertThat(one.getWhereFor(), is(equalTo(whereFor)));
-        assertThat(one.getUsername(), is(equalTo(username)));
-        assertThat(one.getPassword(), is(equalTo(passw0rd)));
-        assertThat(one.getSecuredBy(), is(nullValue()));
+        assertThat(one.getId(), is(equalTo(saved.getId())));
     }
 
     @Test
     public void shouldBeAbleToSecurePasswordWithAGroup() {
-        final String whereFor = "https://github.com/login";
-        final String username = "shouldBeAbleToSecurePasswordWithAGroup";
-        final String passw0rd = "password";
 
-        final Password password = new Password(whereFor, username, passw0rd.getBytes());
-
-        passwordGraphRepository.save(password);
+        final Password password = newPassword(
+                "https://github.com/login",
+                "shouldBeAbleToSecurePasswordWithAGroup",
+                "password"
+        );
 
         final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
 
@@ -94,23 +90,23 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Test Data Setup
         //
-        final Password password_1 = passwordGraphRepository.save(new Password(
+        final Password password_1 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_1",
                 "shouldBeAbleToFindPasswordsByUser_username_1",
-                "shouldBeAbleToFindPasswordsByUser_password_1".getBytes()
-        ));
+                "shouldBeAbleToFindPasswordsByUser_password_1"
+        );
 
-        final Password password_2 = passwordGraphRepository.save(new Password(
+        final Password password_2 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_2",
                 "shouldBeAbleToFindPasswordsByUser_username_2",
-                "shouldBeAbleToFindPasswordsByUser_password_2".getBytes()
-        ));
+                "shouldBeAbleToFindPasswordsByUser_password_2"
+        );
 
-        final Password password_3 = passwordGraphRepository.save(new Password(
+        final Password password_3 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_3",
                 "shouldBeAbleToFindPasswordsByUser_username_3",
-                "shouldBeAbleToFindPasswordsByUser_password_3".getBytes()
-        ));
+                "shouldBeAbleToFindPasswordsByUser_password_3"
+        );
 
         final Bag bag = new Bag("shouldBeAbleToFindPasswordsByUser_group", "public key".getBytes());
 
@@ -141,10 +137,10 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         // Test Data Setup
         //
 
-        final Password password = new Password(
+        final Password password = newPassword(
                 "shouldBeAbleToFindPasswordByUser_whereFor",
                 "shouldBeAbleToFindPasswordByUser_username",
-                "shouldBeAbleToFindPasswordByUser_password".getBytes()
+                "shouldBeAbleToFindPasswordByUser_password"
         );
 
         final Bag bag = new Bag("shouldBeAbleToFindPasswordByUser_group", "public key".getBytes());

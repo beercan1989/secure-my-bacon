@@ -23,6 +23,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -34,6 +35,9 @@ public interface PasswordGraphRepository extends SmbGraphRepository<Password> {
     Password getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
 
     @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
-    Page<Password> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageable);
+    List<Password> getPasswordsForUser(@Param("userName") final String userName);
+
+    // Spring Data Neo4J - Hopper-SR1 does not support pageable in customer queries.
+    // Page<Password> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageRequest);
 
 }
