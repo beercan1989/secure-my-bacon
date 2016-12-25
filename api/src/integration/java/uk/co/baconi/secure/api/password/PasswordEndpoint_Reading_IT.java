@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Base64Utils;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
@@ -32,6 +33,7 @@ import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 import uk.co.baconi.secure.base.user.User;
+import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import static org.hamcrest.Matchers.*;
 
@@ -42,14 +44,25 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
-    private Password newPasswordForUser(final String nameSpace) {
-        final Bag bag = new Bag(nameSpace, nameSpace.getBytes());
-        final User user = new User(nameSpace);
-        final Password password = new Password(
+    @Autowired
+    private UserGraphRepository userGraphRepository;
+
+    private User newUser(final String nameSpace) {
+        return userGraphRepository.save(new User(nameSpace));
+    }
+
+    private Password newPassword(final String nameSpace) {
+        return passwordGraphRepository.save(new Password(
                 nameSpace + "_whereFor",
                 nameSpace + "_username",
                 (nameSpace + "_password").getBytes()
-        );
+        ));
+    }
+
+    private Password newPasswordForUser(final String nameSpace) {
+        final Bag bag = new Bag(nameSpace, nameSpace.getBytes());
+        final User user = newUser(nameSpace);
+        final Password password = newPassword(nameSpace);
 
         new SymmetricLock(password, bag, nameSpace.getBytes(), SymmetricCipher.AES_CBC_PKCS7);
         new AsymmetricLock(bag, user, nameSpace.getBytes(), AsymmetricCipher.RSA_ECB_PKCS1);
@@ -116,9 +129,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     @Test
     @Override
     public void onFindByUuid() {
-        onFindByUuidImpl(endpoint, newPasswordForUser(
-                "onFindByUuid"
-        ).getUuid());
+        onFindByUuidImpl(endpoint, newPassword("onFindByUuid").getUuid());
     }
 
     @Test
@@ -126,9 +137,11 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         final String getPasswordsForUserPath = "{base}/for-user/{user-name}";
 
+        // Test Data
+        newUser("onGetPasswordsForUser_none");
         newPasswordForUser("onGetPasswordsForUser");
 
-        // success with some
+        // Success with some
         withNoAuthentication().
                 get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser").
 
@@ -150,9 +163,34 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
 
-        // success with none
+        // Success with none
+        withNoAuthentication().
+                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_none").
+
+                then().assertThat().
+
+                body("data", is(not(emptyCollectionOf(String.class)))).
+                body("data", hasSize(0)).
+
+                body("paging.page", is(equalTo(0))).
+                body("paging.perPage", is(equalTo(0))).
+                body("paging.totalCount", is(equalTo(0))).
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
 
         // no such user
+        withNoAuthentication().
+                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_so-such-user").
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.NOT_FOUND.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("name", isA(String.class)).
+                body("name", is(equalTo(NotFoundException.class.getName())));
 
         // invalid paging
         onEndpointWithInvalidPagingImpl(
