@@ -169,28 +169,37 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
                 then().assertThat().
 
-                body("data", is(not(emptyCollectionOf(String.class)))).
+                body("data", is(emptyCollectionOf(String.class))).
                 body("data", hasSize(0)).
+
+                and().
 
                 body("paging.page", is(equalTo(0))).
                 body("paging.perPage", is(equalTo(0))).
                 body("paging.totalCount", is(equalTo(0))).
 
+                and().
+
                 statusCode(is(equalTo(HttpStatus.OK.value())));
 
-        // no such user
+        // no such user - empty search results not user not found
         withNoAuthentication().
-                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_so-such-user").
+                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_no-such-user").
 
                 then().assertThat().
 
-                statusCode(is(equalTo(HttpStatus.NOT_FOUND.value()))).
+                body("data", is(emptyCollectionOf(String.class))).
+                body("data", hasSize(0)).
 
                 and().
 
-                body("uuid", isA(String.class)).
-                body("name", isA(String.class)).
-                body("name", is(equalTo(NotFoundException.class.getName())));
+                body("paging.page", is(equalTo(0))).
+                body("paging.perPage", is(equalTo(0))).
+                body("paging.totalCount", is(equalTo(0))).
+
+                and().
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
 
         // invalid paging
         onEndpointWithInvalidPagingImpl(
