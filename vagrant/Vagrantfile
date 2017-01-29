@@ -5,18 +5,23 @@ Vagrant.configure('2') do |config|
 
   config.vm.define 'smb-neo4j-server' do |server|
 
-    server.vm.box = 'debian/jessie64'
+    server.vm.box = 'hashicorp/precise64'
     server.vm.hostname = 'smb-neo4j-server'
 
     server.vm.network :forwarded_port, :host => 7474, :guest => 7474
     server.vm.network :forwarded_port, :host => 7687, :guest => 7687
 
     server.vm.provider :virtualbox do |virtualbox|
-
       virtualbox.name = 'smb-neo4j-server'
       virtualbox.memory = 1024 * 3
       virtualbox.cpus = 4
+    end
 
+    server.vm.provider :hyperv do |hyperv|
+      hyperv.vmname = 'smb-neo4j-server'
+      hyperv.memory = 1024 * 3
+      hyperv.cpus = 4
+      hyperv.differencing_disk = true
     end
 
     server.vm.provision :shell, :path => 'scripts/install-java-8.bash'
