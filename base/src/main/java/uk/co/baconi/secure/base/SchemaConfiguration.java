@@ -20,12 +20,17 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.neo4j.ogm.exception.ConnectionException;
 import org.neo4j.ogm.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import javax.annotation.PostConstruct;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Collections.emptyMap;
 
@@ -38,12 +43,29 @@ public class SchemaConfiguration {
     private final Neo4JProperties properties;
 
     @PostConstruct
-    public void perform() {
+    public void perform() throws InterruptedException {
 
-        if (properties.getEnableAutoSchemaCreationOnStartUp()) {
-            createIndexes();
+        if (properties.isAutoSchemaCreationOnStartUpEnabled()) {
+            final int timeout = properties.getAutoSchemaCreationOnStartUpTimeout();
+            perform(LocalDateTime.now().plus(timeout, ChronoUnit.MILLIS));
         } else {
             log.info("enableAutoSchemaCreationOnStartUp: DISABLED");
+        }
+    }
+
+    private void perform(final LocalDateTime timeoutTime) throws InterruptedException {
+        try {
+            createIndexes();
+        } catch (final ConnectionException exception) {
+
+            if(LocalDateTime.now().isBefore(timeoutTime)) {
+                TimeUnit.MILLISECONDS.sleep(500);
+                log.trace("Retrying perform block.");
+                perform(timeoutTime);
+            } else {
+                log.trace("Giving up on perform block.");
+                throw exception;
+            }
         }
     }
 

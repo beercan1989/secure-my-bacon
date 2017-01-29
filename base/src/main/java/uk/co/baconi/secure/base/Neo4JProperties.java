@@ -43,5 +43,11 @@ public class Neo4JProperties {
     /**
      * Enables the creation of things like predefined indexes on every start up
      */
-    private Boolean enableAutoSchemaCreationOnStartUp;
+    private boolean autoSchemaCreationOnStartUpEnabled;
+
+    /**
+     * Timeout in milliseconds before giving up opening connection on start up
+     */
+    private int autoSchemaCreationOnStartUpTimeout;
+
 }
