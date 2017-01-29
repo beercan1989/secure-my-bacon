@@ -38,6 +38,10 @@ curl -X POST \
   'http://localhost:7474/user/neo4j/password'
 
 ## Restart Neo4J to pick up configuration changes.
-sudo systemctl restart neo4j
+if [ -x "/etc/init.d/neo4j" ]; then
+    sudo /etc/init.d/neo4j restart neo4j
+else
+    sudo systemctl restart neo4j
+fi
 
 touch /home/vagrant/.install-neo4j-has-run
