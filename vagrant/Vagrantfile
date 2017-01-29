@@ -24,6 +24,9 @@ Vagrant.configure('2') do |config|
       hyperv.differencing_disk = true
     end
 
+    server.vm.synced_folder '.', '/vagrant', disabled: true
+
+    server.vm.provision :shell, :path => 'scripts/disable-ipv6.bash'
     server.vm.provision :shell, :path => 'scripts/install-java-8.bash'
     server.vm.provision :shell, :path => 'scripts/install-neo4j.bash'
 
