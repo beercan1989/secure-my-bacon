@@ -14,7 +14,7 @@ wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
 sudo tee /etc/apt/sources.list.d/neo4j.list <<< "deb http://debian.neo4j.org/repo stable/"
 sudo apt-get update
 
-sudo apt-get --assume-yes install neo4j=${NEO4J_VERSION}
+sudo apt-get --assume-yes install curl neo4j=${NEO4J_VERSION}
 
 ## Enable external connections
 sed -i 's/^# *dbms.connector.bolt.address=0.0.0.0:7687/dbms.connector.bolt.address=0.0.0.0:7687/' /etc/neo4j/neo4j.conf
