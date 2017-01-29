@@ -8,7 +8,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
-export NEO4J_VERSION="3.0.1"
+export NEO4J_VERSION="3.0.2"
 
 wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
 sudo tee /etc/apt/sources.list.d/neo4j.list <<< "deb http://debian.neo4j.org/repo stable/"

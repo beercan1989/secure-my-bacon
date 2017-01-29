@@ -2,7 +2,9 @@ version: '2'
 services:
 
   neo4j:
-    image: neo4j:3.0.1
+    image: neo4j:3.0.2
+    environment:
+      NEO4J_AUTH: neo4j/password
     ports:
      - "7474:7474"
      - "7687:7687"
