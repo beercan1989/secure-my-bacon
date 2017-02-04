@@ -15,6 +15,8 @@ RUN mvn install && \
 
 WORKDIR /opt/secure-my-bacon
 
+ENV JAVA_OPTS="-Xms256m -Xmx256m -XX:+UseConcMarkSweepGC"
+
 EXPOSE 8080
 
-CMD ["java", "-jar", "-Dspring.profiles.active=heroku,docker", "api.jar"]
+CMD ["sh", "-c", "java ${JAVA_OPTS} -jar api.jar"]
