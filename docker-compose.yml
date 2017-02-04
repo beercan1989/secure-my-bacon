@@ -12,11 +12,12 @@ services:
   api:
     build:
       context: .
-      dockerfile: docker/api.Dockerfile
+      dockerfile: docker/api-compiled.Dockerfile
     environment:
-      GRAPHENEDB_BOLT_URL: bolt://neo4j:7687
-      GRAPHENEDB_BOLT_USER: neo4j
-      GRAPHENEDB_BOLT_PASSWORD: password
+      neo4j.driver: org.neo4j.ogm.drivers.bolt.driver.BoltDriver
+      neo4j.url: bolt://neo4j:7687
+      neo4j.username: neo4j
+      neo4j.password: password
     ports:
       - "8080:8080"
     links:
