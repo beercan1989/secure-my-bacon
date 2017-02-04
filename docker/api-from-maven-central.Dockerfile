@@ -7,7 +7,7 @@ ENV MAVEN_GROUP_ID="uk.co.baconi.secure" \
     MAVEN_PACKAGING="war"
 
 RUN mkdir -p '/opt/secure-my-bacon' && \
-    wget -O '/opt/secure-my-bacon/api.jar' "https://repo1.maven.org/maven2/${MAVEN_GROUP_ID//.//}/${MAVEN_ARTIFACT_ID}/${MAVEN_VERSION}/${MAVEN_ARTIFACT_ID}-${MAVEN_VERSION}.${MAVEN_PACKAGING}"
+    wget -O '/opt/secure-my-bacon/api.jar' "http://repo1.maven.org/maven2/${MAVEN_GROUP_ID//.//}/${MAVEN_ARTIFACT_ID}/${MAVEN_VERSION}/${MAVEN_ARTIFACT_ID}-${MAVEN_VERSION}.${MAVEN_PACKAGING}"
 
 EXPOSE 8080
 
