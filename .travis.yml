@@ -1,11 +1,62 @@
 language: java
 
 ##
-# Config to force us into the container build slaves
+# Java version supported
 ##
-sudo: false
+jdk:
+  - oraclejdk8
 
-jdk: oraclejdk8
+##
+# Configuration for Neo4j integration tests
+##
+env:
+  global:
+    - NEO4J_USERNAME="neo4j"
+    - NEO4J_PASSWORD="password"
+  matrix:
+    # Embedded, uses the internal version of the project
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver"
+
+    # Bolt & HTTP with an external version of v3.0.2
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.2"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.2"
+
+    # Bolt & HTTP with an external version of v3.0.3
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.3"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.3"
+
+    # Bolt & HTTP with an external version of v3.0.4
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.4"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.4"
+
+    # Bolt & HTTP with an external version of v3.0.5
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.5"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.5"
+
+    # Bolt & HTTP with an external version of v3.0.6
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.6"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.6"
+
+    # Bolt & HTTP with an external version of v3.0.7
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.7"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.7"
+
+    # Bolt & HTTP with an external version of v3.0.8
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.0.8"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.0.8"
+
+    # Bolt & HTTP with an external version of v3.1.0
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.1.0"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.1.0"
+
+    # Bolt & HTTP with an external version of v3.1.1
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.1.1"
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.1.1"
+
+##
+# Install and setup Neo4j
+##
+before_install: ci/setup-neo4j-manual.bash
 
 ##
 # Enable integration tests during the testing phase
@@ -32,7 +83,7 @@ deploy:
       secure: "TjSM4fQKW36sNL9TMRWjZWrehw5v4sjHz6ExmUHfqxl2/VUNmbwtVNrVDuTg5wxa3ec1mOxzKwCGHrdfjJrl55uu4POQuToUYGv+aaAVvVNtPjxinrhXF2bSr+qEFTZfXeJeg9VIhBO2L7UH6pp0+WyxvLvCtG8HTRUjm1vDJXmHAuX2lR+JTpoNxICxXlUl/pJd8cy0F/Pw3qwnwY5XZDuLtuBsK3wwm279zYNEzUr1TgIfy5dfLgaEXKoNK3FLYF8faNvUoQhuY9KL6SNfyvEwFPO+M8jTYXeY6g4n6AD9m+07+tNH6T5XNCL8ZT+AADiHXrl55BiPl6LiCouGMtcXlfgbnW9pwYfaTOzrWI8xL/e5sNFX6x541ChGzu0mkByHi2FFQQUUooB349Pnsfng2G+Mi2zPDPalSpS7V4l09rQkjU8iwRve3yxz8Q0FkJ//rva5d+CfkGKh5rwv6M11EKN08iUWTSnICVrN3Z6R/rwU1HQS9Lx3SKjWm3JGgGotvmtnBdAGpgbqDU8qY5zYJVsIFAQNRMGIKsFC/pPNv/BGwj8JhVlE/RGjk2YoRfXc0VYFAFb+B6h0NGW4coqL4maWWhtdu1LiQJcCxQML2Q+5EG+1ZEB64Ie8AgDeQcNilWAdI3bSkOXHwh5/Cj/wZQTGKEupXoq1BZXeNuQ="
     file:
       - ./base/target/base.jar
-      - ./api/target/api.war
+      - ./api/target/api.jar
     on:
       repo: beercan1989/secure-my-bacon
       tags: true
