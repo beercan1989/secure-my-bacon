@@ -17,3 +17,6 @@ ci/gpg/*.gpg
 
 # Heroku Deployment Folder
 heroku/
+
+# Neo4j when installed on CI
+neo4j-community-*
