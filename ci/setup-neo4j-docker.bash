@@ -2,6 +2,16 @@
 
 set -e
 
+echo
+echo "Setting up Neo4j for:"
+echo "   NEO4J_URI: ${NEO4J_URI}"
+echo "   NEO4J_DRIVER: ${NEO4J_DRIVER}"
+echo "   NEO4J_VERSION: ${NEO4J_VERSION}"
+echo "   NEO4J_USERNAME: ${NEO4J_USERNAME}"
+echo "   NEO4J_PASSWORD: ${NEO4J_PASSWORD}"
+echo "   NEO4J_DEFAULT_PASSWORD: ${NEO4J_DEFAULT_PASSWORD}"
+echo
+
 if [ "${NEO4J_DRIVER}" = "org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver" ]; then
     echo "Skipping Neo4J setup as driver type is: ${NEO4J_DRIVER}"
     exit 0
