@@ -13,6 +13,7 @@ env:
   global:
     - NEO4J_USERNAME="neo4j"
     - NEO4J_PASSWORD="password"
+    - NEO4J_DEFAULT_PASSWORD="neo4j"
   matrix:
     # Embedded, uses the internal version of the project
     - NEO4J_DRIVER="org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver"
