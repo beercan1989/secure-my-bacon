@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "${NEO4J_DRIVER}" -eq "org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver" ]; then
+if [ "${NEO4J_DRIVER}" = "org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver" ]; then
     echo "Skipping Neo4J setup as driver type is: ${NEO4J_DRIVER}"
     exit 0
 fi
