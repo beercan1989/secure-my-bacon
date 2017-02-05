@@ -7,6 +7,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ActiveProfiles("integration")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = BaseConfiguration.class)
+@SpringBootTest(classes = BaseApplication.class)
 public abstract class BaseIntegrationTest {
 }

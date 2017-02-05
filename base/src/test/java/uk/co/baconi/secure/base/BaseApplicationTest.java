@@ -24,23 +24,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
-public class BaseConfigurationTest extends BaseUnitTest {
+public class BaseApplicationTest extends BaseUnitTest {
 
     @Test
     public void shouldNotSetDriverConfigWhenNotProvided() {
 
         final Neo4JProperties neo4JProperties = mock(Neo4JProperties.class);
-        final BaseConfiguration baseConfiguration = new BaseConfiguration(neo4JProperties);
+        final BaseApplication baseApplication = new BaseApplication(neo4JProperties);
 
         verifyZeroInteractions(neo4JProperties);
 
         when(neo4JProperties.getConnectionPoolSize()).thenReturn(null);
 
-        final DriverConfiguration driverConfig = baseConfiguration.getNeo4jConfiguration().driverConfiguration();
+        final DriverConfiguration driverConfig = baseApplication.configuration().driverConfiguration();
 
         verify(neo4JProperties).getDriver();
         verify(neo4JProperties).getUsername();
-        verify(neo4JProperties).getUrl();
+        verify(neo4JProperties).getUri();
         verify(neo4JProperties).getConnectionPoolSize();
         verify(neo4JProperties).getEncryptionLevel();
         verify(neo4JProperties).getTrustStrategy();
@@ -59,25 +59,25 @@ public class BaseConfigurationTest extends BaseUnitTest {
     public void shouldSetDriverConfigWhenProvided() {
 
         final Neo4JProperties neo4JProperties = mock(Neo4JProperties.class);
-        final BaseConfiguration baseConfiguration = new BaseConfiguration(neo4JProperties);
+        final BaseApplication baseApplication = new BaseApplication(neo4JProperties);
 
         verifyZeroInteractions(neo4JProperties);
 
         when(neo4JProperties.getDriver()).thenReturn("custom.driver");
         when(neo4JProperties.getUsername()).thenReturn("custom.user");
         when(neo4JProperties.getPassword()).thenReturn("custom.password");
-        when(neo4JProperties.getUrl()).thenReturn("http://custom.url");
+        when(neo4JProperties.getUri()).thenReturn("http://custom.uri");
         when(neo4JProperties.getConnectionPoolSize()).thenReturn(666);
         when(neo4JProperties.getEncryptionLevel()).thenReturn("custom.encryption.level");
         when(neo4JProperties.getTrustStrategy()).thenReturn("custom.trust.nothing");
         when(neo4JProperties.getTrustCertificateFile()).thenReturn("custom.trust.file");
 
-        final DriverConfiguration driverConfig = baseConfiguration.getNeo4jConfiguration().driverConfiguration();
+        final DriverConfiguration driverConfig = baseApplication.configuration().driverConfiguration();
 
         verify(neo4JProperties, times(2)).getDriver();
         verify(neo4JProperties, times(2)).getUsername();
         verify(neo4JProperties, times(2)).getPassword();
-        verify(neo4JProperties, times(2)).getUrl();
+        verify(neo4JProperties, times(2)).getUri();
         verify(neo4JProperties, times(2)).getConnectionPoolSize();
         verify(neo4JProperties, times(2)).getEncryptionLevel();
         verify(neo4JProperties, times(2)).getTrustStrategy();
@@ -86,7 +86,7 @@ public class BaseConfigurationTest extends BaseUnitTest {
 
         assertThat(driverConfig.getDriverClassName(), is(equalTo("custom.driver")));
         assertThat(driverConfig.getCredentials().credentials(), is(equalTo(Base64.encodeBase64String("custom.user".concat(":").concat("custom.password").getBytes()))));
-        assertThat(driverConfig.getURI(), is(equalTo("http://custom.url")));
+        assertThat(driverConfig.getURI(), is(equalTo("http://custom.uri")));
         assertThat(driverConfig.getConnectionPoolSize(), is(equalTo(666)));
         assertThat(driverConfig.getEncryptionLevel(), is(equalTo("custom.encryption.level")));
         assertThat(driverConfig.getTrustStrategy(), is(equalTo("custom.trust.nothing")));

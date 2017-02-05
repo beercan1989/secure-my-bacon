@@ -20,25 +20,24 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.config.DriverConfiguration;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
 import java.security.Security;
 
 @Slf4j
-@Configuration
-@ComponentScan
+@SpringBootApplication
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @EnableConfigurationProperties
@@ -51,7 +50,7 @@ import java.security.Security;
         "uk.co.baconi.secure.base.repository"
 })
 @AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
-public class BaseConfiguration extends Neo4jConfiguration {
+public class BaseApplication {
 
     private final Neo4JProperties neo4JProperties;
 
@@ -63,10 +62,10 @@ public class BaseConfiguration extends Neo4jConfiguration {
     }
 
     @Bean
-    public org.neo4j.ogm.config.Configuration getNeo4jConfiguration() {
+    public Configuration configuration() {
         log.info("Creating Neo4J Configuration with Neo4JProperties: {}", neo4JProperties);
 
-        final org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
+        final Configuration config = new Configuration();
 
         final DriverConfiguration driverConfiguration = config.driverConfiguration();
 
@@ -78,8 +77,8 @@ public class BaseConfiguration extends Neo4jConfiguration {
             driverConfiguration.setCredentials(neo4JProperties.getUsername(), neo4JProperties.getPassword());
         }
 
-        if (isNotEmpty(neo4JProperties.getUrl())) {
-            driverConfiguration.setURI(neo4JProperties.getUrl());
+        if (isNotEmpty(neo4JProperties.getUri())) {
+            driverConfiguration.setURI(neo4JProperties.getUri());
         }
 
         if (neo4JProperties.getConnectionPoolSize() != null) {
@@ -102,17 +101,22 @@ public class BaseConfiguration extends Neo4jConfiguration {
     }
 
     @Bean
-    public SessionFactory getSessionFactory() {
+    public SessionFactory sessionFactory() {
         log.info("Creating: SessionFactory");
 
         return new SessionFactory(
-                getNeo4jConfiguration(),
+                configuration(),
                 "uk.co.baconi.secure.base.bag",
                 "uk.co.baconi.secure.base.lock",
                 "uk.co.baconi.secure.base.password",
                 "uk.co.baconi.secure.base.user",
                 "uk.co.baconi.secure.base.repository"
         );
+    }
+
+    @Bean
+    public Neo4jTransactionManager transactionManager() {
+        return new Neo4jTransactionManager(sessionFactory());
     }
 
     private boolean isNotEmpty(final String string) {

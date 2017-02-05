@@ -32,7 +32,7 @@ public class Neo4JPropertiesTest {
         final String propertiesAsString = properties.toString();
 
         assertThat(propertiesAsString, not(containsString("password=")));
-        assertThat(propertiesAsString, containsString("url=null,"));
+        assertThat(propertiesAsString, containsString("uri=null,"));
         assertThat(propertiesAsString, containsString("username=null"));
         assertThat(propertiesAsString, containsString("driver=null"));
         assertThat(propertiesAsString, containsString("connectionPoolSize=null"));

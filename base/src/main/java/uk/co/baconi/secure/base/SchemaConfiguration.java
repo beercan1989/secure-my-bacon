@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.neo4j.ogm.exception.ConnectionException;
 import org.neo4j.ogm.model.Result;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import javax.annotation.PostConstruct;
 
@@ -39,7 +39,7 @@ import static java.util.Collections.emptyMap;
 @AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor = @__({@Autowired}))
 public class SchemaConfiguration {
 
-    private final Neo4jOperations neo4jOperations;
+    private final Session neo4jSession;
     private final Neo4JProperties properties;
 
     @PostConstruct
@@ -83,7 +83,7 @@ public class SchemaConfiguration {
 
         log.debug("createConstraint: {}", constraint);
 
-        final Result result = neo4jOperations.query(constraint, emptyMap());
+        final Result result = neo4jSession.query(constraint, emptyMap());
 
         if (log.isDebugEnabled()) {
             log.debug("createConstraintResults: {}", ToStringBuilder.reflectionToString(result.queryStatistics()));

@@ -19,14 +19,12 @@ package uk.co.baconi.secure.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
-import uk.co.baconi.secure.base.BaseConfiguration;
+import uk.co.baconi.secure.base.BaseApplication;
 
-@Configuration
 @SpringBootApplication
-@Import({BaseConfiguration.class, SpringFoxConfiguration.class})
+@Import({BaseApplication.class, SpringFoxConfiguration.class})
 public class ApiApplication {
 
     public static void main(final String... args) {
