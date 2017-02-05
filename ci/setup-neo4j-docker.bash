@@ -2,13 +2,24 @@
 
 set -e
 
-NEO4J_VERSION="${1:-3.0.1}"
-DOCKER_NAME='secure-my-bacon-neo4j-3'
+if [ "${NEO4J_DRIVER}" = "org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver" ]; then
+    echo "Skipping Neo4J setup as driver type is: ${NEO4J_DRIVER}"
+    exit 0
+fi
+
+NEO4J_VERSION="${1:-${NEO4J_VERSION:-3.0.1}}"
+NEO4J_PASSWORD="${2:-${NEO4J_PASSWORD:-password}}"
+
+DOCKER_NAME="secure-my-bacon-neo4j-${NEO4J_VERSION}"
+
+## Download required docker image
+docker pull "neo4j:${NEO4J_VERSION}"
 
 ## Create and start docker container
-docker run --detach --name ${DOCKER_NAME} --publish=7474:7474 --publish=7687:7687 --env=NEO4J_AUTH=neo4j/password neo4j:${NEO4J_VERSION}
+docker run --detach --name ${DOCKER_NAME} --publish=7474:7474 --publish=7687:7687 --env="NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}" "neo4j:${NEO4J_VERSION}"
 
-AUTH_HEADER="Authorization: Basic $(echo -n neo4j:password | base64)"
+## Neo4j credentials
+AUTH_HEADER="Authorization: Basic $(echo -n neo4j:${NEO4J_PASSWORD} | base64)"
 ACCEPT_HEADER="Accept: application/json; charset=UTF-8"
 
 ## Wait until Neo4j server has started
@@ -17,4 +28,5 @@ until curl -s -H "${AUTH_HEADER}" -H "${ACCEPT_HEADER}" 'http://localhost:7474/u
     echo -n '.'
     sleep 1s
 done
+
 echo

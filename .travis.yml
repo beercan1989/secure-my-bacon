@@ -1,5 +1,10 @@
 language: java
 
+sudo: required
+
+services:
+  - docker
+
 ##
 # Java version supported
 ##
@@ -57,7 +62,7 @@ env:
 ##
 # Install and setup Neo4j
 ##
-before_install: ci/setup-neo4j-manual.bash
+before_install: ci/setup-neo4j-docker.bash
 
 ##
 # Enable integration tests during the testing phase
