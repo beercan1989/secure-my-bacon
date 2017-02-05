@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.api.integrations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,16 +36,16 @@ import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import java.util.stream.IntStream;
 
+@RequiredArgsConstructor(onConstructor=@__({@Autowired}))
 public class IntegrationApiApplication extends ApiApplication {
 
-    @Autowired
-    public IntegrationApiApplication(
-            final BagGraphRepository bagGraphRepository,
-            final UserGraphRepository userRepository,
-            final AsymmetricLockGraphRepository asymmetricLockRepository,
-            final PasswordGraphRepository passwordRepository,
-            final SymmetricLockGraphRepository symmetricLockRepository
-    ) {
+    private final BagGraphRepository bagGraphRepository;
+    private final UserGraphRepository userRepository;
+    private final AsymmetricLockGraphRepository asymmetricLockRepository;
+    private final PasswordGraphRepository passwordRepository;
+    private final SymmetricLockGraphRepository symmetricLockRepository;
+
+    public void createTestData() {
         IntStream.range(0, 5).forEach(id -> {
             final Bag bag = createBag(bagGraphRepository, id);
             final User user = createUser(userRepository, id);

@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,6 +35,9 @@ import static com.jayway.restassured.RestAssured.with;
 @ActiveProfiles("integration")
 @SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class IntegratedApiEndpoint extends TearDownRepositories implements RestApiAuthentication {
+
+    @Autowired
+    private IntegrationApiApplication application;
 
     //
     // HTTP Server Values
@@ -49,6 +54,12 @@ public abstract class IntegratedApiEndpoint extends TearDownRepositories impleme
     protected String apiKeyValidValue;
     @Value("${integration.test.data.api.invalidKey}")
     protected String apiKeyInvalidValue;
+
+    @Before
+    public void createTestData() {
+        log.info("Creating test data...");
+        application.createTestData();
+    }
 
     @Override
     public RequestSpecification withNoAuthentication() {
