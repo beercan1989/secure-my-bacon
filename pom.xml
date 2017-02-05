@@ -74,11 +74,12 @@
 
         <!-- Heroku Deployment Configuration -->
         <heroku.deployment.folder>${root-path}/heroku</heroku.deployment.folder>
-        <heroku.newrelic.version>3.34.0</heroku.newrelic.version>
+        <heroku.newrelic.version>3.35.2</heroku.newrelic.version>
 
-        <spring.boot.version>1.4.3.RELEASE</spring.boot.version>
-        <neo4j-ogm.version>2.0.5</neo4j-ogm.version>
+        <spring.boot.version>1.5.1.RELEASE</spring.boot.version>
+        <neo4j-ogm.version>2.1.1</neo4j-ogm.version>
         <powermock.version>1.6.6</powermock.version>
+        <springfox.version>2.6.1</springfox.version>
     </properties>
 
     <dependencyManagement>
@@ -113,7 +114,31 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.16.10</version>
+                <version>1.16.12</version>
+            </dependency>
+
+            <!-- Cryptography Library -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>1.55</version>
+            </dependency>
+
+            <!-- SpringFox aka Swagger -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-bean-validators</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.version}</version>
             </dependency>
 
             <!-- Static Mocking Test Dependencies -->
@@ -126,6 +151,13 @@
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito</artifactId>
                 <version>${powermock.version}</version>
+            </dependency>
+
+            <!-- REST API Testing -->
+            <dependency>
+                <groupId>com.jayway.restassured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>2.9.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -236,7 +268,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
+                <version>0.7.8</version>
 
                 <executions>
                     <execution>

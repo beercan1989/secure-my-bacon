@@ -30,8 +30,6 @@
 
     <properties>
         <root-path>..</root-path>
-
-        <springfox.version>2.6.1</springfox.version>
     </properties>
 
     <dependencies>
@@ -61,17 +59,14 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-bean-validators</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -93,7 +88,6 @@
         <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>2.9.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
