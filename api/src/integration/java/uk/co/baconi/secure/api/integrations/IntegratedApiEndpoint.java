@@ -19,20 +19,20 @@ package uk.co.baconi.secure.api.integrations;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.specification.RequestSpecification;
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.co.baconi.secure.base.TearDownRepositories;
 
 import java.io.IOException;
 
 import static com.jayway.restassured.RestAssured.with;
 
+@Slf4j
 @ActiveProfiles("integration")
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class IntegratedApiEndpoint implements RestApiAuthentication {
+public abstract class IntegratedApiEndpoint extends TearDownRepositories implements RestApiAuthentication {
 
     //
     // HTTP Server Values

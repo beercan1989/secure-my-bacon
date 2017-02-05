@@ -1,12 +1,11 @@
 package uk.co.baconi.secure.base;
 
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@Slf4j
 @ActiveProfiles("integration")
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = BaseApplication.class)
-public abstract class BaseIntegrationTest {
+@SpringBootTest(classes = BaseApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
+public abstract class BaseIntegrationTest extends TearDownRepositories {
 }
