@@ -116,6 +116,8 @@ public class BaseApplication {
 
     @Bean
     public Neo4jTransactionManager transactionManager() {
+        log.info("Creating: Neo4jTransactionManager");
+
         return new Neo4jTransactionManager(sessionFactory());
     }
 
