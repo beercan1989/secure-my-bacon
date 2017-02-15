@@ -1,5 +1,6 @@
 {
   "name": "secure-my-bacon",
+  "stack": "heroku-16",
   "scripts": {},
   "env": {},
   "formation": {},
