@@ -68,13 +68,15 @@ public class SpringFoxConfiguration {
     @Bean
     public UiConfiguration uiConfig() {
         return new UiConfiguration(
-                null,                   // url
-                "list",                 // docExpansion           => none | list
-                "alpha",                // apiSorter              => alpha
-                "schema",               // defaultModelRendering  => schema
-                DEFAULT_SUBMIT_METHODS, // supportedSubmitMethods => { "get", "post", "put", "delete", "patch" }
-                false,                  // enableJsonEditor       => true | false
-                true);                  // showRequestHeaders     => true | false
+                null,
+                "list", // => none | list
+                "alpha",
+                "schema",
+                DEFAULT_SUBMIT_METHODS,
+                false,
+                true,
+                null
+        );
     }
 
     private ApiInfo apiInfo() {
