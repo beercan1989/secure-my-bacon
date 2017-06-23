@@ -39,7 +39,7 @@ public class SymmetricEngine {
         return charsetCodec.decode(decryptedData);
     }
 
-    private <A extends Exception> byte[] doFinal(final Cipher engine, final byte[] cipherText, final Function<Exception, A> onError) throws A {
+    <A extends Exception> byte[] doFinal(final Cipher engine, final byte[] cipherText, final Function<Exception, A> onError) throws A {
         try {
             return engine.doFinal(cipherText);
         } catch (final IllegalBlockSizeException | BadPaddingException exception) {
@@ -56,7 +56,7 @@ public class SymmetricEngine {
      * @param parameterSpec any extra parameters required by the symmetric cipher
      * @return the initialised cipher
      */
-    private Cipher initCipher(final int mode, final SymmetricCipher type, final SecretKey secretKey, final AlgorithmParameterSpec parameterSpec) {
+    Cipher initCipher(final int mode, final SymmetricCipher type, final SecretKey secretKey, final AlgorithmParameterSpec parameterSpec) {
 
         // Create Cipher engine
         final Cipher engine;
@@ -68,11 +68,7 @@ public class SymmetricEngine {
 
         // Init engine with key and parameters
         try {
-            if (parameterSpec != null) {
-                engine.init(mode, secretKey, parameterSpec);
-            } else {
-                engine.init(mode, secretKey);
-            }
+            engine.init(mode, secretKey, parameterSpec);
         } catch (final InvalidKeyException | InvalidAlgorithmParameterException exception) {
             throw new UnsupportedCipherTypeException(type, "cipher-init", exception); // TODO - Review exception wrapping
         }
