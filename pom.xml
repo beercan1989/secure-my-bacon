@@ -76,8 +76,8 @@
         <heroku.deployment.folder>${root-path}/heroku</heroku.deployment.folder>
         <heroku.newrelic.version>3.35.2</heroku.newrelic.version>
 
-        <spring.boot.version>1.5.1.RELEASE</spring.boot.version>
-        <neo4j-ogm.version>2.1.1</neo4j-ogm.version>
+        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+        <neo4j-ogm.version>2.1.3</neo4j-ogm.version>
         <powermock.version>1.7.0</powermock.version>
         <springfox.version>2.7.0</springfox.version>
     </properties>
