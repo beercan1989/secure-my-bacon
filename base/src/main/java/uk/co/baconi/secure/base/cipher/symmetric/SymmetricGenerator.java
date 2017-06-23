@@ -13,6 +13,8 @@ import java.security.spec.AlgorithmParameterSpec;
 @Service
 public class SymmetricGenerator {
 
+    private final SecureRandom secureRandomForIV = new SecureRandom();
+
     public SecretKey generateKey(final SymmetricCipher type, final int bits) {
         switch (type) {
             case AES_CBC_PKCS7:
@@ -41,8 +43,7 @@ public class SymmetricGenerator {
 
         final byte[] iv = new byte[bytes];
 
-        final SecureRandom secureRandom = new SecureRandom();
-        secureRandom.nextBytes(iv);
+        secureRandomForIV.nextBytes(iv);
 
         return new IvParameterSpec(iv);
     }
@@ -53,7 +54,7 @@ public class SymmetricGenerator {
         try {
             keyGen = KeyGenerator.getInstance(type.getKeyGeneratorType());
         } catch (final NoSuchAlgorithmException exception) {
-            throw new UnsupportedCipherTypeException(type, "generate-key-impl", exception);
+            throw new UnsupportedCipherTypeException(type, "generate-secret-key", exception);
         }
 
         keyGen.init(bits);
