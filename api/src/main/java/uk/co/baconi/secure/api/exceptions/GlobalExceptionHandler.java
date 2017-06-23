@@ -17,7 +17,7 @@ import javax.validation.ConstraintViolationException;
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
 
-    @Order(Ordered.LOWEST_PRECEDENCE)
+    @Order
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleExceptions(final HttpServletRequest request,
                                                               final Exception exception) {
