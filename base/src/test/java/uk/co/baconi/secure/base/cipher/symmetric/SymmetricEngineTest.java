@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.boot.SpringApplication;
 import uk.co.baconi.function.ConsumerWithException;
 import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
