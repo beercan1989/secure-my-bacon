@@ -59,6 +59,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Powermock Dependencies -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Neo4j Test Dependencies -->
         <dependency>
             <groupId>org.neo4j</groupId>
