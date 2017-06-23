@@ -1,5 +1,7 @@
 package uk.co.baconi.secure.base.cipher.symmetric;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 
@@ -11,9 +13,14 @@ import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 
 @Service
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class SymmetricGenerator {
 
-    private final SecureRandom secureRandomForIV = new SecureRandom();
+    private final SecureRandom secureRandomForIV;
+
+    public SymmetricGenerator() {
+        secureRandomForIV = new SecureRandom();
+    }
 
     public SecretKey generateKey(final SymmetricCipher type, final int bits) {
         switch (type) {
