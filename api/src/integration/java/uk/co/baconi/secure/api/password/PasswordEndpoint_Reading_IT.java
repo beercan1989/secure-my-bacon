@@ -16,7 +16,6 @@
 
 package uk.co.baconi.secure.api.password;
 
-import org.bouncycastle.util.encoders.Base64Encoder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +33,9 @@ import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
+
+import java.util.Collection;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 
@@ -141,7 +143,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         newUser("onGetPasswordsForUser_none");
         newPasswordForUser("onGetPasswordsForUser");
 
-        // Success with some
+        // Success with one
         withNoAuthentication().
                 get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser").
 
@@ -211,8 +213,87 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
 
     // onGetPasswordForUser password-uuid user-name
-    // success
-    // no such password
-    // no such user
-    // invalid uuid
+    @Test
+    public void onGetPasswordForUser() {
+
+        final String getPasswordForUserPath = "{base}/by-uuid/{password-uuid}/for-user/{user-name}";
+
+        // Test Data
+        final User userWithNoPasswords = newUser("onGetPasswordForUser_none");
+        final Password passwordForUserWithPasswords = newPasswordForUser("onGetPasswordForUser");
+
+        // Success with one
+        withNoAuthentication().
+                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser").
+
+                then().assertThat().
+
+                body("uuid", is(equalTo(passwordForUserWithPasswords.getUuid().toString()))).
+                body("whereFor", is(equalTo(passwordForUserWithPasswords.getWhereFor()))).
+                body("username", is(equalTo(passwordForUserWithPasswords.getUsername()))).
+                body("password", is(equalTo(Base64Utils.encodeToString(passwordForUserWithPasswords.getPassword())))).
+
+                body("id", is(nullValue())).
+                body("securedBy", is(nullValue())).
+
+                statusCode(is(equalTo(HttpStatus.OK.value())));
+
+        // Fail because of no such link to password
+        withNoAuthentication().
+                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), userWithNoPasswords.getName()).
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.NOT_FOUND.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("name", isA(String.class)).
+                body("name", is(equalTo(NotFoundException.class.getName())));
+
+        // Fail because of no such password
+        withNoAuthentication().
+                get(getPasswordForUserPath, endpoint, UUID.randomUUID(), userWithNoPasswords.getName()).
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.NOT_FOUND.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("name", isA(String.class)).
+                body("name", is(equalTo(NotFoundException.class.getName())));
+
+        // Fail because of no such user
+        withNoAuthentication().
+                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser_does-not-exist").
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.NOT_FOUND.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("name", isA(String.class)).
+                body("name", is(equalTo(NotFoundException.class.getName())));
+
+        // Fail because of invalid password UUID
+        withNoAuthentication().
+                get(getPasswordForUserPath, endpoint, "invalid-uuid-string", "onGetPasswordForUser_none").
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.BAD_REQUEST.value()))).
+
+                and().
+
+                body("uuid", isA(String.class)).
+                body("errors", isA(Collection.class)).
+                body("errors[0]", containsString(
+                        "requires type 'java.util.UUID' but was provided 'invalid-uuid-string'"
+                ));
+    }
 }
