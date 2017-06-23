@@ -65,4 +65,15 @@ public class PaginatedResultTest extends BaseUnitTest {
         assertThat(paginatedResultAsString, containsString("data=[first, second],"));
         assertThat(paginatedResultAsString, containsString("paging=Pagination("));
     }
+
+    @Test
+    public void shouldSupportDirectLists() {
+
+        final PaginatedResult<String> paginatedResult = new PaginatedResult<>(Arrays.asList("first", "second"));
+
+        assertThat(paginatedResult.getData(), contains("first", "second"));
+        assertThat(paginatedResult.getPaging().getPage(), is(equalTo(0)));
+        assertThat(paginatedResult.getPaging().getPerPage(), is(equalTo(2)));
+        assertThat(paginatedResult.getPaging().getTotalCount(), is(equalTo(2L)));
+    }
 }
