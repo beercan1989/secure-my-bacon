@@ -162,7 +162,7 @@ public class PasswordEndpoint {
 
     @RequestMapping(value = "/by-uuid/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
     public ResponseEntity<Password> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
-                                                       @PathVariable("user-name") final String userName) {
+                                                       @PathVariable("user-name") final String userName) throws NotFoundException {
 
         log.trace("getPasswordForUser: {}, {}", passwordUuid, userName);
 
@@ -170,6 +170,10 @@ public class PasswordEndpoint {
 
         log.trace("foundPassword: {}", password);
 
-        return ResponseEntity.ok(password);
+        if (password == null) {
+            throw NotFoundException.passwordByUuidForUser(passwordUuid, userName);
+        } else {
+            return ResponseEntity.ok(password);
+        }
     }
 }

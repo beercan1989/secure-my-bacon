@@ -24,6 +24,10 @@ public class NotFoundException extends Exception {
         super(message);
     }
 
+    public static NotFoundException passwordByUuidForUser(final UUID uuid, final String user) {
+        return new NotFoundException("Unable to find [Password] by uuid [" + uuid + "] for user [" + user + "]");
+    }
+
     public static NotFoundException passwordByUuid(final UUID uuid) {
         return new NotFoundException("Unable to find [Password] by uuid [" + uuid + "]");
     }
