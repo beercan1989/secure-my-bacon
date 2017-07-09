@@ -26,6 +26,7 @@ import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
 
 import javax.crypto.*;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -46,10 +47,10 @@ public class SymmetricEngineTest {
     @Test
     public void doFinalShouldHandleBadCipherExceptions() throws Exception {
 
-        final Function<Exception, SymmetricEngineTestException> onError = mock(TestExceptionHandlerFunction.class);
+        final TestExceptionHandlerFunction onError = mock(TestExceptionHandlerFunction.class);
         final byte[] cipherText = "test-data".getBytes();
 
-        final ThrowingConsumer<Exception, Exception> verifyDoFinal = (exception) -> {
+        final ThrowingConsumer<GeneralSecurityException, Exception> verifyDoFinal = (exception) -> {
 
             final Cipher engine = PowerMockito.mock(Cipher.class);
             when(engine.doFinal(any())).thenThrow(exception);
@@ -125,6 +126,6 @@ public class SymmetricEngineTest {
             super(cause);
         }
     }
-    private interface TestExceptionHandlerFunction extends Function<Exception, SymmetricEngineTestException> {}
+    private interface TestExceptionHandlerFunction extends Function<GeneralSecurityException, SymmetricEngineTestException> {}
 
 }

@@ -9,6 +9,7 @@ import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
 
 import javax.crypto.*;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +40,7 @@ public class SymmetricEngine {
         return charsetCodec.decode(decryptedData);
     }
 
-    <A extends Exception> byte[] doFinal(final Cipher engine, final byte[] cipherText, final Function<Exception, A> onError) throws A {
+    <A extends Exception> byte[] doFinal(final Cipher engine, final byte[] cipherText, final Function<GeneralSecurityException, A> onError) throws A {
         try {
             return engine.doFinal(cipherText);
         } catch (final IllegalBlockSizeException | BadPaddingException exception) {
