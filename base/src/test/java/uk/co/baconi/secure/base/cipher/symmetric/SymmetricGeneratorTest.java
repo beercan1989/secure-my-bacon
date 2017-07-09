@@ -31,8 +31,7 @@ import static org.mockito.Mockito.mock;
 
 public class SymmetricGeneratorTest {
 
-    private final SecureRandom secureRandom = mock(SecureRandom.class);
-    private final SymmetricGenerator underTest = new SymmetricGenerator(secureRandom);
+    private final SymmetricGenerator underTest = new SymmetricGenerator();
 
     @BeforeClass
     public static void beforeClass() {

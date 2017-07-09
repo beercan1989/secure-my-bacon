@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import uk.co.baconi.function.ConsumerWithException;
+import uk.co.baconi.function.ThrowingConsumer;
 import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
 
@@ -33,6 +33,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +49,7 @@ public class SymmetricEngineTest {
         final Function<Exception, SymmetricEngineTestException> onError = mock(TestExceptionHandlerFunction.class);
         final byte[] cipherText = "test-data".getBytes();
 
-        final ConsumerWithException<Exception> verifyDoFinal = (exception) -> {
+        final ThrowingConsumer<Exception, Exception> verifyDoFinal = (exception) -> {
 
             final Cipher engine = PowerMockito.mock(Cipher.class);
             when(engine.doFinal(any())).thenThrow(exception);
@@ -57,7 +58,7 @@ public class SymmetricEngineTest {
 
             try {
                 underTest.doFinal(engine, cipherText, onError);
-                throw new AssertionError("Expected an exception to be thrown!");
+                fail("Expected an exception to be thrown while ciphering!");
             } catch (final SymmetricEngineTestException e) {
                 assertThat(e).hasCause(exception);
             } finally {
@@ -75,7 +76,7 @@ public class SymmetricEngineTest {
     public void initCipherShouldHandleNoSuchCipherExceptions() throws Exception {
 
         PowerMockito.mockStatic(Cipher.class);
-        when(Cipher.getInstance(anyString())).thenThrow(NoSuchPaddingException.class, NoSuchAlgorithmException.class);
+        when(Cipher.getInstance(anyString())).thenThrow(new NoSuchPaddingException(), new NoSuchAlgorithmException());
 
         try {
             underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
@@ -120,7 +121,7 @@ public class SymmetricEngineTest {
     }
 
     private class SymmetricEngineTestException extends Exception {
-        public SymmetricEngineTestException(Throwable cause) {
+        SymmetricEngineTestException(Throwable cause) {
             super(cause);
         }
     }

@@ -16,6 +16,7 @@
 
 package uk.co.baconi.secure.base.cipher.symmetric;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +26,20 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 
+import javax.crypto.SecretKey;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(SymmetricCipher.class)
@@ -41,7 +49,8 @@ public class SymmetricGenerator_Unsupported_Test {
     private static final SymmetricCipher UNSUPPORTED_CIPHER = PowerMockito.mock(SymmetricCipher.class);
 
     private final SecureRandom secureRandom = mock(SecureRandom.class);
-    private final SymmetricGenerator underTest = new SymmetricGenerator(secureRandom);
+    private final KeyGeneratorFactory keyGeneratorFactory = mock(KeyGeneratorFactory.class);
+    private final SymmetricGenerator underTest = new SymmetricGenerator(secureRandom, keyGeneratorFactory);
 
     @BeforeClass
     public static void beforeClass() {
@@ -56,27 +65,42 @@ public class SymmetricGenerator_Unsupported_Test {
         PowerMockito.when(SymmetricCipher.values()).thenReturn(newEnumValues);
     }
 
+    @Before
+    public void before() {
+        reset(secureRandom, keyGeneratorFactory);
+    }
+
     @Test
     public void generateKeysShouldThrowAnErrorOnUnsupportedCipher() {
         try {
-            underTest.generateKey(UNSUPPORTED_CIPHER, 8);
-            assertNeverRun();
+            final SecretKey result = underTest.generateKey(UNSUPPORTED_CIPHER, 8);
+            fail("An UnsupportedCipherTypeException should have been thrown but instead we got a result of: %s", result);
         } catch (final UnsupportedCipherTypeException exception) {
             assertThat(exception).hasMessageContaining("generate-key");
+            assertThat(exception).hasNoCause();
+        }
+    }
+
+    @Test
+    public void generateKeysShouldThrowAnErrorOnNoSuchAlgorithm() throws NoSuchAlgorithmException {
+        when(keyGeneratorFactory.apply(anyString())).thenThrow(new NoSuchAlgorithmException("test-no-such-algorithm"));
+        try {
+            final SecretKey result = underTest.generateKey(SymmetricCipher.AES_CBC_PKCS7, 8);
+            fail("An UnsupportedCipherTypeException should have been thrown but instead we got a result of: %s", result);
+        } catch (final UnsupportedCipherTypeException exception) {
+            assertThat(exception).hasMessageContaining("generate-secret-key");
+            assertThat(exception).hasCauseInstanceOf(NoSuchAlgorithmException.class);
         }
     }
 
     @Test
     public void generateParametersShouldThrowAnErrorOnUnsupportedCipher() {
         try {
-            underTest.generateParameters(UNSUPPORTED_CIPHER);
-            assertNeverRun();
+            final AlgorithmParameterSpec result = underTest.generateParameters(UNSUPPORTED_CIPHER);
+            fail("An UnsupportedCipherTypeException should have been thrown but instead we got a result of: %s", result);
         } catch (final UnsupportedCipherTypeException exception) {
             assertThat(exception).hasMessageContaining("generate-parameters");
+            assertThat(exception).hasNoCause();
         }
-    }
-
-    private void assertNeverRun() {
-        throw new AssertionError("Should never be run!");
     }
 }
