@@ -17,9 +17,11 @@ import java.security.spec.AlgorithmParameterSpec;
 public class SymmetricGenerator {
 
     private final SecureRandom secureRandomForIV;
+    private final KeyGeneratorFactory keyGeneratorFactory;
 
     public SymmetricGenerator() {
         secureRandomForIV = new SecureRandom();
+        keyGeneratorFactory = KeyGenerator::getInstance;
     }
 
     public SecretKey generateKey(final SymmetricCipher type, final int bits) {
@@ -59,7 +61,7 @@ public class SymmetricGenerator {
 
         final KeyGenerator keyGen;
         try {
-            keyGen = KeyGenerator.getInstance(type.getKeyGeneratorType());
+            keyGen = keyGeneratorFactory.apply(type.getKeyGeneratorType());
         } catch (final NoSuchAlgorithmException exception) {
             throw new UnsupportedCipherTypeException(type, "generate-secret-key", exception);
         }
