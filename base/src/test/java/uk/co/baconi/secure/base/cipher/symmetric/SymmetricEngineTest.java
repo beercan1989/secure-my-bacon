@@ -16,20 +16,26 @@
 
 package uk.co.baconi.secure.base.cipher.symmetric;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Base64;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import uk.co.baconi.function.ThrowingConsumer;
+import uk.co.baconi.secure.base.cipher.DecryptionException;
+import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.UnsupportedCipherTypeException;
 import uk.co.baconi.secure.base.cipher.charset.CharsetCodec;
 
 import javax.crypto.*;
-import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.*;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.function.Function;
 
@@ -42,7 +48,47 @@ import static org.mockito.Mockito.*;
 @PrepareForTest(Cipher.class)
 public class SymmetricEngineTest {
 
+    //
+    // GCM test data
+    //
+    private static final byte[] GCM_CIPHER_TEXT = Base64.decode("SUTBvAf8mB1iqoDj2TpmRddtyR4GjhlyaZIdMvwbvi2+H1NQeeE2BxuGUFxXC8BhL3K3r89VNuSEkmU=");
+    private static final byte[] GCM_AUTH_TAG = Base64.decode("qSdiLNH8eTsXDDYKF0/1mw==");
+    private static final byte[] GCM_IV = Base64.decode("1MmxNgwpU42Mi77Z");
+    private static final byte[] GCM_KEY = Base64.decode("TIZTMfJvxTSAlyjMP76QWo9Src/+ALpcaI59Kx8M2e4=");
+
     private final SymmetricEngine underTest = new SymmetricEngine(new CharsetCodec());
+
+    @BeforeClass
+    public static void beforeClass() {
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
+    @Test
+    public void decryptWithGcmShouldWorkAsExpected() throws IOException, DecryptionException {
+
+        final SymmetricEngine engine = new SymmetricEngine(new CharsetCodec());
+        final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write(GCM_CIPHER_TEXT);
+        outputStream.write(GCM_AUTH_TAG);
+        final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
+        final String result = engine.decrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, outputStream.toByteArray());
+
+        assertThat(result).isEqualTo("{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-oxi-auth-token\"}");
+    }
+
+    @Test
+    public void encryptWithGcmShouldWorkAsExpected() throws IOException, EncryptionException {
+
+        final SymmetricEngine engine = new SymmetricEngine(new CharsetCodec());
+        final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
+        final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
+        final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-oxi-auth-token\"}";
+        final byte[] result = engine.encrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, plainText);
+
+        assertThat(result).startsWith(GCM_CIPHER_TEXT);
+        assertThat(result).endsWith(GCM_AUTH_TAG);
+    }
 
     @Test
     public void doFinalShouldHandleBadCipherExceptions() throws Exception {
