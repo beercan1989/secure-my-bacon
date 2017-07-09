@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -61,9 +62,13 @@ public class SymmetricGeneratorTest {
 
         final AlgorithmParameterSpec result = underTest.generateParameters(SymmetricCipher.AES_GCM_NONE);
 
-        assertThat(result).isInstanceOf(IvParameterSpec.class);
+        assertThat(result).isInstanceOf(GCMParameterSpec.class);
+
         assertThat(result).hasFieldOrProperty("iv");
-        assertThat(((IvParameterSpec) result).getIV()).hasSize(12); // TODO - Review extraction mechanism
+        assertThat(((GCMParameterSpec) result).getIV()).hasSize(12); // TODO - Review extraction mechanism
+
+        assertThat(result).hasFieldOrProperty("tLen");
+        assertThat(((GCMParameterSpec) result).getTLen()).isEqualTo(128); // TODO - Review extraction mechanism
     }
 
 }
