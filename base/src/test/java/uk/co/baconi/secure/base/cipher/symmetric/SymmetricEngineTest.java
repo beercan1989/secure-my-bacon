@@ -51,8 +51,8 @@ public class SymmetricEngineTest {
     //
     // GCM test data
     //
-    private static final byte[] GCM_CIPHER_TEXT = Base64.decode("SUTBvAf8mB1iqoDj2TpmRddtyR4GjhlyaZIdMvwbvi2+H1NQeeE2BxuGUFxXC8BhL3K3r89VNuSEkmU=");
-    private static final byte[] GCM_AUTH_TAG = Base64.decode("qSdiLNH8eTsXDDYKF0/1mw==");
+    private static final byte[] GCM_CIPHER_TEXT = Base64.decode("SUTBvAf8mB1iqoDj2TpmRddtyR4GjhlyaZIdMvwbvi2+H1NQeeE2BxuGUFJaFoUtLmm059UYIA==");
+    private static final byte[] GCM_AUTH_TAG = Base64.decode("KXrGQR7udgrAgfxctvJAkg==");
     private static final byte[] GCM_IV = Base64.decode("1MmxNgwpU42Mi77Z");
     private static final byte[] GCM_KEY = Base64.decode("TIZTMfJvxTSAlyjMP76QWo9Src/+ALpcaI59Kx8M2e4=");
 
@@ -74,7 +74,7 @@ public class SymmetricEngineTest {
         final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
         final String result = engine.decrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, outputStream.toByteArray());
 
-        assertThat(result).isEqualTo("{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-oxi-auth-token\"}");
+        assertThat(result).isEqualTo("{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class SymmetricEngineTest {
         final SymmetricEngine engine = new SymmetricEngine(new CharsetCodec());
         final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
         final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
-        final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-oxi-auth-token\"}";
+        final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}";
         final byte[] result = engine.encrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, plainText);
 
         assertThat(result).startsWith(GCM_CIPHER_TEXT);
