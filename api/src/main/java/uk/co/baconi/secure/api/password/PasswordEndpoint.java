@@ -112,9 +112,6 @@ public class PasswordEndpoint {
         final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey.getEncoded(), symmetricType));
         log.trace("createdSymmetricLock: {}", lock);
 
-        // TODO - Make sure the SecretKey is no longer stored in memory
-        // symmetricKey.destroy();
-
         // TODO - Review exposing encrypted passwords
         return ResponseEntity.ok(password);
     }
