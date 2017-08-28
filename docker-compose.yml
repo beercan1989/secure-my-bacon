@@ -18,6 +18,7 @@ services:
       neo4j.uri: bolt://neo4j:7687
       neo4j.username: neo4j
       neo4j.password: password
+      neo4j.encryption-level: REQUIRED
     ports:
       - "8080:8080"
     links:
