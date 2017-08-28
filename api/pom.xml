@@ -50,10 +50,6 @@
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-bolt-driver</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-ogm-embedded-driver</artifactId>
-        </dependency>
 
         <!-- SpringFox aka Swagger -->
         <dependency>
@@ -145,6 +141,9 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                        <configuration>
+                            <classifier>bundled</classifier>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -177,7 +176,7 @@
                                         <mkdir dir="${heroku.deployment.folder}"/>
 
                                         <echo>Moving 'api.jar' into 'heroku' deployment folder.</echo>
-                                        <copy file="${project.build.directory}/api.jar" tofile="${heroku.deployment.folder}/api.jar"/>
+                                        <copy file="${project.build.directory}/api-bundled.jar" tofile="${heroku.deployment.folder}/api.jar"/>
                                     </target>
                                 </configuration>
                             </execution>

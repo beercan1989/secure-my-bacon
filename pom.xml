@@ -26,6 +26,7 @@
     <modules>
         <module>base</module>
         <module>api</module>
+        <module>api-embedded</module>
     </modules>
 
     <name>${project.groupId}:${project.artifactId}</name>
