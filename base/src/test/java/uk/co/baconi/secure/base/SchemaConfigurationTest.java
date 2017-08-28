@@ -56,7 +56,7 @@ public class SchemaConfigurationTest {
         try {
             underTest.perform();
         } finally {
-            verify(neo4jSession, atLeast(2)).query(anyString(), anyMap());
+            verify(neo4jSession, times(2)).query(anyString(), anyMap());
         }
     }
 }
