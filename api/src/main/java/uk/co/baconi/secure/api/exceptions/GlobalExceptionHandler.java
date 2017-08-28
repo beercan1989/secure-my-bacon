@@ -1,7 +1,6 @@
 package uk.co.baconi.secure.api.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
