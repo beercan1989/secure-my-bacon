@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Base64Utils;
+import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
@@ -38,10 +39,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
+import static uk.co.baconi.secure.api.common.Locations.PASSWORDS;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByUuidIntegrationTest {
-
-    private final String endpoint = "/passwords";
 
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
@@ -77,7 +77,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Success
         withNoAuthentication().
-                get(endpoint).
+                get(PASSWORDS).
 
                 then().assertThat().
 
@@ -97,7 +97,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
                 statusCode(is(equalTo(HttpStatus.OK.value())));
 
         // Invalid Pagination
-        onEndpointWithInvalidPagingImpl(endpoint);
+        onEndpointWithInvalidPagingImpl(PASSWORDS);
     }
 
     @Test // 200
@@ -106,7 +106,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         withNoAuthentication().
                 queryParam("page", 5).
                 queryParam("perPage", 5).
-                get(endpoint).
+                get(PASSWORDS).
 
                 then().assertThat().
 
@@ -118,7 +118,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         withNoAuthentication().
                 queryParam("page", 55).
                 queryParam("perPage", 10).
-                get(endpoint).
+                get(PASSWORDS).
 
                 then().assertThat().
 
@@ -131,7 +131,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     @Test
     @Override
     public void onFindByUuid() {
-        onFindByUuidImpl(endpoint, newPassword("onFindByUuid").getUuid());
+        onFindByUuidImpl(PASSWORDS, newPassword("onFindByUuid").getUuid());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Success with one
         withNoAuthentication().
-                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser").
+                get(getPasswordsForUserPath, PASSWORDS, "onGetPasswordsForUser").
 
                 then().assertThat().
 
@@ -167,7 +167,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Success with none
         withNoAuthentication().
-                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_none").
+                get(getPasswordsForUserPath, PASSWORDS, "onGetPasswordsForUser_none").
 
                 then().assertThat().
 
@@ -186,7 +186,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // no such user - empty search results not user not found
         withNoAuthentication().
-                get(getPasswordsForUserPath, endpoint, "onGetPasswordsForUser_no-such-user").
+                get(getPasswordsForUserPath, PASSWORDS, "onGetPasswordsForUser_no-such-user").
 
                 then().assertThat().
 
@@ -206,7 +206,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         // invalid paging
         onEndpointWithInvalidPagingImpl(
                 getPasswordsForUserPath.
-                        replace("{base}", endpoint).
+                        replace("{base}", PASSWORDS).
                         replace("{user-name}", "onGetPasswordsForUser")
         );
     }
@@ -224,7 +224,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Success with one
         withNoAuthentication().
-                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser").
+                get(getPasswordForUserPath, PASSWORDS, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser").
 
                 then().assertThat().
 
@@ -240,7 +240,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Fail because of no such link to password
         withNoAuthentication().
-                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), userWithNoPasswords.getName()).
+                get(getPasswordForUserPath, PASSWORDS, passwordForUserWithPasswords.getUuid(), userWithNoPasswords.getName()).
 
                 then().assertThat().
 
@@ -254,7 +254,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Fail because of no such password
         withNoAuthentication().
-                get(getPasswordForUserPath, endpoint, UUID.randomUUID(), userWithNoPasswords.getName()).
+                get(getPasswordForUserPath, PASSWORDS, UUID.randomUUID(), userWithNoPasswords.getName()).
 
                 then().assertThat().
 
@@ -268,7 +268,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Fail because of no such user
         withNoAuthentication().
-                get(getPasswordForUserPath, endpoint, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser_does-not-exist").
+                get(getPasswordForUserPath, PASSWORDS, passwordForUserWithPasswords.getUuid(), "onGetPasswordForUser_does-not-exist").
 
                 then().assertThat().
 
@@ -282,7 +282,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Fail because of invalid password UUID
         withNoAuthentication().
-                get(getPasswordForUserPath, endpoint, "invalid-uuid-string", "onGetPasswordForUser_none").
+                get(getPasswordForUserPath, PASSWORDS, "invalid-uuid-string", "onGetPasswordForUser_none").
 
                 then().assertThat().
 
