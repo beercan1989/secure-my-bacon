@@ -31,7 +31,7 @@ import java.util.UUID;
 @Getter
 @NodeEntity
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id", "securedBy"})
+@EqualsAndHashCode(of = "uuid")
 @ToString(exclude = {"password", "securedBy"})
 public class Password {
 
@@ -67,16 +67,17 @@ public class Password {
         this.password = password;  // TODO - Encryption with the target's public key
     }
 
+    Password(final UUID uuid, final String whereFor, final String username, final byte[] password) {
+        this.uuid = uuid;
+        this.whereFor = whereFor;
+        this.username = username;
+        this.password = password;  // TODO - Encryption with the target's public key
+    }
+
     public Password securedBy(final SymmetricLock securedBy) {
 
         this.securedBy = securedBy;
 
         return this;
-    }
-
-    static Password forTest(final String whereFor, final String username, final byte[] password) {
-        final Password forTest = new Password(whereFor, username, password);
-        forTest.uuid = null;
-        return forTest;
     }
 }
