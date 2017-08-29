@@ -18,6 +18,9 @@ package uk.co.baconi.secure.base.password;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.CompositionType;
+import org.hibernate.validator.constraints.ConstraintComposition;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -59,14 +62,20 @@ public class PasswordService {
      * @throws EncryptionException is thrown if there has been any issues with encrypting the provided data.
      */
     public Password createAndShare(
-            @NotNull final Bag bag, // TODO - Add better validation message
+            @NotNull(message = "{uk.co.baconi.secure.base.Bag.not.null}")
+            final Bag bag,
 
             final String whereFor,
             final String username,
-            @NotNull final String rawPassword, // TODO - Add better validation message
 
-            @NotNull final SymmetricCipher cipherType, // TODO - Add better validation message
-            @Min(128) final Integer keySize  // TODO - Add better validation message
+            @NotBlank(message = "{uk.co.baconi.secure.base.Password.populated}")
+            final String rawPassword,
+
+            @NotNull(message = "{uk.co.baconi.secure.base.SymmetricCipher.not.null}")
+            final SymmetricCipher cipherType,
+
+            @Min(value = 1, message = "{uk.co.baconi.secure.base.KeySize.not.negative}")
+            final Integer keySize
     ) throws EncryptionException {
 
         final SecretKey symmetricKey = symmetricGenerator.generateKey(cipherType, keySize);
