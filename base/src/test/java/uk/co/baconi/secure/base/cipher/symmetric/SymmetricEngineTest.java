@@ -20,8 +20,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import uk.co.baconi.function.ThrowingConsumer;
@@ -44,8 +46,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Cipher.class)
+@RunWith(Enclosed.class)
 public class SymmetricEngineTest {
 
     //
@@ -56,118 +57,127 @@ public class SymmetricEngineTest {
     private static final byte[] GCM_IV = Base64.decode("1MmxNgwpU42Mi77Z");
     private static final byte[] GCM_KEY = Base64.decode("TIZTMfJvxTSAlyjMP76QWo9Src/+ALpcaI59Kx8M2e4=");
 
-    private final SymmetricEngine underTest = new SymmetricEngine(new CharsetCodec());
-
     @BeforeClass
     public static void beforeClass() {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    @Test
-    public void decryptWithGcmShouldWorkAsExpected() throws IOException, DecryptionException {
+    public static class SymmetricEngineRealTest {
 
-        final SymmetricEngine engine = new SymmetricEngine(new CharsetCodec());
-        final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        outputStream.write(GCM_CIPHER_TEXT);
-        outputStream.write(GCM_AUTH_TAG);
-        final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
-        final String result = engine.decrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, outputStream.toByteArray());
+        private final SymmetricEngine underTest = new SymmetricEngine(new CharsetCodec());
 
-        assertThat(result).isEqualTo("{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}");
+        @Test
+        public void decryptWithGcmShouldWorkAsExpected() throws IOException, DecryptionException {
+
+            final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(GCM_CIPHER_TEXT);
+            outputStream.write(GCM_AUTH_TAG);
+            final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
+            final String result = underTest.decrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, outputStream.toByteArray());
+
+            assertThat(result).isEqualTo("{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}");
+        }
+
+        @Test
+        public void encryptWithGcmShouldWorkAsExpected() throws IOException, EncryptionException {
+            
+            final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
+            final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
+            final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}";
+            final byte[] result = underTest.encrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, plainText);
+
+            assertThat(result).startsWith(GCM_CIPHER_TEXT);
+            assertThat(result).endsWith(GCM_AUTH_TAG);
+        }
+
     }
 
-    @Test
-    public void encryptWithGcmShouldWorkAsExpected() throws IOException, EncryptionException {
+    @RunWith(PowerMockRunner.class)
+    @PrepareForTest(Cipher.class)
+    public static class SymmetricEngineMockedTest {
 
-        final SymmetricEngine engine = new SymmetricEngine(new CharsetCodec());
-        final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
-        final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
-        final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}";
-        final byte[] result = engine.encrypt(SymmetricCipher.AES_GCM_NONE, secretKey, parameterSpec, plainText);
+        private final SymmetricEngine underTest = new SymmetricEngine(new CharsetCodec());
 
-        assertThat(result).startsWith(GCM_CIPHER_TEXT);
-        assertThat(result).endsWith(GCM_AUTH_TAG);
-    }
+        @Test
+        public void doFinalShouldHandleBadCipherExceptions() throws Exception {
 
-    @Test
-    public void doFinalShouldHandleBadCipherExceptions() throws Exception {
+            final TestExceptionHandlerFunction onError = mock(TestExceptionHandlerFunction.class);
+            final byte[] cipherText = "test-data".getBytes();
 
-        final TestExceptionHandlerFunction onError = mock(TestExceptionHandlerFunction.class);
-        final byte[] cipherText = "test-data".getBytes();
+            final ThrowingConsumer<GeneralSecurityException, Exception> verifyDoFinal = (exception) -> {
 
-        final ThrowingConsumer<GeneralSecurityException, Exception> verifyDoFinal = (exception) -> {
+                final Cipher engine = PowerMockito.mock(Cipher.class);
+                when(engine.doFinal(any())).thenThrow(exception);
 
-            final Cipher engine = PowerMockito.mock(Cipher.class);
-            when(engine.doFinal(any())).thenThrow(exception);
+                when(onError.apply(any())).then(invocation -> new SymmetricEngineTestException(invocation.getArgumentAt(0, Exception.class)));
 
-            when(onError.apply(any())).then(invocation -> new SymmetricEngineTestException(invocation.getArgumentAt(0, Exception.class)));
+                try {
+                    underTest.doFinal(engine, cipherText, onError);
+                    fail("Expected an exception to be thrown while ciphering!");
+                } catch (final SymmetricEngineTestException e) {
+                    assertThat(e).hasCause(exception);
+                } finally {
+                    verify(engine).doFinal(cipherText);
+                    verify(onError).apply(exception);
+                }
+            };
+
+
+            verifyDoFinal.with(new BadPaddingException("t"));
+            verifyDoFinal.with(new IllegalBlockSizeException("b"));
+        }
+
+        @Test
+        public void initCipherShouldHandleNoSuchCipherExceptions() throws Exception {
+
+            PowerMockito.mockStatic(Cipher.class);
+            when(Cipher.getInstance(anyString())).thenThrow(new NoSuchPaddingException(), new NoSuchAlgorithmException());
 
             try {
-                underTest.doFinal(engine, cipherText, onError);
-                fail("Expected an exception to be thrown while ciphering!");
-            } catch (final SymmetricEngineTestException e) {
-                assertThat(e).hasCause(exception);
-            } finally {
-                verify(engine).doFinal(cipherText);
-                verify(onError).apply(exception);
+                underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
+                throw new AssertionError("Expected an exception to be thrown!");
+            } catch (final UnsupportedCipherTypeException e) {
+                assertThat(e).hasCauseInstanceOf(NoSuchPaddingException.class);
             }
-        };
 
-
-        verifyDoFinal.with(new BadPaddingException("t"));
-        verifyDoFinal.with(new IllegalBlockSizeException("b"));
-    }
-
-    @Test
-    public void initCipherShouldHandleNoSuchCipherExceptions() throws Exception {
-
-        PowerMockito.mockStatic(Cipher.class);
-        when(Cipher.getInstance(anyString())).thenThrow(new NoSuchPaddingException(), new NoSuchAlgorithmException());
-
-        try {
-            underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
-            throw new AssertionError("Expected an exception to be thrown!");
-        } catch (final UnsupportedCipherTypeException e) {
-            assertThat(e).hasCauseInstanceOf(NoSuchPaddingException.class);
+            try {
+                underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
+                throw new AssertionError("Expected an exception to be thrown!");
+            } catch (final UnsupportedCipherTypeException e) {
+                assertThat(e).hasCauseInstanceOf(NoSuchAlgorithmException.class);
+            }
         }
 
-        try {
-            underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
-            throw new AssertionError("Expected an exception to be thrown!");
-        } catch (final UnsupportedCipherTypeException e) {
-            assertThat(e).hasCauseInstanceOf(NoSuchAlgorithmException.class);
-        }
-    }
+        @Test
+        public void initCipherShouldHandleInvalidCipherExceptions() throws Exception {
 
-    @Test
-    public void initCipherShouldHandleInvalidCipherExceptions() throws Exception {
+            PowerMockito.mockStatic(Cipher.class);
 
-        PowerMockito.mockStatic(Cipher.class);
+            final Cipher cipher = PowerMockito.mock(Cipher.class);
+            when(Cipher.getInstance(anyString())).thenReturn(cipher);
 
-        final Cipher cipher = PowerMockito.mock(Cipher.class);
-        when(Cipher.getInstance(anyString())).thenReturn(cipher);
+            doThrow(InvalidKeyException.class).when(cipher).init(anyInt(), any(SecretKey.class), any(AlgorithmParameterSpec.class));
 
-        doThrow(InvalidKeyException.class).when(cipher).init(anyInt(), any(SecretKey.class), any(AlgorithmParameterSpec.class));
+            try {
+                underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
+                throw new AssertionError("Expected an exception to be thrown!");
+            } catch (final UnsupportedCipherTypeException e) {
+                assertThat(e).hasCauseInstanceOf(InvalidKeyException.class);
+            }
 
-        try {
-            underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
-            throw new AssertionError("Expected an exception to be thrown!");
-        } catch (final UnsupportedCipherTypeException e) {
-            assertThat(e).hasCauseInstanceOf(InvalidKeyException.class);
-        }
+            doThrow(InvalidAlgorithmParameterException.class).when(cipher).init(anyInt(), any(SecretKey.class), any(AlgorithmParameterSpec.class));
 
-        doThrow(InvalidAlgorithmParameterException.class).when(cipher).init(anyInt(), any(SecretKey.class), any(AlgorithmParameterSpec.class));
-
-        try {
-            underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
-            throw new AssertionError("Expected an exception to be thrown!");
-        } catch (final UnsupportedCipherTypeException e) {
-            assertThat(e).hasCauseInstanceOf(InvalidAlgorithmParameterException.class);
+            try {
+                underTest.initCipher(0, SymmetricCipher.AES_CBC_PKCS7, mock(SecretKey.class), mock(AlgorithmParameterSpec.class));
+                throw new AssertionError("Expected an exception to be thrown!");
+            } catch (final UnsupportedCipherTypeException e) {
+                assertThat(e).hasCauseInstanceOf(InvalidAlgorithmParameterException.class);
+            }
         }
     }
 
-    private class SymmetricEngineTestException extends Exception {
+    private static class SymmetricEngineTestException extends Exception {
         SymmetricEngineTestException(Throwable cause) {
             super(cause);
         }
