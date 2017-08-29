@@ -27,7 +27,6 @@ import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricEngine;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricGenerator;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
-import uk.co.baconi.secure.base.user.User;
 
 import javax.crypto.SecretKey;
 import javax.validation.constraints.Min;
