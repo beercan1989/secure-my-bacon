@@ -41,17 +41,20 @@ public class NewPassword {
     @ToString
     @AllArgsConstructor
     static class NewPasswordBag {
+
         @NotBlank
         private final String name;
     }
 
     @Getter
-    @ToString
+    @ToString(exclude = "password")
     @AllArgsConstructor
     static class NewPasswordPassword {
-        @NotBlank
+
         private final String whereFor;
         private final String username;
+
+        @NotBlank
         private final String password;
     }
 }

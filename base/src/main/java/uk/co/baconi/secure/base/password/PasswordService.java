@@ -17,8 +17,10 @@
 package uk.co.baconi.secure.base.password;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
@@ -32,7 +34,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.security.spec.AlgorithmParameterSpec;
 
+@Slf4j
 @Service
+@Validated
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class PasswordService {
 
@@ -41,19 +45,30 @@ public class PasswordService {
 
     private final PasswordGraphRepository passwordGraphRepository;
 
-    public Password create(
-            @NotNull final User user,
-            @NotNull final Bag bag,
+    /**
+     * Create a new Password encrypted and shared with the provided Bag.
+     *
+     * @param bag the Bag to initially share the Password with
+     * @param whereFor
+     * @param username
+     * @param rawPassword
+     * @param cipherType
+     * @param keySize
+     *
+     * @return the secured and saved Password
+     *
+     * @throws EncryptionException is thrown if there has been any issues with encrypting the provided data.
+     */
+    public Password createAndShare(
+            @NotNull final Bag bag, // TODO - Add better validation message
 
             final String whereFor,
             final String username,
-            @NotNull final String rawPassword,
+            @NotNull final String rawPassword, // TODO - Add better validation message
 
-            @NotNull final SymmetricCipher cipherType,
-            @Min(128) final Integer keySize
+            @NotNull final SymmetricCipher cipherType, // TODO - Add better validation message
+            @Min(128) final Integer keySize  // TODO - Add better validation message
     ) throws EncryptionException {
-
-        // TODO - Verify user has access to the bag
 
         final SecretKey symmetricKey = symmetricGenerator.generateKey(cipherType, keySize);
         final AlgorithmParameterSpec parameterSpec = symmetricGenerator.generateParameters(cipherType);
@@ -62,11 +77,12 @@ public class PasswordService {
 
         final Password password = new Password(whereFor, username, encryptedPassword);
 
-        // TODO - Encrypt key with the bags's public key
+        // TODO - Encrypt symmetric key with the bags's public key
         new SymmetricLock(password, bag, symmetricKey.getEncoded(), cipherType);
 
         // Save two deep to make sure the Bag in the SymmetricLock is also saved.
         return passwordGraphRepository.save(password, 2);
     }
+
 
 }

@@ -30,35 +30,32 @@ import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
-import uk.co.baconi.secure.base.cipher.symmetric.SymmetricEngine;
-import uk.co.baconi.secure.base.cipher.symmetric.SymmetricGenerator;
-import uk.co.baconi.secure.base.lock.SymmetricLock;
-import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.password.Password;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
+import uk.co.baconi.secure.base.password.PasswordService;
 
-import javax.crypto.SecretKey;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.security.spec.AlgorithmParameterSpec;
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import static uk.co.baconi.secure.api.common.Locations.*;
 
 @Slf4j
 @Validated
 @RestController
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
-@RequestMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = PASSWORDS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordEndpoint {
 
     private final PasswordGraphRepository passwordGraphRepository;
     private final BagGraphRepository bagGraphRepository;
-    private final SymmetricLockGraphRepository symmetricLockGraphRepository;
 
-    private final SymmetricGenerator symmetricGenerator;
-    private final SymmetricEngine symmetricEngine;
+    private final PasswordService passwordService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> findAll(
@@ -84,39 +81,38 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Password> create(@Valid @RequestBody final NewPassword newPassword) throws EncryptionException {
+    public ResponseEntity<NewPasswordResponse> create(@Valid @RequestBody final NewPassword newPassword) throws EncryptionException {
 
-        log.trace("createPassword: {}", newPassword);
+        log.trace("Create a {}", newPassword);
 
         // Find user who this bag will initially belong to
         final Bag bag = bagGraphRepository.findByName(newPassword.getBag().getName());
-        log.trace("foundBag: {}", bag);
 
-        // TODO - Verify user has access to the bag
+        log.trace("Found a {}", bag);
 
-        final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS7;
-        final int keySize = 256;
-
-        final SecretKey symmetricKey = symmetricGenerator.generateKey(symmetricType, keySize);
-        final AlgorithmParameterSpec parameterSpec = symmetricGenerator.generateParameters(symmetricType);
-
-        final byte[] pwd = symmetricEngine.encrypt(symmetricType, symmetricKey, parameterSpec, newPassword.getPassword().getPassword());
-        log.trace("encryptedPassword: [REDACTED]");
+        // TODO - Verify user has access to the bag, as USer might not be able to access the password if they do not.
 
         final String whereFor = newPassword.getPassword().getWhereFor();
         final String username = newPassword.getPassword().getUsername();
-        final Password password = passwordGraphRepository.save(new Password(whereFor, username, pwd));
-        log.trace("createdPassword: {}", password);
+        final String rawPassword = newPassword.getPassword().getPassword();
 
-        // TODO - Secure symmetricKey with bag.publicKey
-        final SymmetricLock lock = symmetricLockGraphRepository.save(new SymmetricLock(password, bag, symmetricKey.getEncoded(), symmetricType));
-        log.trace("createdSymmetricLock: {}", lock);
+        // TODO - Extract into incoming request.
+        final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS7;
+        final int keySize = 256;
 
-        // TODO - Review exposing encrypted passwords
-        return ResponseEntity.ok(password);
+        final Password password = passwordService.createAndShare(bag, whereFor, username, rawPassword, symmetricType, keySize);
+
+        log.trace("Created and shared {} with {}", password, bag);
+
+        final NewPasswordResponse response = new NewPasswordResponse(password);
+        final Optional<URI> location = passwordByUuid(response.getUuid());
+
+        log.trace("Responding with {} and location {}", response, location);
+
+        return location.map(ResponseEntity::created).orElseGet(ResponseEntity::ok).body(response);
     }
 
-    @RequestMapping(value = "/for-user/{user-name}", method = RequestMethod.GET)
+    @RequestMapping(value = FOR_USER + "{user-name}", method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<Password>> getPasswordsForUser(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
@@ -141,7 +137,7 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(paginatedResult);
     }
 
-    @RequestMapping(value = "/by-uuid/{password-uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = BY_UUID + "{password-uuid}", method = RequestMethod.GET)
     public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) throws NotFoundException {
 
         log.trace("getPasswordByUuid: {}", uuid);
@@ -157,7 +153,7 @@ public class PasswordEndpoint {
         }
     }
 
-    @RequestMapping(value = "/by-uuid/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
+    @RequestMapping(value = BY_UUID + "{password-uuid}"+ FOR_USER + "{user-name}", method = RequestMethod.GET)
     public ResponseEntity<Password> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
                                                        @PathVariable("user-name") final String userName) throws NotFoundException {
 
