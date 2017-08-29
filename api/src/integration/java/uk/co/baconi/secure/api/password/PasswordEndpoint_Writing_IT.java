@@ -17,9 +17,12 @@
 package uk.co.baconi.secure.api.password;
 
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Headers;
+import org.apache.http.Header;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
@@ -27,10 +30,11 @@ import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
+import static uk.co.baconi.secure.api.common.Locations.BY_UUID;
+import static uk.co.baconi.secure.api.common.Locations.PASSWORDS;
 
 public class PasswordEndpoint_Writing_IT extends IntegratedApiEndpoint {
 
-    private final String endpoint = "/passwords";
     @Autowired
     private BagGraphRepository bagGraphRepository;
 
@@ -51,17 +55,19 @@ public class PasswordEndpoint_Writing_IT extends IntegratedApiEndpoint {
                                 "onCreateNewPassword-password"
                         )
                 ))).
-                post(endpoint).
+                post(PASSWORDS).
 
                 then().assertThat().
 
+                body("uuid", isA(String.class)).
                 body("id", is(nullValue())).
-                body("whereFor", is(equalTo("onCreateNewPassword-whereFor"))).
-                body("username", is(equalTo("onCreateNewPassword-username"))).
-                body("password", isA(String.class)).
-                body("password", is(not(equalTo("onCreateNewPassword-password")))).
+                body("whereFor", is(nullValue())).
+                body("username", is(nullValue())).
+                body("password", is(nullValue())).
 
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+                header("Location", startsWith(PASSWORDS + BY_UUID)).
+
+                statusCode(is(equalTo(HttpStatus.CREATED.value())));
     }
 
 }
