@@ -10,9 +10,10 @@ import java.util.UUID;
 @ToString
 public class NewPasswordResponse {
 
+    private final UUID uuid;
+
     public NewPasswordResponse(final Password newPassword) {
         this.uuid = newPassword.getUuid();
     }
 
-    private final UUID uuid;
 }
