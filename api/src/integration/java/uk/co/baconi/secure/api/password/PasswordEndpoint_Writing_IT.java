@@ -17,12 +17,9 @@
 package uk.co.baconi.secure.api.password;
 
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Headers;
-import org.apache.http.Header;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
