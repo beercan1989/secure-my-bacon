@@ -24,17 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.api.ApiApplication;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLockGraphRepository;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
+import uk.co.baconi.secure.base.password.PasswordService;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
 
 import java.util.stream.IntStream;
+
+import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
 @RequiredArgsConstructor(onConstructor=@__({@Autowired}))
 public class IntegrationApiApplication extends ApiApplication {
@@ -42,8 +46,7 @@ public class IntegrationApiApplication extends ApiApplication {
     private final BagGraphRepository bagGraphRepository;
     private final UserGraphRepository userRepository;
     private final AsymmetricLockGraphRepository asymmetricLockRepository;
-    private final PasswordGraphRepository passwordRepository;
-    private final SymmetricLockGraphRepository symmetricLockRepository;
+    private final PasswordService passwordService;
 
     public void createTestData() {
         IntStream.range(0, 5).forEach(id -> {
@@ -52,9 +55,7 @@ public class IntegrationApiApplication extends ApiApplication {
 
             createAsymmetricLock(asymmetricLockRepository, bag, user, id);
 
-            final Password password = createPassword(passwordRepository, id);
-
-            createSymmetricLock(symmetricLockRepository, password, bag, id);
+            createPassword(passwordService, bag, id);
         });
     }
 
@@ -70,12 +71,12 @@ public class IntegrationApiApplication extends ApiApplication {
         return repository.save(new AsymmetricLock(bag, user, ("private-key-" + id).getBytes()));
     }
 
-    private static Password createPassword(final PasswordGraphRepository repository, final int id) {
-        return repository.save(new Password("whereFor-" + id, "username-" + id, ("password-" + id).getBytes()));
-    }
-
-    private static SymmetricLock createSymmetricLock(final SymmetricLockGraphRepository repository, final Password password, final Bag bag, final int id) {
-        return repository.save(new SymmetricLock(password, bag, ("key-" + id).getBytes(), SymmetricCipher.AES_CBC_PKCS7));
+    private static EncryptedPassword createPassword(final PasswordService passwordService, final Bag bag, final int id) {
+        try {
+            return passwordService.createAndShare(bag, "whereFor-" + id, "username-" + id, "password-" + id, AES_CBC_PKCS7, 128);
+        } catch (final EncryptionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @RestController

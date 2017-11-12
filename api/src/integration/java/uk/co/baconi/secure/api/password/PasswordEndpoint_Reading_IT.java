@@ -25,12 +25,14 @@ import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
 import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
+import uk.co.baconi.secure.base.password.PasswordService;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
 
@@ -39,6 +41,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static uk.co.baconi.secure.api.common.Locations.PASSWORDS;
+import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByUuidIntegrationTest {
 
@@ -48,22 +51,32 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     @Autowired
     private UserGraphRepository userGraphRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     private User newUser(final String nameSpace) {
         return userGraphRepository.save(new User(nameSpace));
     }
 
-    private Password newPassword(final String nameSpace) {
-        return passwordGraphRepository.save(new Password(
-                nameSpace + "_whereFor",
-                nameSpace + "_username",
-                (nameSpace + "_password").getBytes()
-        ));
+    private EncryptedPassword newPassword(final Bag bag, final String nameSpace) {
+        try {
+            return passwordService.createAndShare(
+                    bag,
+                    nameSpace + "_whereFor",
+                    nameSpace + "_username",
+                    nameSpace + "_password",
+                    AES_CBC_PKCS7,
+                    128
+            );
+        } catch (final EncryptionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private Password newPasswordForUser(final String nameSpace) {
+    private EncryptedPassword newPasswordForUser(final String nameSpace) {
         final Bag bag = new Bag(nameSpace, nameSpace.getBytes());
         final User user = newUser(nameSpace);
-        final Password password = newPassword(nameSpace);
+        final EncryptedPassword password = newPassword(bag, nameSpace);
 
         new SymmetricLock(password, bag, nameSpace.getBytes(), SymmetricCipher.AES_CBC_PKCS7);
         new AsymmetricLock(bag, user, nameSpace.getBytes(), AsymmetricCipher.RSA_ECB_PKCS1);
@@ -130,7 +143,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
     @Test
     @Override
     public void onFindByUuid() {
-        onFindByUuidImpl(PASSWORDS, newPassword("onFindByUuid").getUuid());
+        onFindByUuidImpl(PASSWORDS, newPasswordForUser("onFindByUuid").getUuid());
     }
 
     @Test
@@ -152,7 +165,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
                 body("data", hasSize(1)).
                 body("data[0].whereFor", is(equalTo("onGetPasswordsForUser_whereFor"))).
                 body("data[0].username", is(equalTo("onGetPasswordsForUser_username"))).
-                body("data[0].password", is(equalTo(Base64Utils.encodeToString("onGetPasswordsForUser_password".getBytes())))).
+                body("data[0].password", is(not(equalTo(Base64Utils.encodeToString("onGetPasswordsForUser_password".getBytes()))))).
 
                 body("paging.page", isA(Integer.class)).
                 body("paging.perPage", isA(Integer.class)).
@@ -219,7 +232,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
         // Test Data
         final User userWithNoPasswords = newUser("onGetPasswordForUser_none");
-        final Password passwordForUserWithPasswords = newPasswordForUser("onGetPasswordForUser");
+        final EncryptedPassword passwordForUserWithPasswords = newPasswordForUser("onGetPasswordForUser");
 
         // Success with one
         withNoAuthentication().

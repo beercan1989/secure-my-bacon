@@ -46,20 +46,20 @@ public class PasswordService {
     private final PasswordGraphRepository passwordGraphRepository;
 
     /**
-     * Create a new Password encrypted and shared with the provided Bag.
+     * Create a new EncryptedPassword encrypted and shared with the provided Bag.
      *
-     * @param bag the Bag to initially share the Password with
+     * @param bag the Bag to initially share the EncryptedPassword with
      * @param whereFor
      * @param username
      * @param rawPassword
      * @param cipherType
      * @param keySize
      *
-     * @return the secured and saved Password
+     * @return the secured and saved EncryptedPassword
      *
      * @throws EncryptionException is thrown if there has been any issues with encrypting the provided data.
      */
-    public Password createAndShare(
+    public EncryptedPassword createAndShare(
             @NotNull(message = "{uk.co.baconi.secure.base.Bag.not.null}")
             final Bag bag,
 
@@ -81,10 +81,13 @@ public class PasswordService {
 
         final byte[] encryptedPassword = symmetricEngine.encrypt(cipherType, symmetricKey, parameterSpec, rawPassword);
 
-        final Password password = new Password(whereFor, username, encryptedPassword);
+        final EncryptedPassword password = new EncryptedPassword(whereFor, username, encryptedPassword);
 
         // TODO - Encrypt symmetric key with the bags's public key
-        new SymmetricLock(password, bag, symmetricKey.getEncoded(), cipherType);
+        final SymmetricLock lock = new SymmetricLock(password, bag, symmetricKey.getEncoded(), cipherType);
+
+        // Update password to be secured by the lock. TODO - Work out why I wanted to do it here and not inside SymmetricLock
+        // password.securedBy(lock);
 
         // Save two deep to make sure the Bag in the SymmetricLock is also saved.
         return passwordGraphRepository.save(password, 2);

@@ -27,11 +27,11 @@ import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import java.util.HashSet;
 import java.util.Set;
 
-@NodeEntity
 @Getter
+@NodeEntity
 @NoArgsConstructor
 @ToString(exclude = "shared")
-@EqualsAndHashCode(exclude = {"id", "shared"})
+@EqualsAndHashCode(of = "name")
 public class User {
 
     @GraphId

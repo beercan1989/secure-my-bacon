@@ -19,6 +19,7 @@ package uk.co.baconi.secure.base.bag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
@@ -27,9 +28,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@NodeEntity
+@NoArgsConstructor
 @EqualsAndHashCode(exclude = {"id", "shared", "secured"})
 @ToString(exclude = {"shared", "secured"})
-@NoArgsConstructor
 public class Bag {
 
     @GraphId

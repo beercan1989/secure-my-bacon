@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PasswordGraphRepository extends SmbGraphRepository<Password> {
+public interface PasswordGraphRepository extends SmbGraphRepository<EncryptedPassword> {
 
-    Password findByUuid(final UUID uuid);
+    EncryptedPassword findByUuid(final UUID uuid);
 
-    @Query("MATCH (p:Password {uuid:{uuid}})-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}}) RETURN p")
-    Password getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
+    @Query("MATCH (p:EncryptedPassword {uuid:{uuid}})-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}}) RETURN p")
+    EncryptedPassword getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
 
-    @Query("MATCH (p:Password)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
-    List<Password> getPasswordsForUser(@Param("userName") final String userName);
+    @Query("MATCH (p:EncryptedPassword)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
+    List<EncryptedPassword> getPasswordsForUser(@Param("userName") final String userName);
 
     // Spring Data Neo4J - Hopper-SR1 does not support pageable in customer queries.
-    // Page<Password> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageRequest);
+    // Page<EncryptedPassword> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageRequest);
 
 }

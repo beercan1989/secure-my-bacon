@@ -35,8 +35,8 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
-    private Password newPassword(final String whereFor, final String username, final String password) {
-        return passwordGraphRepository.save(new Password(whereFor, username, password.getBytes()));
+    private EncryptedPassword newPassword(final String whereFor, final String username, final String password) {
+        return passwordGraphRepository.save(new EncryptedPassword(whereFor, username, password.getBytes()));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         final String username = "shouldBeAbleToCreateAndRetrievePassword";
         final String passw0rd = "password";
 
-        final Password saved = newPassword(whereFor, username, passw0rd);
+        final EncryptedPassword saved = newPassword(whereFor, username, passw0rd);
 
         assertThat(saved.getId(), is(not(nullValue())));
         assertThat(saved.getWhereFor(), is(equalTo(whereFor)));
@@ -53,7 +53,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         assertThat(saved.getPassword(), is(equalTo(passw0rd.getBytes())));
         assertThat(saved.getSecuredBy(), is(nullValue()));
 
-        final Password one = passwordGraphRepository.findByUuid(saved.getUuid());
+        final EncryptedPassword one = passwordGraphRepository.findByUuid(saved.getUuid());
 
         assertThat(one, is(equalTo(saved)));
         assertThat(one.getId(), is(equalTo(saved.getId())));
@@ -62,7 +62,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     @Test
     public void shouldBeAbleToSecurePasswordWithAGroup() {
 
-        final Password password = newPassword(
+        final EncryptedPassword password = newPassword(
                 "https://github.com/login",
                 "shouldBeAbleToSecurePasswordWithAGroup",
                 "password"
@@ -90,19 +90,19 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Test Data Setup
         //
-        final Password password_1 = newPassword(
+        final EncryptedPassword password_1 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_1",
                 "shouldBeAbleToFindPasswordsByUser_username_1",
                 "shouldBeAbleToFindPasswordsByUser_password_1"
         );
 
-        final Password password_2 = newPassword(
+        final EncryptedPassword password_2 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_2",
                 "shouldBeAbleToFindPasswordsByUser_username_2",
                 "shouldBeAbleToFindPasswordsByUser_password_2"
         );
 
-        final Password password_3 = newPassword(
+        final EncryptedPassword password_3 = newPassword(
                 "shouldBeAbleToFindPasswordsByUser_whereFor_3",
                 "shouldBeAbleToFindPasswordsByUser_username_3",
                 "shouldBeAbleToFindPasswordsByUser_password_3"
@@ -125,7 +125,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Actual Test
         //
-        final List<Password> passwordsByUser = passwordGraphRepository.getPasswordsForUser(user.getName());
+        final List<EncryptedPassword> passwordsByUser = passwordGraphRepository.getPasswordsForUser(user.getName());
         assertThat(passwordsByUser, is(not(nullValue())));
         assertThat(passwordsByUser, containsInAnyOrder(password_1, password_2, password_3));
     }
@@ -137,7 +137,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         // Test Data Setup
         //
 
-        final Password password = newPassword(
+        final EncryptedPassword password = newPassword(
                 "shouldBeAbleToFindPasswordByUser_whereFor",
                 "shouldBeAbleToFindPasswordByUser_username",
                 "shouldBeAbleToFindPasswordByUser_password"
@@ -156,7 +156,7 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         //
         // Actual Test
         //
-        final Password passwordByUser = passwordGraphRepository.getPasswordForUser(password.getUuid(), user.getName());
+        final EncryptedPassword passwordByUser = passwordGraphRepository.getPasswordForUser(password.getUuid(), user.getName());
         assertThat(passwordByUser, is(not(nullValue())));
         assertThat(passwordByUser.getId(), is(equalTo(password.getId())));
         assertThat(passwordByUser, is(equalTo(password)));

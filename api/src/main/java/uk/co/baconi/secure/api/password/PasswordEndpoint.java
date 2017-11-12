@@ -31,7 +31,7 @@ import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
 import uk.co.baconi.secure.base.password.PasswordGraphRepository;
 import uk.co.baconi.secure.base.password.PasswordService;
 
@@ -58,7 +58,7 @@ public class PasswordEndpoint {
     private final PasswordService passwordService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Password>> findAll(
+    public ResponseEntity<PaginatedResult<EncryptedPassword>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
@@ -69,11 +69,11 @@ public class PasswordEndpoint {
 
         log.trace("findAll: {}, {}", page, perPage);
 
-        final Page<Password> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));
+        final Page<EncryptedPassword> paged = passwordGraphRepository.findAll(new PageRequest(page, perPage));
 
         log.trace("paged: {}", paged);
 
-        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(paged);
+        final PaginatedResult<EncryptedPassword> paginatedResult = new PaginatedResult<>(paged);
 
         log.trace("paginatedResult: {}", paginatedResult);
 
@@ -100,20 +100,20 @@ public class PasswordEndpoint {
         final SymmetricCipher symmetricType = SymmetricCipher.AES_CBC_PKCS7;
         final int keySize = 256;
 
-        final Password password = passwordService.createAndShare(bag, whereFor, username, rawPassword, symmetricType, keySize);
+        final EncryptedPassword password = passwordService.createAndShare(bag, whereFor, username, rawPassword, symmetricType, keySize);
 
         log.trace("Created and shared {} with {}", password, bag);
 
         final NewPasswordResponse response = new NewPasswordResponse(password);
-        final Optional<URI> location = passwordByUuid(response.getUuid());
+        final URI location = passwordByUuid(response.getUuid());
 
         log.trace("Responding with {} and location {}", response, location);
 
-        return location.map(ResponseEntity::created).orElseGet(ResponseEntity::ok).body(response);
+        return ResponseEntity.created(location).body(response);
     }
 
     @RequestMapping(value = FOR_USER + "{user-name}", method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Password>> getPasswordsForUser(
+    public ResponseEntity<PaginatedResult<EncryptedPassword>> getPasswordsForUser(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
 
@@ -126,11 +126,11 @@ public class PasswordEndpoint {
 
         log.trace("getPasswordsForUser: {}, {}, {}", name, page, perPage);
 
-        final List<Password> fullPage = passwordGraphRepository.getPasswordsForUser(name);
+        final List<EncryptedPassword> fullPage = passwordGraphRepository.getPasswordsForUser(name);
 
         log.trace("fullPage: {}", fullPage);
 
-        final PaginatedResult<Password> paginatedResult = new PaginatedResult<>(fullPage);
+        final PaginatedResult<EncryptedPassword> paginatedResult = new PaginatedResult<>(fullPage);
 
         log.trace("paginatedResult: {}", paginatedResult);
 
@@ -138,11 +138,11 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(value = BY_UUID + "{password-uuid}", method = RequestMethod.GET)
-    public ResponseEntity<Password> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) throws NotFoundException {
+    public ResponseEntity<EncryptedPassword> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) throws NotFoundException {
 
         log.trace("getPasswordByUuid: {}", uuid);
 
-        final Password password = passwordGraphRepository.findByUuid(uuid);
+        final EncryptedPassword password = passwordGraphRepository.findByUuid(uuid);
 
         log.trace("foundPassword: {}", password);
 
@@ -154,12 +154,12 @@ public class PasswordEndpoint {
     }
 
     @RequestMapping(value = BY_UUID + "{password-uuid}"+ FOR_USER + "{user-name}", method = RequestMethod.GET)
-    public ResponseEntity<Password> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
-                                                       @PathVariable("user-name") final String userName) throws NotFoundException {
+    public ResponseEntity<EncryptedPassword> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
+                                                                @PathVariable("user-name") final String userName) throws NotFoundException {
 
         log.trace("getPasswordForUser: {}, {}", passwordUuid, userName);
 
-        final Password password = passwordGraphRepository.getPasswordForUser(passwordUuid, userName);
+        final EncryptedPassword password = passwordGraphRepository.getPasswordForUser(passwordUuid, userName);
 
         log.trace("foundPassword: {}", password);
 

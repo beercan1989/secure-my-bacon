@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-public class PasswordTest extends BaseUnitTest {
+public class EncryptedPasswordTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToReadProperties() {
@@ -35,7 +35,7 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final byte[] passw0rd = "password".getBytes();
 
-        final Password password = new Password(null, whereFor, username, passw0rd);
+        final EncryptedPassword password = new EncryptedPassword( whereFor, username, passw0rd);
 
         assertThat(password.getWhereFor(), is(equalTo(whereFor)));
         assertThat(password.getUsername(), is(equalTo(username)));
@@ -47,7 +47,7 @@ public class PasswordTest extends BaseUnitTest {
     public void shouldBeAbleToChangeProperties() {
 
         final SymmetricLock symmetricLock = mock(SymmetricLock.class);
-        final Password password = new Password(null, "", "", "".getBytes()).securedBy(symmetricLock);
+        final EncryptedPassword password = new EncryptedPassword( "", "", "".getBytes()).securedBy(symmetricLock);
         assertThat(password.getSecuredBy(), is(equalTo(symmetricLock)));
 
         final String newWhereFor = "https://bitbucket.org/account/signin/?next=/";
@@ -75,8 +75,8 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final byte[] passw0rd = "password".getBytes();
 
-        final Password password1 = new Password(uuidOne, whereFor, username, passw0rd);
-        final Password password2 = new Password(uuidOne, whereFor, username, passw0rd);
+        final EncryptedPassword password1 = new EncryptedPassword(uuidOne, whereFor, username, passw0rd);
+        final EncryptedPassword password2 = new EncryptedPassword(uuidOne, whereFor, username, passw0rd);
 
         assertThat(password1, is(equalTo(password2)));
         assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
@@ -85,19 +85,19 @@ public class PasswordTest extends BaseUnitTest {
         assertThat(password1, is(equalTo(password2)));
         assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
 
-        final Password password3 = new Password(UUID.randomUUID(), whereFor, username, passw0rd);
+        final EncryptedPassword password3 = new EncryptedPassword(UUID.randomUUID(), whereFor, username, passw0rd);
         assertThat(password1, is(not(equalTo(password3))));
         assertThat(password1.hashCode(), is(not(equalTo(password3.hashCode()))));
 
-        final Password password4 = new Password(uuidOne, whereFor, username, "P@55w0rd!".getBytes());
+        final EncryptedPassword password4 = new EncryptedPassword(uuidOne, whereFor, username, "P@55w0rd!".getBytes());
         assertThat(password1, is(equalTo(password4)));
         assertThat(password1.hashCode(), is(equalTo(password4.hashCode())));
 
-        final Password password5 = new Password(uuidOne, "https://bitbucket.org/account/signin/?next=/", username, passw0rd);
+        final EncryptedPassword password5 = new EncryptedPassword(uuidOne, "https://bitbucket.org/account/signin/?next=/", username, passw0rd);
         assertThat(password1, is(equalTo(password5)));
         assertThat(password1.hashCode(), is(equalTo(password5.hashCode())));
 
-        final Password password6 = new Password(uuidOne, whereFor, "beercan", passw0rd);
+        final EncryptedPassword password6 = new EncryptedPassword(uuidOne, whereFor, "beercan", passw0rd);
         assertThat(password1, is(equalTo(password6)));
         assertThat(password1.hashCode(), is(equalTo(password6.hashCode())));
     }
@@ -109,7 +109,7 @@ public class PasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final String passw0rd = "p@55w0rd!";
 
-        final Password password = new Password(uuid, whereFor, username, passw0rd.getBytes());
+        final EncryptedPassword password = new EncryptedPassword(uuid, whereFor, username, passw0rd.getBytes());
 
         final String passwordAsString = password.toString();
 
@@ -123,7 +123,7 @@ public class PasswordTest extends BaseUnitTest {
     @Test
     public void shouldBeAbleToCreateBlankPassword() {
 
-        final Password password = new Password();
+        final EncryptedPassword password = new EncryptedPassword();
 
         assertThat(password.getWhereFor(), is(nullValue(String.class)));
         assertThat(password.getUsername(), is(nullValue(String.class)));

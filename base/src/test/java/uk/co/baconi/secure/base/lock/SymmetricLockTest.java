@@ -20,7 +20,7 @@ import org.junit.Test;
 import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -30,7 +30,7 @@ public class SymmetricLockTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToChangeKey() {
-        final Password password = mock(Password.class);
+        final EncryptedPassword password = mock(EncryptedPassword.class);
         final Bag bag = mock(Bag.class);
         final SymmetricLock lock = new SymmetricLock(password, bag, "".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
@@ -47,7 +47,7 @@ public class SymmetricLockTest extends BaseUnitTest {
     @Test
     public void shouldBeAddedToBothUserAndBagOnCreation() {
 
-        final Password password = mock(Password.class);
+        final EncryptedPassword password = mock(EncryptedPassword.class);
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
@@ -67,7 +67,7 @@ public class SymmetricLockTest extends BaseUnitTest {
     @Test
     public void shouldImplementEqualsCorrectly() {
 
-        final Password password = mock(Password.class);
+        final EncryptedPassword password = mock(EncryptedPassword.class);
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
@@ -77,7 +77,7 @@ public class SymmetricLockTest extends BaseUnitTest {
         assertThat(lock1, is(equalTo(lock2)));
         assertThat(lock1.hashCode(), is(equalTo(lock2.hashCode())));
 
-        final SymmetricLock lock3 = new SymmetricLock(mock(Password.class), bag, key, SymmetricCipher.AES_CBC_PKCS7);
+        final SymmetricLock lock3 = new SymmetricLock(mock(EncryptedPassword.class), bag, key, SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(lock1, is(not(equalTo(lock3))));
         assertThat(lock2, is(not(equalTo(lock3))));
@@ -108,7 +108,7 @@ public class SymmetricLockTest extends BaseUnitTest {
     @Test
     public void shouldHaveNiceToStringRepresentation() {
 
-        final Password password = mock(Password.class);
+        final EncryptedPassword password = mock(EncryptedPassword.class);
         final Bag bag = mock(Bag.class);
         final byte[] key = "symmetric key".getBytes();
 
@@ -129,7 +129,7 @@ public class SymmetricLockTest extends BaseUnitTest {
 
         assertThat(lock.getId(), is(nullValue(Long.class)));
         assertThat(lock.getBag(), is(nullValue(Bag.class)));
-        assertThat(lock.getPassword(), is(nullValue(Password.class)));
+        assertThat(lock.getPassword(), is(nullValue(EncryptedPassword.class)));
         assertThat(lock.getKey(), is(nullValue(byte[].class)));
     }
 }

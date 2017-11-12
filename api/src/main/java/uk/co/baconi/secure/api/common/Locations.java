@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotNull;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -22,18 +24,16 @@ public class Locations {
     public static final String BY_UUID = "/by-uuid/";
     public static final String FOR_USER = "/for-user/";
 
-    public static Optional<URI> passwordByUuid(final UUID uuid) {
-        return passwordByUuid(uuid, DEFAULT_CHARSET);
+    public static URI passwordByUuid(final UUID uuid) {
+        try {
+            return passwordByUuid(uuid, DEFAULT_CHARSET);
+        } catch (final UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Optional<URI> passwordByUuid(final UUID uuid, final Charset charset) {
-        try {
-            final String encodedUuid = URLEncoder.encode(uuid.toString(), charset.name());
-            final URI locationUri = URI.create(PASSWORDS + BY_UUID + encodedUuid);
-            return Optional.of(locationUri);
-        } catch (final Exception exception) {
-            log.error("Unable to create URI for password by UUID for: {}", uuid, exception);
-            return Optional.empty();
-        }
+    public static URI passwordByUuid(final UUID uuid, final Charset charset) throws UnsupportedEncodingException {
+        final String encodedUuid = URLEncoder.encode(uuid.toString(), charset.name());
+        return URI.create(PASSWORDS + BY_UUID + encodedUuid);
     }
 }

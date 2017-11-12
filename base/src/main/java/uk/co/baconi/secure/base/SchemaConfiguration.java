@@ -73,7 +73,7 @@ public class SchemaConfiguration {
 
         createConstraint("CREATE CONSTRAINT ON (u:User) ASSERT u.name IS UNIQUE");
         createConstraint("CREATE CONSTRAINT ON (b:Bag) ASSERT b.name IS UNIQUE");
-        createConstraint("CREATE CONSTRAINT ON (p:Password) ASSERT p.uuid IS UNIQUE");
+        createConstraint("CREATE CONSTRAINT ON (p:EncryptedPassword) ASSERT p.uuid IS UNIQUE");
 
         log.info("createIndexes: END");
     }

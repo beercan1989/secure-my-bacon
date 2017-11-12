@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 James Bacon
+ * Copyright 2017 James Bacon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ import uk.co.baconi.secure.base.lock.SymmetricLock;
 import java.util.UUID;
 
 @Getter
-@NodeEntity
 @NoArgsConstructor
+@NodeEntity(label = "Password")
 @EqualsAndHashCode(of = "uuid")
 @ToString(exclude = {"password", "securedBy"})
-public class Password {
+public abstract class Password<A extends Password<A>> {
 
     @GraphId
     @Deprecated
@@ -44,40 +44,41 @@ public class Password {
     @Convert(UuidConverter.class)
     private UUID uuid;
 
-    @Setter
     @Property
+    @Setter(value = AccessLevel.PROTECTED)
     private String whereFor;
 
-    @Setter
     @Property
+    @Setter(value = AccessLevel.PROTECTED)
     private String username;
 
-    @Setter
     @Property
+    @Setter(value = AccessLevel.PROTECTED)
     private byte[] password;
 
     @JsonIgnore
     @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
-    public Password(final String whereFor, final String username, final byte[] password) {
+    protected Password(final String whereFor, final String username, final byte[] password) {
         this.uuid = UUID.randomUUID();
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
     }
 
-    Password(final UUID uuid, final String whereFor, final String username, final byte[] password) {
+    protected Password(final UUID uuid, final String whereFor, final String username, final byte[] password) {
         this.uuid = uuid;
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
     }
 
-    public Password securedBy(final SymmetricLock securedBy) {
+    @SuppressWarnings("unchecked")
+    public A securedBy(final SymmetricLock securedBy) {
 
         this.securedBy = securedBy;
 
-        return this;
+        return (A) this;
     }
 }

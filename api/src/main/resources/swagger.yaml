@@ -249,7 +249,7 @@ definitions:
         description: "List of passwords, limited by pagination"
         type: array
         items:
-          $ref: "#/definitions/Password"
+          $ref: "#/definitions/EncryptedPassword"
       paging:
         $ref: "#/definitions/Pagination"
   

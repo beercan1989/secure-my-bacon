@@ -21,12 +21,12 @@ import lombok.*;
 import org.neo4j.ogm.annotation.*;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
 
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id"})
 @ToString(exclude = "key")
+@EqualsAndHashCode(exclude = {"id"})
 @RelationshipEntity(type = SymmetricLock.SECURED_BY)
 public class SymmetricLock {
 
@@ -47,12 +47,12 @@ public class SymmetricLock {
     private byte[] key;
 
     @StartNode
-    private Password password;
+    private EncryptedPassword password;
 
     @EndNode
     private Bag bag;
 
-    public SymmetricLock(final Password password, final Bag bag, final byte[] key, final SymmetricCipher type) {
+    public SymmetricLock(final EncryptedPassword password, final Bag bag, final byte[] key, final SymmetricCipher type) {
         this.password = password;
         this.bag = bag;
 
