@@ -40,7 +40,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static uk.co.baconi.secure.api.common.Locations.*;

@@ -17,7 +17,6 @@
 package uk.co.baconi.secure.base.password;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import uk.co.baconi.secure.base.cipher.Decrypted;
 
