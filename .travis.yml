@@ -41,11 +41,15 @@ env:
 
     # Bolt & HTTP with an external version of v3.1.4 (Current version used on Heroku)
     - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.1.4"
-    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.1.4"
+    #- NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.1.4"
+
+    # Bolt & HTTP with an external version of v3.2
+    - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="3.2"
+    #- NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="3.2"
 
     # Bolt & HTTP with an external version of LATEST (Latest released docker version)
     - NEO4J_DRIVER="org.neo4j.ogm.drivers.bolt.driver.BoltDriver" NEO4J_URI="bolt://localhost:7687" NEO4J_VERSION="latest"
-    - NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="latest"
+    #- NEO4J_DRIVER="org.neo4j.ogm.drivers.http.driver.HttpDriver" NEO4J_URI="http://localhost:7474" NEO4J_VERSION="latest"
 
 ##
 # Install and setup Neo4j
