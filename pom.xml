@@ -75,9 +75,9 @@
 
         <!-- Heroku Deployment Configuration -->
         <heroku.deployment.folder>${root-path}/heroku</heroku.deployment.folder>
-        <heroku.newrelic.version>3.35.2</heroku.newrelic.version>
+        <heroku.newrelic.version>3.46.0</heroku.newrelic.version>
 
-        <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
         <neo4j-ogm.version>2.1.5</neo4j-ogm.version>
         <powermock.version>1.7.3</powermock.version>
         <springfox.version>2.7.0</springfox.version>
@@ -168,7 +168,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
