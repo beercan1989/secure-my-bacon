@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
@@ -42,13 +43,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import static uk.co.baconi.secure.api.common.Locations.*;
-
 @Slf4j
 @Validated
 @RestController
 @AllArgsConstructor(onConstructor = @__({@Autowired}))
-@RequestMapping(value = PASSWORDS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/passwords", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PasswordEndpoint {
 
     private final PasswordGraphRepository passwordGraphRepository;
@@ -56,6 +55,7 @@ public class PasswordEndpoint {
 
     private final PasswordService passwordService;
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<EncryptedPassword>> findAll(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
@@ -104,14 +104,14 @@ public class PasswordEndpoint {
         log.trace("Created and shared {} with {}", password, bag);
 
         final NewPasswordResponse response = new NewPasswordResponse(password);
-        final URI location = passwordByUuid(response.getUuid());
+        final URI location = Locations.passwordByUuid(response.getUuid());
 
         log.trace("Responding with {} and location {}", response, location);
 
         return ResponseEntity.created(location).body(response);
     }
 
-    @RequestMapping(value = FOR_USER + "{user-name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/for-user/{user-name}", method = RequestMethod.GET)
     public ResponseEntity<PaginatedResult<EncryptedPassword>> getPasswordsForUser(
             @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
             @RequestParam(required = false, defaultValue = "0") final Integer page,
@@ -136,7 +136,7 @@ public class PasswordEndpoint {
         return ResponseEntity.ok(paginatedResult);
     }
 
-    @RequestMapping(value = BY_UUID + "{password-uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/by-uuid/{password-uuid}", method = RequestMethod.GET)
     public ResponseEntity<EncryptedPassword> getPasswordByUuid(@PathVariable("password-uuid") final UUID uuid) throws NotFoundException {
 
         log.trace("getPasswordByUuid: {}", uuid);
@@ -152,7 +152,7 @@ public class PasswordEndpoint {
         }
     }
 
-    @RequestMapping(value = BY_UUID + "{password-uuid}"+ FOR_USER + "{user-name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/by-uuid/{password-uuid}/for-user/{user-name}", method = RequestMethod.GET)
     public ResponseEntity<EncryptedPassword> getPasswordForUser(@PathVariable("password-uuid") final UUID passwordUuid,
                                                                 @PathVariable("user-name") final String userName) throws NotFoundException {
 

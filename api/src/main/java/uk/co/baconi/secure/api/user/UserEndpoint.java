@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.user.User;
@@ -33,6 +34,7 @@ import uk.co.baconi.secure.base.user.UserGraphRepository;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.net.URI;
 
 @Slf4j
 @Validated
@@ -73,7 +75,10 @@ public class UserEndpoint {
 
         log.trace("createdUser: {}", user);
 
-        return ResponseEntity.ok(user);
+        final URI location = Locations.userByName(user.getName());
+        log.trace("Responding with {} and location {}", user, location);
+
+        return ResponseEntity.created(location).body(user);
     }
 
     @RequestMapping(value = "/by-name/{user-name}", method = RequestMethod.GET)

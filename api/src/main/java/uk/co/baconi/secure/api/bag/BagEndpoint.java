@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.common.Locations;
 import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
@@ -37,6 +38,7 @@ import uk.co.baconi.secure.base.user.UserGraphRepository;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.net.URI;
 
 @Slf4j
 @Validated
@@ -91,7 +93,10 @@ public class BagEndpoint {
         final AsymmetricLock lock = asymmetricLockGraphRepository.save(new AsymmetricLock(bag, user, privateKey));
         log.trace("createdAsymmetricLock: {}", lock);
 
-        return ResponseEntity.ok(bag);
+        final URI location = Locations.bagByName(bag.getName());
+        log.trace("Responding with {} and location {}", bag, location);
+
+        return ResponseEntity.created(location).body(bag);
     }
 
     @RequestMapping(value = "/by-name/{bag-name}", method = RequestMethod.GET)
