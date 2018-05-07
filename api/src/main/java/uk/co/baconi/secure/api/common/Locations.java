@@ -2,36 +2,45 @@ package uk.co.baconi.secure.api.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-// TODO - Consider renaming and rebuilding as a URL builder?
 public class Locations {
-    
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     public static final String PASSWORDS = "/passwords";
+    public static final String USERS = "/users";
+    public static final String BAGS = "/bags";
+
     public static final String BY_UUID = "/by-uuid/";
+    public static final String BY_NAME = "/by-name/";
     public static final String FOR_USER = "/for-user/";
 
     public static URI passwordByUuid(final UUID uuid) {
-        try {
-            return passwordByUuid(uuid, DEFAULT_CHARSET);
-        } catch (final UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return UriBuilder
+                .builder()
+                .append(PASSWORDS)
+                .append(BY_UUID)
+                .appendEncoded(uuid)
+                .build();
     }
 
-    public static URI passwordByUuid(final UUID uuid, final Charset charset) throws UnsupportedEncodingException {
-        final String encodedUuid = URLEncoder.encode(uuid.toString(), charset.name());
-        return URI.create(PASSWORDS + BY_UUID + encodedUuid);
+    public static URI userByName(final String name) {
+        return UriBuilder
+                .builder()
+                .append(USERS)
+                .append(BY_NAME)
+                .appendEncoded(name)
+                .build();
+    }
+
+    public static URI bagByName(final String name) {
+        return UriBuilder
+                .builder()
+                .append(BAGS)
+                .append(BY_NAME)
+                .appendEncoded(name)
+                .build();
     }
 }
