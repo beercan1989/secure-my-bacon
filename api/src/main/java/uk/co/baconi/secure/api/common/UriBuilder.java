@@ -68,7 +68,7 @@ public class UriBuilder {
         try {
             return URLEncoder.encode(string, charset);
         } catch (final UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 }

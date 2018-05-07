@@ -56,7 +56,7 @@ public class UriBuilderTest {
         final UriBuilder builder = UriBuilder.builder().withCharset("F").append("/bob/").appendEncoded("&");
 
         assertThatThrownBy(builder::build)
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(IllegalStateException.class)
                 .hasCauseInstanceOf(UnsupportedEncodingException.class);
     }
 
