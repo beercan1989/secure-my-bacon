@@ -29,7 +29,7 @@ public interface FindByUuidIntegrationTest extends RestApiAuthentication {
 
     String FIND_BY_UUID_PATH = "{base}/by-uuid/{uuid}";
 
-    void onFindByUuid();
+    void onFindByUuid() throws Exception;
 
     default void onFindByUuidImpl(final String endpoint, final UUID uuid) {
 

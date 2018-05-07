@@ -17,6 +17,7 @@
 package uk.co.baconi.secure.api.integrations;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +37,7 @@ import java.util.stream.IntStream;
 
 import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class IntegrationApiApplication extends ApiApplication {
 
@@ -63,15 +65,15 @@ public class IntegrationApiApplication extends ApiApplication {
         return repository.save(new Bag("bag-" + id, ("public-key-" + id).getBytes()));
     }
 
-    private static AsymmetricLock createAsymmetricLock(final AsymmetricLockGraphRepository repository, final Bag bag, final User user, final int id) {
-        return repository.save(new AsymmetricLock(bag, user, ("private-key-" + id).getBytes()));
+    private static void createAsymmetricLock(final AsymmetricLockGraphRepository repository, final Bag bag, final User user, final int id) {
+        repository.save(new AsymmetricLock(bag, user, ("private-key-" + id).getBytes()));
     }
 
-    private static EncryptedPassword createPassword(final PasswordService passwordService, final Bag bag, final int id) {
+    private static void createPassword(final PasswordService passwordService, final Bag bag, final int id) {
         try {
-            return passwordService.createAndShare(bag, "whereFor-" + id, "username-" + id, "password-" + id, AES_CBC_PKCS7, 128);
+            passwordService.createAndShare(bag, "whereFor-" + id, "username-" + id, "password-" + id, AES_CBC_PKCS7, 128);
         } catch (final EncryptionException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to generate a password", e);
         }
     }
 

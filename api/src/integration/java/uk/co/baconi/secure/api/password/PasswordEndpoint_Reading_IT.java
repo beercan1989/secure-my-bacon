@@ -58,8 +58,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         return userGraphRepository.save(new User(nameSpace));
     }
 
-    private EncryptedPassword newPassword(final Bag bag, final String nameSpace) {
-        try {
+    private EncryptedPassword newPassword(final Bag bag, final String nameSpace) throws EncryptionException {
             return passwordService.createAndShare(
                     bag,
                     nameSpace + "_whereFor",
@@ -68,12 +67,9 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
                     AES_CBC_PKCS7,
                     128
             );
-        } catch (final EncryptionException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    private EncryptedPassword newPasswordForUser(final String nameSpace) {
+    private EncryptedPassword newPasswordForUser(final String nameSpace) throws EncryptionException {
         final Bag bag = new Bag(nameSpace, nameSpace.getBytes());
         final User user = newUser(nameSpace);
         final EncryptedPassword password = newPassword(bag, nameSpace);
@@ -142,12 +138,12 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
     @Test
     @Override
-    public void onFindByUuid() {
+    public void onFindByUuid() throws EncryptionException {
         onFindByUuidImpl(PASSWORDS, newPasswordForUser("onFindByUuid").getUuid());
     }
 
     @Test
-    public void onGetPasswordsForUser() {
+    public void onGetPasswordsForUser() throws EncryptionException {
 
         final String getPasswordsForUserPath = "{base}/for-user/{user-name}";
 
@@ -226,7 +222,7 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
 
     // onGetPasswordForUser password-uuid user-name
     @Test
-    public void onGetPasswordForUser() {
+    public void onGetPasswordForUser() throws EncryptionException {
 
         final String getPasswordForUserPath = "{base}/by-uuid/{password-uuid}/for-user/{user-name}";
 
