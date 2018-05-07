@@ -47,7 +47,7 @@ public class UriBuilderTest {
         final URI uri = UriBuilder.builder().appendEncoded("/bob/MjdkODM2ZDAtMmUwNy00NDliLWIxZDYtMjk0MjQzNTEzNzZh==").build();
 
         assertThat(uri.toString())
-                .isEqualTo("%2fbob%2fMjdkODM2ZDAtMmUwNy00NDliLWIxZDYtMjk0MjQzNTEzNzZh%3d%3d");
+                .isEqualTo("%2Fbob%2FMjdkODM2ZDAtMmUwNy00NDliLWIxZDYtMjk0MjQzNTEzNzZh%3D%3D");
     }
 
     @Test

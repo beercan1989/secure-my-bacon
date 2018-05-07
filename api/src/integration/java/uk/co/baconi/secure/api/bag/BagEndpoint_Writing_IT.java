@@ -50,7 +50,7 @@ public class BagEndpoint_Writing_IT extends IntegratedApiEndpoint {
                 body("name", isA(String.class)).
                 body("name", is(equalTo("new-clean-bag"))).
 
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+                statusCode(is(equalTo(HttpStatus.CREATED.value())));
     }
 
 }
