@@ -176,7 +176,8 @@
                                         <mkdir dir="${heroku.deployment.folder}"/>
 
                                         <echo>Moving 'api.jar' into 'heroku' deployment folder.</echo>
-                                        <copy file="${project.build.directory}/api-bundled.jar" tofile="${heroku.deployment.folder}/api.jar"/>
+                                        <copy file="${project.build.directory}/api-bundled.jar"
+                                              tofile="${heroku.deployment.folder}/api.jar"/>
                                     </target>
                                 </configuration>
                             </execution>

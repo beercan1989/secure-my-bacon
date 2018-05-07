@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 /**
  * TODO - Consider extracting into separate project.
- *
+ * <p>
  * Represents an operation that accepts a single input argument and returns no
  * result. Unlike most other functional interfaces, {@code Consumer} is expected
  * to operate via side-effects.
@@ -31,7 +31,6 @@ import java.util.function.Consumer;
  *
  * @param <T> the type of the input to the operation
  * @param <E> the type of the exception that might be thrown in the operation
- *
  * @since 2017/07/09
  */
 @FunctionalInterface
@@ -66,7 +65,10 @@ public interface ThrowingConsumer<T, E extends Exception> {
      */
     default ThrowingConsumer<T, E> andThen(Consumer<? super T> after) {
         Objects.requireNonNull(after);
-        return (T t) -> { accept(t); after.accept(t); };
+        return (T t) -> {
+            accept(t);
+            after.accept(t);
+        };
     }
 
     /**

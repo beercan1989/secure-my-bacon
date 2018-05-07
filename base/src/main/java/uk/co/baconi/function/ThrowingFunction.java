@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 /**
  * TODO - Consider extracting into separate project.
- *
+ * <p>
  * Represents a function that accepts one argument and produces a result.
  *
  * <p>This is a <a href="package-summary.html">functional interface</a>
@@ -30,7 +30,6 @@ import java.util.function.Function;
  * @param <T> the type of the input to the function
  * @param <R> the type of the result of the function
  * @param <E> the type of the exception that might be thrown in the operation
-
  * @since 2017/07/09
  */
 @FunctionalInterface

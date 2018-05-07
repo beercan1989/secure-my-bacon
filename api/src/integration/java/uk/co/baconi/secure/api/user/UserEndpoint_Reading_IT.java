@@ -60,6 +60,6 @@ public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements Pa
     @Test
     @Override
     public void onFindByName() {
-        onFindByNameImpl(endpoint,"user-0");
+        onFindByNameImpl(endpoint, "user-0");
     }
 }

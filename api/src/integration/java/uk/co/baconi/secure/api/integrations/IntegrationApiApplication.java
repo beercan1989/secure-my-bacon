@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
 
 import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
-@RequiredArgsConstructor(onConstructor=@__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class IntegrationApiApplication extends ApiApplication {
 
     private final BagGraphRepository bagGraphRepository;

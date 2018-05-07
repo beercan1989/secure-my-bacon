@@ -27,27 +27,27 @@ import org.springframework.stereotype.Component;
  * <p>Configuration options based on the Neo4j documentation <a href="https://neo4j.com/docs/ogm-manual/current/reference/#reference:configuration">https://neo4j.com/docs/ogm-manual/current/reference/#reference:configuration</a></p>
  * <h2>Bolt</h2>
  * <ul>
- *     <li><strong>driver:</strong>org.neo4j.ogm.drivers.bolt.driver.BoltDriver</li>
- *     <li><strong>uri:</strong>bolt://localhost:7687</li>
+ * <li><strong>driver:</strong>org.neo4j.ogm.drivers.bolt.driver.BoltDriver</li>
+ * <li><strong>uri:</strong>bolt://localhost:7687</li>
  * </ul>
  * <h2>HTTP</h2>
  * <ul>
- *     <li><strong>driver:</strong>org.neo4j.ogm.drivers.http.driver.HttpDriver</li>
- *     <li><strong>uri:</strong>http://localhost:7474</li>
+ * <li><strong>driver:</strong>org.neo4j.ogm.drivers.http.driver.HttpDriver</li>
+ * <li><strong>uri:</strong>http://localhost:7474</li>
  * </ul>
  * <h2>Embedded - No Persistence</h2>
  * <ul>
- *     <li><strong>driver:</strong>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
+ * <li><strong>driver:</strong>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
  * </ul>
  * <h2>Embedded - With Persistence</h2>
  * <ul>
- *     <li><strong>driver:</strong>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
- *     <li><strong>uri:</strong>file:///var/tmp/neo4j.db</li>
+ * <li><strong>driver:</strong>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
+ * <li><strong>uri:</strong>file:///var/tmp/neo4j.db</li>
  * </ul>
  * <h2>Credentials - For Bolt or HTTP connections</h2>
  * <ul>
- *     <li><strong>username:</strong>neo4j</li>
- *     <li><strong>password:</strong>password</li>
+ * <li><strong>username:</strong>neo4j</li>
+ * <li><strong>password:</strong>password</li>
  * </ul>
  */
 @Getter
@@ -60,9 +60,9 @@ public class Neo4JProperties {
     /**
      * The Neo4J driver to connect with: <br/>
      * <ul>
-     *     <li>org.neo4j.ogm.drivers.bolt.driver.BoltDriver</li>
-     *     <li>org.neo4j.ogm.drivers.http.driver.HttpDriver</li>
-     *     <li>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
+     * <li>org.neo4j.ogm.drivers.bolt.driver.BoltDriver</li>
+     * <li>org.neo4j.ogm.drivers.http.driver.HttpDriver</li>
+     * <li>org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver</li>
      * </ul>
      */
     private String driver;
@@ -70,9 +70,9 @@ public class Neo4JProperties {
     /**
      * The uri of where the Neo4j server is: <br/>
      * <ul>
-     *     <li>bolt://localhost:7687</li>
-     *     <li>http://localhost:7474</li>
-     *     <li>file:///var/tmp/neo4j.db</li>
+     * <li>bolt://localhost:7687</li>
+     * <li>http://localhost:7474</li>
+     * <li>file:///var/tmp/neo4j.db</li>
      * </ul>
      */
     private String uri;

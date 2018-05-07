@@ -80,7 +80,7 @@ public class SymmetricEngineTest {
 
         @Test
         public void encryptWithGcmShouldWorkAsExpected() throws IOException, EncryptionException {
-            
+
             final GCMParameterSpec parameterSpec = new GCMParameterSpec(128, GCM_IV);
             final SecretKey secretKey = new SecretKeySpec(GCM_KEY, "AES");
             final String plainText = "{\"username\":\"Joe Bloggs\",\"authToken\":\"fake-auth-token\"}";
@@ -181,6 +181,8 @@ public class SymmetricEngineTest {
             super(cause);
         }
     }
-    private interface TestExceptionHandlerFunction extends Function<GeneralSecurityException, SymmetricEngineTestException> {}
+
+    private interface TestExceptionHandlerFunction extends Function<GeneralSecurityException, SymmetricEngineTestException> {
+    }
 
 }

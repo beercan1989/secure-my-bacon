@@ -42,7 +42,7 @@ public class SymmetricGeneratorTest {
 
         final SecretKey result = underTest.generateKey(SymmetricCipher.AES_CBC_PKCS7, 256);
 
-        assertThat(result.getEncoded()).hasSize(256/8);
+        assertThat(result.getEncoded()).hasSize(256 / 8);
         assertThat(result.getAlgorithm()).isEqualTo("AES");
     }
 

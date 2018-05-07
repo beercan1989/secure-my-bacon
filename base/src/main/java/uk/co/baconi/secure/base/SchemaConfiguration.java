@@ -57,7 +57,7 @@ public class SchemaConfiguration {
             createIndexes();
         } catch (final ConnectionException exception) {
 
-            if(LocalDateTime.now().isBefore(timeoutTime)) {
+            if (LocalDateTime.now().isBefore(timeoutTime)) {
                 TimeUnit.MILLISECONDS.sleep(500);
                 log.trace("Retrying perform block.");
                 perform(timeoutTime);

@@ -89,6 +89,9 @@ public class ThrowingConsumerTest {
         }
     }
 
-    private abstract class TestThrowingConsumer implements ThrowingConsumer<String, Exception> {}
-    private abstract class TestConsumer implements Consumer<String> {}
+    private abstract class TestThrowingConsumer implements ThrowingConsumer<String, Exception> {
+    }
+
+    private abstract class TestConsumer implements Consumer<String> {
+    }
 }

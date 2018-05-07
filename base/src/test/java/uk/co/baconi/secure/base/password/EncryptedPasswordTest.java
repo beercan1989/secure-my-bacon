@@ -35,7 +35,7 @@ public class EncryptedPasswordTest extends BaseUnitTest {
         final String username = "beercan1989";
         final byte[] passw0rd = "password".getBytes();
 
-        final EncryptedPassword password = new EncryptedPassword( whereFor, username, passw0rd);
+        final EncryptedPassword password = new EncryptedPassword(whereFor, username, passw0rd);
 
         assertThat(password.getWhereFor(), is(equalTo(whereFor)));
         assertThat(password.getUsername(), is(equalTo(username)));
@@ -47,7 +47,7 @@ public class EncryptedPasswordTest extends BaseUnitTest {
     public void shouldBeAbleToChangeProperties() {
 
         final SymmetricLock symmetricLock = mock(SymmetricLock.class);
-        final EncryptedPassword password = new EncryptedPassword( "", "", "".getBytes()).securedBy(symmetricLock);
+        final EncryptedPassword password = new EncryptedPassword("", "", "".getBytes()).securedBy(symmetricLock);
         assertThat(password.getSecuredBy(), is(equalTo(symmetricLock)));
 
         final String newWhereFor = "https://bitbucket.org/account/signin/?next=/";
