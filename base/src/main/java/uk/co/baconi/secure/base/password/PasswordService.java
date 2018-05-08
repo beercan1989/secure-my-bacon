@@ -84,7 +84,7 @@ public class PasswordService {
         final EncryptedPassword password = new EncryptedPassword(whereFor, username, encryptedPassword);
 
         // TODO - Encrypt symmetric key with the bags's public key
-        final SymmetricLock lock = new SymmetricLock(password, bag, symmetricKey.getEncoded(), cipherType);
+        new SymmetricLock(password, bag, symmetricKey.getEncoded(), cipherType);
 
         // Update password to be secured by the lock. TODO - Work out why I wanted to do it here and not inside SymmetricLock
         // password.securedBy(lock);
