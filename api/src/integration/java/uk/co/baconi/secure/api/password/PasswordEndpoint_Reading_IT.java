@@ -26,8 +26,6 @@ import uk.co.baconi.secure.api.tests.FindByUuidIntegrationTest;
 import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
-import uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher;
-import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 import uk.co.baconi.secure.base.password.EncryptedPassword;
@@ -41,6 +39,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static uk.co.baconi.secure.api.common.Locations.PASSWORDS;
+import static uk.co.baconi.secure.base.cipher.asymmetric.AsymmetricCipher.RSA_ECB_PKCS1;
 import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
 public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByUuidIntegrationTest {
@@ -74,8 +73,8 @@ public class PasswordEndpoint_Reading_IT extends IntegratedApiEndpoint implement
         final User user = newUser(nameSpace);
         final EncryptedPassword password = newPassword(bag, nameSpace);
 
-        new SymmetricLock(password, bag, nameSpace.getBytes(), SymmetricCipher.AES_CBC_PKCS7);
-        new AsymmetricLock(bag, user, nameSpace.getBytes(), AsymmetricCipher.RSA_ECB_PKCS1);
+        new SymmetricLock(password, bag, nameSpace.getBytes(), AES_CBC_PKCS7);
+        new AsymmetricLock(bag, user, nameSpace.getBytes(), RSA_ECB_PKCS1);
 
         return passwordGraphRepository.save(password);
     }
