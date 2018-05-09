@@ -28,7 +28,6 @@ import uk.co.baconi.secure.base.bag.BagGraphRepository;
 import uk.co.baconi.secure.base.cipher.EncryptionException;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
-import uk.co.baconi.secure.base.password.EncryptedPassword;
 import uk.co.baconi.secure.base.password.PasswordService;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
