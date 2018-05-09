@@ -10,6 +10,7 @@ services:
 ##
 jdk:
   - oraclejdk8
+  - oraclejdk9
 
 ##
 # Environment configuration
