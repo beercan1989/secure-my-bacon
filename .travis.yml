@@ -85,3 +85,7 @@ deploy:
     on:
       repo: beercan1989/secure-my-bacon
       tags: true
+
+notifications:
+  slack:
+    secure: fXKHAvf2Ew8QpyZQYXIJ/byyRbDmrV7WD8zIRHZvDcRwu3da8L4ub4jq2vU/XL3Gt4UZvjvd7kqh+iPHiPFA6dpO3gPa2yaYfH1SKi46+OSOoMN7CzcM+T76/6UAegWMB0/WC/ob82h3r7ntVgJttPlv60zWIFZLYxJMlb28bpEEUKlg27ENVqtZnKCLsubeJIepj+SDJ5dpO2VA/KOz+poPFB6Hj/mviwaHlt5AHbaIa2dbbn9xHPhpzj66i2aWVlG9jm+stnOat+YT93kx/MH/snFrhhHTP1Ix/dR7Q8hT6opqP81fsd348heM69JxYXwXavz57Oky07bmbl/DV3BmW7ZWEhCr0wel03zuValB7gbNzy2W6OKnGDu3RDN2A1t21SDzIKK7iVppKfVB2Br7Ce7//xJFZzr0tA4yPwsJbGmXLf9StXfsx515XGxF2wMa9xZj+P5b3JGlOYG3cQ6P7hjaPIwA6ABjTwdbKb8hWhNL6/Q8mFYHgFIugvd/zfPa2rwpI+4E24nQ1URTNhTLdCMSSRlvZOzTx3c5jIQjFPDf+JxdTVurEIatmaw8OHsWuZW1/TIMMNaw55VSeDAnhMfHwR+7l8lkcO4ZSgxrJKXfLfo42cwJc8VjjxC0Gj75yb7RShHB6ccQc5BwMEkxKWrr+h0dZ8dns9E3VFI=
