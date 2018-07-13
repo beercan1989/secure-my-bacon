@@ -19,30 +19,31 @@ package uk.co.baconi.secure.api.integrations;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.specification.RequestSpecification;
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.co.baconi.secure.base.TearDownRepositories;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 import static com.jayway.restassured.RestAssured.with;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(IntegrationApiApplication.class)
-@WebIntegrationTest(randomPort = true)
+@Slf4j
 @ActiveProfiles("integration")
-public abstract class IntegratedApiEndpoint {
+@SpringBootTest(classes = IntegrationApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public abstract class IntegratedApiEndpoint extends TearDownRepositories implements RestApiAuthentication {
+
+    @Autowired
+    private IntegrationApiApplication application;
 
     //
     // HTTP Server Values
     //
-    @Value("${local.server.port}")
-    @NotNull
-    protected int port;
+    @Value("http://localhost:${local.server.port}")
+    protected String baseUrl;
 
     //
     // Api Key Values
@@ -54,26 +55,26 @@ public abstract class IntegratedApiEndpoint {
     @Value("${integration.test.data.api.invalidKey}")
     protected String apiKeyInvalidValue;
 
-
-    protected String getBaseUrl() {
-        return "http://localhost:" + port;
+    @Before
+    public void createTestData() {
+        log.info("Creating test data...");
+        application.createTestData();
     }
 
-
-    protected RequestSpecification withValidAuthentication() {
-        return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyValidValue);
+    @Override
+    public RequestSpecification withNoAuthentication() {
+        return with().baseUri(baseUrl);
     }
 
-
-    protected RequestSpecification withNoAuthentication() {
-        return with().baseUri(getBaseUrl());
+    @Override
+    public RequestSpecification withValidAuthentication() {
+        return withNoAuthentication().header(apiKeyHeader, apiKeyValidValue);
     }
 
-
-    protected RequestSpecification withInvalidAuthentication() {
-        return with().baseUri(getBaseUrl()).header(apiKeyHeader, apiKeyInvalidValue);
+    @Override
+    public RequestSpecification withInvalidAuthentication() {
+        return withNoAuthentication().header(apiKeyHeader, apiKeyInvalidValue);
     }
-
 
     protected byte[] convertToJson(final Object object) throws IOException {
         final ObjectMapper mapper = new ObjectMapper();

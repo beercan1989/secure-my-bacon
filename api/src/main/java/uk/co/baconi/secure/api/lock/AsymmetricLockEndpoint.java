@@ -16,33 +16,53 @@
 
 package uk.co.baconi.secure.api.lock;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
+import uk.co.baconi.secure.base.pagination.PaginatedResult;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
+@Slf4j
+@Validated
 @RestController
-@RequestMapping(value = "/asymmetric-locks", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequestMapping(value = "/asymmetric-locks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AsymmetricLockEndpoint {
 
-    @Autowired
-    private AsymmetricLockGraphRepository asymmetricLockGraphRepository;
+    private final AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<AsymmetricLock>> get(){
+    public ResponseEntity<PaginatedResult<AsymmetricLock>> findAll(
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        final List<AsymmetricLock> allAsymmetricLocks = StreamSupport.
-                stream(asymmetricLockGraphRepository.findAll().spliterator(), false).
-                collect(Collectors.toList());
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
+    ) {
 
-        return ResponseEntity.ok(allAsymmetricLocks);
+        final Page<AsymmetricLock> paged = asymmetricLockGraphRepository.findAll(new PageRequest(page, perPage));
+
+        log.trace("paged: {}", paged);
+
+        final PaginatedResult<AsymmetricLock> paginatedResult = new PaginatedResult<>(paged);
+
+        log.trace("paginatedResult: {}", paginatedResult);
+
+        return ResponseEntity.ok(paginatedResult);
     }
 
 }

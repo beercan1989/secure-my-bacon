@@ -31,8 +31,8 @@ public class UserGraphRepositoryIT extends BaseIntegrationTest {
     private UserGraphRepository userGraphRepository;
 
     @Test
-    public void shouldBeAbleToCreateAndRetrieveBag() {
-        final String name = "beercan1989";
+    public void shouldBeAbleToCreateAndRetrieveUser() {
+        final String name = "shouldBeAbleToCreateAndRetrieveUser";
 
         final User user = new User(name);
 
@@ -52,14 +52,14 @@ public class UserGraphRepositoryIT extends BaseIntegrationTest {
     }
 
     @Test
-    public void shouldBeAbleToShareWithAGroup() {
-        final String name = "beercan1989";
+    public void shouldBeAbleToShareUserWithAGroup() {
+        final String name = "shouldBeAbleToShareUserWithAGroup_User";
 
         final User user = new User(name);
 
         userGraphRepository.save(user);
 
-        final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
+        final Bag gitHubBag = new Bag("shouldBeAbleToShareUserWithAGroup_Group", "public key".getBytes());
 
         final AsymmetricLock sharedWith = new AsymmetricLock(gitHubBag, user, "privateKey".getBytes());
 

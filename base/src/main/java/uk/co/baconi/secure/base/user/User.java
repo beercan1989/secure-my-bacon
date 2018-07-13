@@ -17,74 +17,46 @@
 package uk.co.baconi.secure.base.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import uk.co.baconi.secure.base.cipher.pbe.PbeCipher;
 import uk.co.baconi.secure.base.lock.AsymmetricLock;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+@Getter
 @NodeEntity
+@NoArgsConstructor
+@ToString(exclude = "shared")
+@EqualsAndHashCode(of = "name")
 public class User {
 
     @GraphId
+    @Deprecated
+    @JsonIgnore
     private Long id;
 
-    @Property
     private String name;
+
+    @Setter
+    @JsonIgnore
+    private PbeCipher pbeType;
 
     @JsonIgnore
     @Relationship(type = AsymmetricLock.SHARED_WITH, direction = Relationship.INCOMING)
     private Set<AsymmetricLock> shared = new HashSet<>();
 
-    // Here for Neo4J annotations
-    public User() {
-    }
-
     public User(final String name) {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User sharedWith(final AsymmetricLock lock){
+    public User sharedWith(final AsymmetricLock lock) {
 
         shared.add(lock);
 
         return this;
-    }
-
-    public Set<AsymmetricLock> getShared() {
-        return shared;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(name, user.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

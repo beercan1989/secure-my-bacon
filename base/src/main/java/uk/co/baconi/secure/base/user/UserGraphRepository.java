@@ -16,9 +16,12 @@
 
 package uk.co.baconi.secure.base.user;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
+import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
 @Repository
-public interface UserGraphRepository extends GraphRepository<User> {
+public interface UserGraphRepository extends SmbGraphRepository<User> {
+
+    User findByName(final String name);
+
 }

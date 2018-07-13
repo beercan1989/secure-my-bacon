@@ -20,39 +20,39 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.baconi.secure.base.BaseIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
-import uk.co.baconi.secure.base.password.Password;
+import uk.co.baconi.secure.base.cipher.EncryptionException;
+import uk.co.baconi.secure.base.password.EncryptedPassword;
+import uk.co.baconi.secure.base.password.PasswordService;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher.AES_CBC_PKCS7;
 
 public class SymmetricGraphRepositoryIT extends BaseIntegrationTest {
 
     @Autowired
     private SymmetricLockGraphRepository symmetricLockGraphRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     @Test
-    public void shouldBeAbleToCreateLock() {
-        final Password password = new Password("whereFor", "username", "password");
-        final Bag bag = new Bag("bag", "public key".getBytes());
-        final byte[] key = "key".getBytes();
+    public void shouldBeAbleToCreateSymmetricLock() throws EncryptionException {
 
-        final SymmetricLock lock = new SymmetricLock(password, bag, key);
+        final Bag bag = new Bag("shouldBeAbleToCreateSymmetricLock_Bag", "public key".getBytes());
 
-        final SymmetricLock saved = symmetricLockGraphRepository.save(lock);
+        final EncryptedPassword password = passwordService.createAndShare(bag, "whereFor", "username", "raw", AES_CBC_PKCS7, 256);
 
-        assertThat(saved, is(equalTo(lock)));
+        final SymmetricLock saved = password.getSecuredBy();
         assertThat(saved.getId(), is(not(nullValue())));
-        assertThat(saved.getKey(), is(equalTo(key)));
         assertThat(saved.getPassword(), is(equalTo(password)));
         assertThat(saved.getBag(), is(equalTo(bag)));
 
-        final SymmetricLock one = symmetricLockGraphRepository.findOne(lock.getId());
+        final SymmetricLock one = symmetricLockGraphRepository.findOne(saved.getId());
 
-        assertThat(one, is(equalTo(lock)));
-        assertThat(one.getId(), is(equalTo(lock.getId())));
-        assertThat(one.getKey(), is(equalTo(key)));
+        assertThat(one, is(equalTo(saved)));
+        assertThat(one.getId(), is(equalTo(saved.getId())));
         assertThat(one.getPassword(), is(equalTo(password)));
         assertThat(one.getBag(), is(equalTo(bag)));
     }
-
 }

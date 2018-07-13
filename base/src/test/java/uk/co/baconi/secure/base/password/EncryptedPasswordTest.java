@@ -20,22 +20,23 @@ import org.junit.Test;
 import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
+import java.util.UUID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-public class PasswordTest extends BaseUnitTest {
+public class EncryptedPasswordTest extends BaseUnitTest {
 
     @Test
     public void shouldBeAbleToReadProperties() {
 
         final String whereFor = "https://github.com/login";
         final String username = "beercan1989";
-        final String passw0rd = "password";
+        final byte[] passw0rd = "password".getBytes();
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final EncryptedPassword password = new EncryptedPassword(whereFor, username, passw0rd);
 
-        assertThat(password.getId(), is(nullValue()));
         assertThat(password.getWhereFor(), is(equalTo(whereFor)));
         assertThat(password.getUsername(), is(equalTo(username)));
         assertThat(password.getPassword(), is(equalTo(passw0rd)));
@@ -46,7 +47,7 @@ public class PasswordTest extends BaseUnitTest {
     public void shouldBeAbleToChangeProperties() {
 
         final SymmetricLock symmetricLock = mock(SymmetricLock.class);
-        final Password password = new Password("", "", "").securedBy(symmetricLock);
+        final EncryptedPassword password = new EncryptedPassword("", "", "".getBytes()).securedBy(symmetricLock);
         assertThat(password.getSecuredBy(), is(equalTo(symmetricLock)));
 
         final String newWhereFor = "https://bitbucket.org/account/signin/?next=/";
@@ -57,7 +58,7 @@ public class PasswordTest extends BaseUnitTest {
         password.setUsername(newUsername);
         assertThat(password.getUsername(), is(equalTo(newUsername)));
 
-        final String newPassw0rd = "P@55w0rd!";
+        final byte[] newPassw0rd = "P@55w0rd!".getBytes();
         password.setPassword(newPassw0rd);
         assertThat(password.getPassword(), is(equalTo(newPassw0rd)));
 
@@ -69,76 +70,64 @@ public class PasswordTest extends BaseUnitTest {
     @Test
     public void shouldImplementEqualsCorrectly() {
 
+        final UUID uuidOne = UUID.randomUUID();
         final String whereFor = "https://github.com/login";
         final String username = "beercan1989";
-        final String passw0rd = "password";
+        final byte[] passw0rd = "password".getBytes();
 
-        final Password password1 = new Password(whereFor, username, passw0rd);
-        final Password password2 = new Password(whereFor, username, passw0rd);
+        final EncryptedPassword password1 = new EncryptedPassword(uuidOne, whereFor, username, passw0rd);
+        final EncryptedPassword password2 = new EncryptedPassword(uuidOne, whereFor, username, passw0rd);
 
         assertThat(password1, is(equalTo(password2)));
         assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
 
-        final Password password3 = new Password(whereFor, "beercan", passw0rd);
+        password1.securedBy(mock(SymmetricLock.class));
+        assertThat(password1, is(equalTo(password2)));
+        assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
 
+        final EncryptedPassword password3 = new EncryptedPassword(UUID.randomUUID(), whereFor, username, passw0rd);
         assertThat(password1, is(not(equalTo(password3))));
-        assertThat(password2, is(not(equalTo(password3))));
         assertThat(password1.hashCode(), is(not(equalTo(password3.hashCode()))));
-        assertThat(password2.hashCode(), is(not(equalTo(password3.hashCode()))));
 
-        final Password password4 = new Password(whereFor, username, "P@55w0rd!");
+        final EncryptedPassword password4 = new EncryptedPassword(uuidOne, whereFor, username, "P@55w0rd!".getBytes());
+        assertThat(password1, is(equalTo(password4)));
+        assertThat(password1.hashCode(), is(equalTo(password4.hashCode())));
 
-        assertThat(password1, is(not(equalTo(password4))));
-        assertThat(password2, is(not(equalTo(password4))));
-        assertThat(password3, is(not(equalTo(password4))));
-        assertThat(password1.hashCode(), is(not(equalTo(password4.hashCode()))));
-        assertThat(password2.hashCode(), is(not(equalTo(password4.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password4.hashCode()))));
+        final EncryptedPassword password5 = new EncryptedPassword(uuidOne, "https://bitbucket.org/account/signin/?next=/", username, passw0rd);
+        assertThat(password1, is(equalTo(password5)));
+        assertThat(password1.hashCode(), is(equalTo(password5.hashCode())));
 
-        final Password password5 = new Password("https://bitbucket.org/account/signin/?next=/", username, passw0rd);
-
-        assertThat(password1, is(not(equalTo(password5))));
-        assertThat(password2, is(not(equalTo(password5))));
-        assertThat(password3, is(not(equalTo(password5))));
-        assertThat(password4, is(not(equalTo(password5))));
-        assertThat(password1.hashCode(), is(not(equalTo(password5.hashCode()))));
-        assertThat(password2.hashCode(), is(not(equalTo(password5.hashCode()))));
-        assertThat(password3.hashCode(), is(not(equalTo(password5.hashCode()))));
-        assertThat(password4.hashCode(), is(not(equalTo(password5.hashCode()))));
-
-        final SymmetricLock asymmetricLock = mock(SymmetricLock.class);
-
-        password1.securedBy(asymmetricLock);
-
-        assertThat(password1, is(equalTo(password2)));
-        assertThat(password1.hashCode(), is(equalTo(password2.hashCode())));
+        final EncryptedPassword password6 = new EncryptedPassword(uuidOne, whereFor, "beercan", passw0rd);
+        assertThat(password1, is(equalTo(password6)));
+        assertThat(password1.hashCode(), is(equalTo(password6.hashCode())));
     }
 
     @Test
     public void shouldHaveNiceToStringRepresentation() {
+        final UUID uuid = UUID.fromString("ee145c66-8cfb-11e7-bb31-be2e44b06b34");
         final String whereFor = "https://github.com/login";
         final String username = "beercan1989";
         final String passw0rd = "p@55w0rd!";
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final EncryptedPassword password = new EncryptedPassword(uuid, whereFor, username, passw0rd.getBytes());
 
         final String passwordAsString = password.toString();
 
         assertThat(passwordAsString, containsString("id=null,"));
-        assertThat(passwordAsString, containsString("whereFor='https://github.com/login',"));
-        assertThat(passwordAsString, containsString("username='beercan1989',"));
-        assertThat(passwordAsString, containsString("password='p@55w0rd!'"));
+        assertThat(passwordAsString, containsString("uuid=ee145c66-8cfb-11e7-bb31-be2e44b06b34,"));
+        assertThat(passwordAsString, containsString("whereFor=https://github.com/login,"));
+        assertThat(passwordAsString, not(containsString("password=")));
+        assertThat(passwordAsString, containsString("username=beercan1989)"));
     }
 
     @Test
     public void shouldBeAbleToCreateBlankPassword() {
 
-        final Password password = new Password();
+        final EncryptedPassword password = new EncryptedPassword();
 
-        assertThat(password.getId(), is(nullValue(Long.class)));
         assertThat(password.getWhereFor(), is(nullValue(String.class)));
         assertThat(password.getUsername(), is(nullValue(String.class)));
-        assertThat(password.getPassword(), is(nullValue(String.class)));
+        assertThat(password.getPassword(), is(nullValue(byte[].class)));
         assertThat(password.getSecuredBy(), is(nullValue(SymmetricLock.class)));
     }
 }

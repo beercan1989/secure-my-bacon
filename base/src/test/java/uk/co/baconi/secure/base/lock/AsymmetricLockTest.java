@@ -21,8 +21,6 @@ import uk.co.baconi.secure.base.BaseUnitTest;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.user.User;
 
-import java.util.Arrays;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -119,7 +117,7 @@ public class AsymmetricLockTest extends BaseUnitTest {
         final String lockAsString = lock.toString();
 
         assertThat(lockAsString, containsString("id=null,"));
-        assertThat(lockAsString, containsString("privateKey=" + Arrays.toString(privateKey) + ','));
+        assertThat(lockAsString, not(containsString("privateKey=")));
         assertThat(lockAsString, containsString("bag=" + bag + ','));
         assertThat(lockAsString, containsString("user=" + user));
     }

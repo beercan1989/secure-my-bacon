@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+  neo4j:
+    image: neo4j:3.1.4
+    environment:
+      NEO4J_AUTH: neo4j/password
+    ports:
+     - "7474:7474"
+     - "7687:7687"
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api-compiled.Dockerfile
+    environment:
+      neo4j.driver: org.neo4j.ogm.drivers.bolt.driver.BoltDriver
+      neo4j.uri: bolt://neo4j:7687
+      neo4j.username: neo4j
+      neo4j.password: password
+      neo4j.encryption-level: REQUIRED
+    ports:
+      - "8080:8080"
+    links:
+      - "neo4j:neo4j"

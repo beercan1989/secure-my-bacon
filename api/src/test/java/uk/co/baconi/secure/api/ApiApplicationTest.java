@@ -1,29 +1,39 @@
-/*
- * Copyright 2015 James Bacon
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package uk.co.baconi.secure.api;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(SpringApplication.class)
 public class ApiApplicationTest {
 
     @Test
-    public void startApplication() throws Exception {
-        // TODO - Replace
-        ApiApplication.main();
+    public void shouldRunSpringApplicationViaMain() {
+
+        // Setup static mock
+        PowerMockito.mockStatic(SpringApplication.class);
+
+        ApiApplication.main("Test Argument");
+
+        // Verify static is called
+        PowerMockito.verifyStatic(Mockito.times(1));
+        SpringApplication.run(Mockito.eq(ApiApplication.class), Mockito.eq("Test Argument"));
+    }
+
+    @Test
+    public void shouldCreateMethodValidationPostProcessorBean() {
+
+        final Object underTest = new ApiApplication().methodValidationPostProcessor();
+
+        assertThat(underTest).isInstanceOf(MethodValidationPostProcessor.class);
     }
 
 }

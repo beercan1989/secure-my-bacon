@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 James Bacon
+ * Copyright 2017 James Bacon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,104 +17,68 @@
 package uk.co.baconi.secure.base.password;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
+import uk.co.baconi.secure.base.common.UuidConverter;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
 
-import java.util.Objects;
+import java.util.UUID;
 
-@NodeEntity
-public class Password {
+@Getter
+@NoArgsConstructor
+@NodeEntity(label = "Password")
+@EqualsAndHashCode(of = "uuid")
+@ToString(exclude = {"password", "securedBy"})
+public abstract class Password<A extends Password<A>> {
 
     @GraphId
+    @Deprecated
+    @JsonIgnore
     private Long id;
 
     @Property
+    @Convert(UuidConverter.class)
+    private UUID uuid;
+
+    @Property
+    @Setter(value = AccessLevel.PROTECTED)
     private String whereFor;
 
     @Property
+    @Setter(value = AccessLevel.PROTECTED)
     private String username;
 
     @Property
-    private String password;
+    @Setter(value = AccessLevel.PROTECTED)
+    private byte[] password;
 
     @JsonIgnore
     @Relationship(type = SymmetricLock.SECURED_BY)
     private SymmetricLock securedBy;
 
-    // Here for Neo4J annotations
-    public Password() {
-    }
-
-    public Password(final String whereFor, final String username, final String password) {
+    protected Password(final String whereFor, final String username, final byte[] password) {
+        this.uuid = UUID.randomUUID();
         this.whereFor = whereFor;
         this.username = username;
         this.password = password;  // TODO - Encryption with the target's public key
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getWhereFor() {
-        return whereFor;
-    }
-
-    public void setWhereFor(final String whereFor) {
+    protected Password(final UUID uuid, final String whereFor, final String username, final byte[] password) {
+        this.uuid = uuid;
         this.whereFor = whereFor;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
+        this.password = password;  // TODO - Encryption with the target's public key
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public SymmetricLock getSecuredBy() {
-        return securedBy;
-    }
-
-    public Password securedBy(final SymmetricLock securedBy) {
+    @SuppressWarnings("unchecked")
+    public A securedBy(final SymmetricLock securedBy) {
 
         this.securedBy = securedBy;
 
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Password password1 = (Password) o;
-        return Objects.equals(whereFor, password1.whereFor) &&
-                Objects.equals(username, password1.username) &&
-                Objects.equals(password, password1.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(whereFor, username, password);
-    }
-
-    @Override
-    public String toString() {
-        return "Password{" +
-                "id=" + id +
-                ", whereFor='" + whereFor + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return (A) this;
     }
 }

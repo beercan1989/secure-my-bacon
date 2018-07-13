@@ -16,9 +16,26 @@
 
 package uk.co.baconi.secure.base.password;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import uk.co.baconi.secure.base.common.SmbGraphRepository;
+
+import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface PasswordGraphRepository extends GraphRepository<Password> {
+public interface PasswordGraphRepository extends SmbGraphRepository<EncryptedPassword> {
+
+    EncryptedPassword findByUuid(final UUID uuid);
+
+    @Query("MATCH (p:EncryptedPassword {uuid:{uuid}})-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(u:User {name:{userName}}) RETURN p")
+    EncryptedPassword getPasswordForUser(@Param("uuid") final UUID passwordUuid, @Param("userName") final String userName);
+
+    @Query("MATCH (p:EncryptedPassword)-[:SECURED_BY]-(:Bag)-[:SHARED_WITH]-(:User {name:{userName}}) RETURN p")
+    List<EncryptedPassword> getPasswordsForUser(@Param("userName") final String userName);
+
+    // Spring Data Neo4J - Hopper-SR1 does not support pageable in customer queries.
+    // Page<EncryptedPassword> getPasswordsForUser(@Param("userName") final String userName, final Pageable pageRequest);
+
 }

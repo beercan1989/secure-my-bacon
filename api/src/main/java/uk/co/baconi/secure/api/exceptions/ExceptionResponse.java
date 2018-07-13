@@ -1,7 +1,12 @@
 package uk.co.baconi.secure.api.exceptions;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.UUID;
 
+@Getter
+@ToString
 public class ExceptionResponse implements BaseErrorResponse {
 
     private final UUID uuid;
@@ -12,20 +17,4 @@ public class ExceptionResponse implements BaseErrorResponse {
         this.name = exception.getClass().getName();
     }
 
-    @Override
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "ExceptionResponse{" +
-            "uuid=" + uuid +
-            ", name='" + name + '\'' +
-            '}';
-    }
 }

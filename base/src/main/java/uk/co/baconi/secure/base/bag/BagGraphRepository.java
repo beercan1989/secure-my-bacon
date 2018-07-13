@@ -16,16 +16,12 @@
 
 package uk.co.baconi.secure.base.bag;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import uk.co.baconi.secure.base.common.SmbGraphRepository;
 
 @Repository
-public interface BagGraphRepository extends GraphRepository<Bag> {
+public interface BagGraphRepository extends SmbGraphRepository<Bag> {
 
-    // List<Bag> findByName(final String name);
-
-    // List<Password> findByWhereFor(final String whereFor);
+    Bag findByName(final String name);
 
 }

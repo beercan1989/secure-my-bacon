@@ -24,21 +24,71 @@ import static org.hamcrest.Matchers.*;
 
 public class SymmetricLockEndpoint_Reading_IT extends IntegratedApiEndpoint {
 
+    private final String endpoint = "/symmetric-locks";
+
     @Test // 200
-    public void onFindingAllPasswords() {
+    public void onFindingAllSymmetricLocks() {
 
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/symmetric-locks").
+                get(endpoint).
 
                 then().assertThat().
 
-                body("[0].password.whereFor", isA(String.class)).
-                body("[0].password.username", isA(String.class)).
-                body("[0].password.password", isA(String.class)).
-                body("[0].bag.name", isA(String.class)).
+                statusCode(is(equalTo(HttpStatus.OK.value()))).
 
-                statusCode(is(equalTo(HttpStatus.OK.value())));
+                body("data", is(not(emptyCollectionOf(String.class)))).
+
+                body("data[0].password.whereFor", isA(String.class)).
+                body("data[0].password.username", isA(String.class)).
+                body("data[0].password.password", isA(String.class)).
+                body("data[0].bag.name", isA(String.class)).
+
+                body("data[1].password.whereFor", isA(String.class)).
+                body("data[1].password.username", isA(String.class)).
+                body("data[1].password.password", isA(String.class)).
+                body("data[1].bag.name", isA(String.class)).
+
+                body("data[2].password.whereFor", isA(String.class)).
+                body("data[2].password.username", isA(String.class)).
+                body("data[2].password.password", isA(String.class)).
+                body("data[2].bag.name", isA(String.class)).
+
+                body("paging.page", isA(Integer.class)).
+                body("paging.perPage", isA(Integer.class)).
+                body("paging.totalCount", isA(Integer.class)).
+
+                body("paging.page", is(equalTo(0))).
+                body("paging.perPage", is(equalTo(5))).
+                body("paging.totalCount", is(equalTo(3)));
     }
 
+    @Test // 200
+    public void onFindingAllSymmetricLocksWithPaging() {
+
+        withNoAuthentication().
+                queryParam("page", 5).
+                queryParam("perPage", 5).
+                get(endpoint).
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.OK.value()))).
+
+                body("paging.page", is(equalTo(5))).
+                body("paging.perPage", is(equalTo(5)));
+
+        withNoAuthentication().
+                queryParam("page", 55).
+                queryParam("perPage", 10).
+                get(endpoint).
+
+                then().assertThat().
+
+                statusCode(is(equalTo(HttpStatus.OK.value()))).
+
+                body("paging.page", is(equalTo(55))).
+                body("paging.perPage", is(equalTo(10)));
+    }
+
+    // TODO - @Test public void onFindingSymmetricLocksWithInvalidPaging() {}
 }

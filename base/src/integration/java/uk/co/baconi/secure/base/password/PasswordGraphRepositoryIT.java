@@ -20,7 +20,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.baconi.secure.base.BaseIntegrationTest;
 import uk.co.baconi.secure.base.bag.Bag;
+import uk.co.baconi.secure.base.cipher.symmetric.SymmetricCipher;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
 import uk.co.baconi.secure.base.lock.SymmetricLock;
+import uk.co.baconi.secure.base.user.User;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -30,46 +35,42 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
     @Autowired
     private PasswordGraphRepository passwordGraphRepository;
 
-    @Test
-    public void shouldBeAbleToCreateAndRetrieveBag() {
-        final String whereFor = "https://github.com/login";
-        final String username = "beercan1989";
-        final String passw0rd = "password";
-
-        final Password password = new Password(whereFor, username, passw0rd);
-
-        final Password saved = passwordGraphRepository.save(password);
-
-        assertThat(saved, is(equalTo(password)));
-        assertThat(saved.getId(), is(not(nullValue())));
-        assertThat(saved.getWhereFor(), is(equalTo(whereFor)));
-        assertThat(saved.getUsername(), is(equalTo(username)));
-        assertThat(saved.getPassword(), is(equalTo(passw0rd)));
-        assertThat(saved.getSecuredBy(), is(nullValue()));
-
-        final Password one = passwordGraphRepository.findOne(password.getId());
-
-        assertThat(one, is(equalTo(saved)));
-        assertThat(one.getId(), is(equalTo(password.getId())));
-        assertThat(one.getWhereFor(), is(equalTo(whereFor)));
-        assertThat(one.getUsername(), is(equalTo(username)));
-        assertThat(one.getPassword(), is(equalTo(passw0rd)));
-        assertThat(one.getSecuredBy(), is(nullValue()));
+    private EncryptedPassword newPassword(final String whereFor, final String username, final String password) {
+        return passwordGraphRepository.save(new EncryptedPassword(whereFor, username, password.getBytes()));
     }
 
     @Test
-    public void shouldBeAbleToSecureWithAGroup() {
+    public void shouldBeAbleToCreateAndRetrievePassword() {
         final String whereFor = "https://github.com/login";
-        final String username = "beercan1989";
+        final String username = "shouldBeAbleToCreateAndRetrievePassword";
         final String passw0rd = "password";
 
-        final Password password = new Password(whereFor, username, passw0rd);
+        final EncryptedPassword saved = newPassword(whereFor, username, passw0rd);
 
-        passwordGraphRepository.save(password);
+        assertThat(saved.getId(), is(not(nullValue())));
+        assertThat(saved.getWhereFor(), is(equalTo(whereFor)));
+        assertThat(saved.getUsername(), is(equalTo(username)));
+        assertThat(saved.getPassword(), is(equalTo(passw0rd.getBytes())));
+        assertThat(saved.getSecuredBy(), is(nullValue()));
+
+        final EncryptedPassword one = passwordGraphRepository.findByUuid(saved.getUuid());
+
+        assertThat(one, is(equalTo(saved)));
+        assertThat(one.getId(), is(equalTo(saved.getId())));
+    }
+
+    @Test
+    public void shouldBeAbleToSecurePasswordWithAGroup() {
+
+        final EncryptedPassword password = newPassword(
+                "https://github.com/login",
+                "shouldBeAbleToSecurePasswordWithAGroup",
+                "password"
+        );
 
         final Bag gitHubBag = new Bag("GitHub", "public key".getBytes());
 
-        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes());
+        final SymmetricLock securedWith = new SymmetricLock(password, gitHubBag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
 
         assertThat(password.getSecuredBy(), is(equalTo(securedWith)));
 
@@ -83,4 +84,81 @@ public class PasswordGraphRepositoryIT extends BaseIntegrationTest {
         assertThat(securedWith.getId(), is(not(nullValue())));
     }
 
+    @Test
+    public void shouldBeAbleToFindPasswordsByUser() {
+
+        //
+        // Test Data Setup
+        //
+        final EncryptedPassword password_1 = newPassword(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_1",
+                "shouldBeAbleToFindPasswordsByUser_username_1",
+                "shouldBeAbleToFindPasswordsByUser_password_1"
+        );
+
+        final EncryptedPassword password_2 = newPassword(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_2",
+                "shouldBeAbleToFindPasswordsByUser_username_2",
+                "shouldBeAbleToFindPasswordsByUser_password_2"
+        );
+
+        final EncryptedPassword password_3 = newPassword(
+                "shouldBeAbleToFindPasswordsByUser_whereFor_3",
+                "shouldBeAbleToFindPasswordsByUser_username_3",
+                "shouldBeAbleToFindPasswordsByUser_password_3"
+        );
+
+        final Bag bag = new Bag("shouldBeAbleToFindPasswordsByUser_group", "public key".getBytes());
+
+        new SymmetricLock(password_1, bag, "key_1".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+        new SymmetricLock(password_2, bag, "key_2".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+        new SymmetricLock(password_3, bag, "key_3".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+
+        final User user = new User("shouldBeAbleToFindPasswordsByUser_username");
+
+        new AsymmetricLock(bag, user, "private key".getBytes());
+
+        passwordGraphRepository.save(password_1);
+        passwordGraphRepository.save(password_2);
+        passwordGraphRepository.save(password_3);
+
+        //
+        // Actual Test
+        //
+        final List<EncryptedPassword> passwordsByUser = passwordGraphRepository.getPasswordsForUser(user.getName());
+        assertThat(passwordsByUser, is(not(nullValue())));
+        assertThat(passwordsByUser, containsInAnyOrder(password_1, password_2, password_3));
+    }
+
+    @Test
+    public void shouldBeAbleToFindPasswordByUser() {
+
+        //
+        // Test Data Setup
+        //
+
+        final EncryptedPassword password = newPassword(
+                "shouldBeAbleToFindPasswordByUser_whereFor",
+                "shouldBeAbleToFindPasswordByUser_username",
+                "shouldBeAbleToFindPasswordByUser_password"
+        );
+
+        final Bag bag = new Bag("shouldBeAbleToFindPasswordByUser_group", "public key".getBytes());
+
+        new SymmetricLock(password, bag, "key".getBytes(), SymmetricCipher.AES_CBC_PKCS7);
+
+        final User user = new User("shouldBeAbleToFindPasswordByUser_username");
+
+        new AsymmetricLock(bag, user, "private key".getBytes());
+
+        passwordGraphRepository.save(password);
+
+        //
+        // Actual Test
+        //
+        final EncryptedPassword passwordByUser = passwordGraphRepository.getPasswordForUser(password.getUuid(), user.getName());
+        assertThat(passwordByUser, is(not(nullValue())));
+        assertThat(passwordByUser.getId(), is(equalTo(password.getId())));
+        assertThat(passwordByUser, is(equalTo(password)));
+    }
 }

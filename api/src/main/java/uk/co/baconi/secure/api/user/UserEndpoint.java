@@ -16,33 +16,84 @@
 
 package uk.co.baconi.secure.api.user;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.common.Locations;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
+import uk.co.baconi.secure.base.pagination.PaginatedResult;
 import uk.co.baconi.secure.base.user.User;
 import uk.co.baconi.secure.base.user.UserGraphRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.net.URI;
 
+@Slf4j
+@Validated
 @RestController
-@RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserEndpoint {
 
-    @Autowired
-    private UserGraphRepository userGraphRepository;
+    private final UserGraphRepository userGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> get(){
+    public ResponseEntity<PaginatedResult<User>> findAll(
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        final List<User> allUsers = StreamSupport.
-                stream(userGraphRepository.findAll().spliterator(), false).
-                collect(Collectors.toList());
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
+    ) {
 
-        return ResponseEntity.ok(allUsers);
+        final Page<User> paged = userGraphRepository.findAll(new PageRequest(page, perPage));
+
+        log.trace("paged: {}", paged);
+
+        final PaginatedResult<User> paginatedResult = new PaginatedResult<>(paged);
+
+        log.trace("paginatedResult: {}", paginatedResult);
+
+        return ResponseEntity.ok(paginatedResult);
     }
 
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<User> create(@Valid @RequestBody final NewUser newUser) {
+
+        log.trace("createUser: {}", newUser);
+
+        final User user = userGraphRepository.save(new User(newUser.getName()));
+
+        log.trace("createdUser: {}", user);
+
+        final URI location = Locations.userByName(user.getName());
+        log.trace("Responding with {} and location {}", user, location);
+
+        return ResponseEntity.created(location).body(user);
+    }
+
+    @RequestMapping(value = "/by-name/{user-name}", method = RequestMethod.GET)
+    public ResponseEntity<User> findByName(@PathVariable("user-name") final String name) throws NotFoundException {
+
+        log.trace("findByName: {}", name);
+
+        final User user = userGraphRepository.findByName(name);
+
+        log.trace("foundUser: {}", user);
+
+        if (user == null) {
+            throw NotFoundException.userByName(name);
+        } else {
+            return ResponseEntity.ok(user);
+        }
+    }
 }

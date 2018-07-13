@@ -19,23 +19,47 @@ package uk.co.baconi.secure.api.user;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import uk.co.baconi.secure.api.integrations.IntegratedApiEndpoint;
+import uk.co.baconi.secure.api.tests.FindByNameIntegrationTest;
+import uk.co.baconi.secure.api.tests.PaginationIntegrationTest;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint {
+public class UserEndpoint_Reading_IT extends IntegratedApiEndpoint implements PaginationIntegrationTest, FindByNameIntegrationTest {
 
-    @Test // 200
+    private final String endpoint = "/users";
+
+    @Test
     public void onFindingAllUsers() {
 
+        // Success
         withNoAuthentication().
-                baseUri(getBaseUrl()).
-                get("/users").
+                get(endpoint).
 
                 then().assertThat().
 
-                body("[0].name", isA(String.class)).
+                body("data", is(not(emptyCollectionOf(String.class)))).
+
+                body("data[0].id", is(nullValue())).
+                body("data[0].name", isA(String.class)).
+
+                body("paging.page", isA(Integer.class)).
+                body("paging.perPage", isA(Integer.class)).
+                body("paging.totalCount", isA(Integer.class)).
+
+                body("data[0].name", is(equalTo("user-0"))).
+
+                body("paging.page", is(equalTo(0))).
+                body("paging.perPage", is(equalTo(5))).
 
                 statusCode(is(equalTo(HttpStatus.OK.value())));
+
+        // Invalid Pagination
+        onEndpointWithInvalidPagingImpl(endpoint);
     }
 
+    @Test
+    @Override
+    public void onFindByName() {
+        onFindByNameImpl(endpoint, "user-0");
+    }
 }

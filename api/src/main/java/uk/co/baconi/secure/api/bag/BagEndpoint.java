@@ -16,53 +16,102 @@
 
 package uk.co.baconi.secure.api.bag;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uk.co.baconi.secure.api.common.Locations;
+import uk.co.baconi.secure.api.exceptions.NotFoundException;
 import uk.co.baconi.secure.base.bag.Bag;
 import uk.co.baconi.secure.base.bag.BagGraphRepository;
+import uk.co.baconi.secure.base.lock.AsymmetricLock;
+import uk.co.baconi.secure.base.lock.AsymmetricLockGraphRepository;
 import uk.co.baconi.secure.base.pagination.PaginatedResult;
+import uk.co.baconi.secure.base.user.User;
+import uk.co.baconi.secure.base.user.UserGraphRepository;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.net.URI;
 
+@Slf4j
 @Validated
 @RestController
-@RequestMapping(value = "/bags", produces = "application/json; charset=UTF-8")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequestMapping(value = "/bags", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class BagEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BagEndpoint.class);
-
-    @Autowired
-    private BagGraphRepository bagGraphRepository;
+    private final BagGraphRepository bagGraphRepository;
+    private final UserGraphRepository userGraphRepository;
+    private final AsymmetricLockGraphRepository asymmetricLockGraphRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PaginatedResult<Bag>> get(
-        @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
-        @RequestParam(required = false, defaultValue = "0") final Integer page,
+    public ResponseEntity<PaginatedResult<Bag>> findAll(
+            @Min(value = 0, message = "{uk.co.baconi.secure.api.Page.min}")
+            @RequestParam(required = false, defaultValue = "0") final Integer page,
 
-        @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
-        @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
-        @RequestParam(required = false, defaultValue = "5") final Integer perPage
+            @Min(value = 1, message = "{uk.co.baconi.secure.api.PerPage.min}")
+            @Max(value = 20, message = "{uk.co.baconi.secure.api.PerPage.max}")
+            @RequestParam(required = false, defaultValue = "5") final Integer perPage
     ) {
 
         final Page<Bag> paged = bagGraphRepository.findAll(new PageRequest(page, perPage));
 
-        LOG.trace("paged: {}", paged);
+        log.trace("paged: {}", paged);
 
         final PaginatedResult<Bag> paginatedResult = new PaginatedResult<>(paged);
 
-        LOG.trace("paginatedResult: {}", paginatedResult);
+        log.trace("paginatedResult: {}", paginatedResult);
 
         return ResponseEntity.ok(paginatedResult);
     }
 
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Bag> create(@Valid @RequestBody final NewBag newBag) {
+
+        log.trace("createBag: {}", newBag);
+
+        // TODO - Verify user exists
+        // Find user who this bag will initially belong to
+        final User user = userGraphRepository.findByName(newBag.getUserName());
+        log.trace("foundUser: {}", user);
+
+        // TODO - Generate bags key pair
+        final byte[] publicKey = {1, 2, 3, 4};
+        final byte[] privateKey = {5, 6, 7, 8};
+
+        final Bag bag = bagGraphRepository.save(new Bag(newBag.getBagName(), publicKey));
+        log.trace("createdBag: {}", bag);
+
+        // TODO - Secure private key with User details
+        final AsymmetricLock lock = asymmetricLockGraphRepository.save(new AsymmetricLock(bag, user, privateKey));
+        log.trace("createdAsymmetricLock: {}", lock);
+
+        final URI location = Locations.bagByName(bag.getName());
+        log.trace("Responding with {} and location {}", bag, location);
+
+        return ResponseEntity.created(location).body(bag);
+    }
+
+    @RequestMapping(value = "/by-name/{bag-name}", method = RequestMethod.GET)
+    public ResponseEntity<Bag> findByName(@PathVariable("bag-name") final String name) throws NotFoundException {
+
+        log.trace("findByName: {}", name);
+
+        final Bag bag = bagGraphRepository.findByName(name);
+
+        log.trace("foundBag: {}", bag);
+
+        if (bag == null) {
+            throw NotFoundException.bagByName(name);
+        } else {
+            return ResponseEntity.ok(bag);
+        }
+    }
 }
