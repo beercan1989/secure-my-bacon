@@ -65,6 +65,12 @@
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
 
+        <!-- Java 11 "patches" -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <!-- Base Modules's Test Sources -->
         <!-- See profile below: on-not-skipping-tests -->
 
