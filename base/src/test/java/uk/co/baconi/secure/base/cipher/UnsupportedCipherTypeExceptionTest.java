@@ -32,7 +32,7 @@ public class UnsupportedCipherTypeExceptionTest extends BaseUnitTest {
                 "test-operation"
         );
 
-        assertThat(underTest).hasMessage("Unsupported cipher [SymmetricCipher(type=AES/CBC/PKCS7Padding, keyGeneratorType=AES)] for operation [test-operation]");
+        assertThat(underTest).hasMessage("Unsupported cipher [SymmetricCipher.AES_CBC_PKCS7(type=AES/CBC/PKCS7Padding, keyGeneratorType=AES)] for operation [test-operation]");
         assertThat(underTest).hasNoCause();
     }
 
@@ -45,7 +45,7 @@ public class UnsupportedCipherTypeExceptionTest extends BaseUnitTest {
                 new Exception("test-exception")
         );
 
-        assertThat(underTest).hasMessage("Unsupported cipher [SymmetricCipher(type=AES/CBC/PKCS7Padding, keyGeneratorType=AES)] for operation [test-operation-with-exception]");
+        assertThat(underTest).hasMessage("Unsupported cipher [SymmetricCipher.AES_CBC_PKCS7(type=AES/CBC/PKCS7Padding, keyGeneratorType=AES)] for operation [test-operation-with-exception]");
         assertThat(underTest).hasCauseInstanceOf(Exception.class);
     }
 }
