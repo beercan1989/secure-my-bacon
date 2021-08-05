@@ -1,5 +1,4 @@
 FROM java:8-jre-alpine
-LABEL maintainer james@baconi.co.uk
 
 ENV MAVEN_GROUP_ID="uk.co.baconi.secure" \
     MAVEN_ARTIFACT_ID="api" \

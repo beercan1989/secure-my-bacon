@@ -9,7 +9,7 @@ services:
 # Java version supported
 ##
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 ##
 # Environment configuration

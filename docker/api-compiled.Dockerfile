@@ -1,5 +1,4 @@
-FROM maven:3-jdk-8-alpine
-LABEL maintainer="james@baconi.co.uk"
+FROM maven:3-jdk-11-alpine
 
 RUN mkdir -p /opt/src/secure-my-bacon && \
     mkdir -p /opt/secure-my-bacon

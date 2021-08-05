@@ -1,5 +1,4 @@
-FROM java:8-jre-alpine
-LABEL maintainer james@baconi.co.uk
+FROM java:11-jre-alpine
 
 ADD api/target/api.jar /opt/secure-my-bacon/api.jar
 
